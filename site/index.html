@@ -1,41 +1,51 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Citeh Chess</title>
 <style>
-:root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffd9;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee}
+:root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffe6;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee;--cs:40px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:linear-gradient(170deg,var(--bg1),var(--bg2)) fixed;color:var(--txt);font-family:ui-rounded,system-ui,-apple-system,sans-serif;-webkit-user-select:none;user-select:none}
-body{padding:14px 12px 30px;max-width:520px;margin:0 auto}
-.top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 4px}
-h1{margin:0;font-size:30px;letter-spacing:-.5px}h1 span{background:linear-gradient(90deg,#2f7de8,#7cc4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;min-height:100%;background:linear-gradient(170deg,var(--bg1),var(--bg2)) fixed;color:var(--txt);font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-user-select:none;user-select:none}
+body{padding:calc(12px + env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;margin:4px 0}
+h1{margin:0;font-size:28px;letter-spacing:-.5px}h1 span{color:var(--blue)}
 .sub{color:var(--dim);margin-bottom:8px;font-size:14px}
-.gear{width:44px;height:44px;border-radius:50%;padding:0;font-size:21px;background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:0 4px 14px #3b8cf033}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 8px 26px #3b8cf022;backdrop-filter:blur(8px)}
-button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 16px;background:linear-gradient(180deg,#4a9bff,#2f7de8);color:#fff;box-shadow:0 4px 12px #2f7de844;transition:transform .1s}
-button:active{transform:scale(.96)}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 14px;min-height:46px;background:linear-gradient(180deg,#4a9bff,#2f7de8);color:#fff;box-shadow:0 3px 10px #2f7de844;touch-action:manipulation;-webkit-appearance:none;appearance:none;cursor:pointer}
+button:active{transform:scale(.96)}button[disabled]{opacity:.4}
 button.alt{background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:none}
+.gear{width:46px;padding:0;border-radius:50%;font-size:20px;background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:0 3px 12px #3b8cf033}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 6px 22px #3b8cf022}
 .row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
 .chips button{flex:1 0 28%;padding:10px 4px}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--txt);font:inherit;margin:6px 0;-webkit-user-select:text;user-select:text}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
 small,.dim{color:var(--dim)}summary{font-weight:700}
 .rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:21px;color:var(--blue2)}
 .hide{display:none!important}
-#bd{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;border:5px solid #fff;box-shadow:0 12px 34px #2f7de833;touch-action:manipulation}
-#bd div{display:flex;align-items:center;justify-content:center;font-size:min(9.5vw,48px);line-height:1;position:relative}
-.l{background:var(--sqL)}.d{background:var(--sqD)}
+#bd{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;width:min(100%,max(280px,calc(100dvh - 340px)));aspect-ratio:1/1;margin:0 auto;border-radius:12px;overflow:hidden;border:4px solid #fff;box-shadow:0 10px 30px #2f7de833;touch-action:none}
+#bd>div{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;font-size:calc(var(--cs)*.8);line-height:1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif;font-variant-emoji:text}
+#bd span.g{display:block;pointer-events:none}
+.l{background-color:var(--sqL)}.d{background-color:var(--sqD)}
 .sel{box-shadow:inset 0 0 0 100px #ffe36699}.lm{box-shadow:inset 0 0 0 100px #5be6a355}
-.co{position:absolute;font-size:10px;font-style:normal;font-weight:800;opacity:.65;color:var(--txt)}.co.r{top:2px;left:3px}.co.f{bottom:1px;right:3px}
+.ck{background-image:radial-gradient(circle,#ff3b3bcc 0,#ff3b3b00 70%)}
+.hn::after{content:'';position:absolute;width:30%;height:30%;border-radius:50%;background:#12335e38;pointer-events:none}
+.hc::after{content:'';position:absolute;inset:3%;border-radius:50%;border:4px solid #12335e44;pointer-events:none}
+.co{position:absolute;font-family:-apple-system,system-ui,sans-serif;font-size:10px;font-style:normal;font-weight:800;opacity:.65;color:var(--txt);pointer-events:none}.co.r{top:2px;left:3px}.co.f{bottom:1px;right:3px}
 .pw{color:#fff;text-shadow:0 0 2px #12335e,0 0 2px #12335e,0 1px 3px #12335e}.pb{color:#0f2a52;text-shadow:0 0 1px #e8f3ff}.pc{color:#12335e}
-.pl{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;font-weight:700}
-.clk{background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:12px;font-variant-numeric:tabular-nums;font-size:21px}
+#gh{position:fixed;z-index:6;pointer-events:none;transform:translate(-50%,-62%);font-size:calc(var(--cs)*1.25);line-height:1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif}
+.pl{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;font-weight:700}
+.clk{background:#fff;border:1px solid var(--line);padding:5px 14px;border-radius:12px;font-variant-numeric:tabular-nums;font-size:20px}
 .clk.run{background:var(--blue);border-color:var(--blue);color:#fff}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 6px}.nav button{font-size:26px;line-height:1;padding:6px}
+#mlist{display:flex;gap:6px;align-items:center;overflow-x:auto;white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;min-height:44px;-webkit-overflow-scrolling:touch}
+#mlist .mn{color:var(--dim);font-size:13px;margin-left:4px}
+#mlist .mv{padding:5px 9px;border-radius:8px;font-weight:700;background:#eef6ff;cursor:pointer}#mlist .mv.cur{background:var(--blue);color:#fff}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
-#promo button{font-size:44px;padding:8px 14px;background:#fff;border:2px solid var(--blue)}
+#promo button{font-size:44px;padding:8px 14px;background:#fff;border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
 #set{position:fixed;inset:0;background:#12335e66;display:flex;z-index:7}
-.sheet{background:#fff;width:100%;max-width:520px;margin:auto auto 0;border-radius:26px 26px 0 0;padding:18px 18px 28px;max-height:88vh;overflow:auto}
-.opt{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #e1eefc;font-weight:600}
-.sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;height:44px;border-radius:50%;padding:0;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
+.sheet{background:#fff;width:100%;max-width:520px;margin:auto auto 0;border-radius:24px 24px 0 0;padding:18px 18px calc(28px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.opt{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e1eefc;font-weight:600}
+.sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;min-height:44px;height:44px;border-radius:50%;padding:0;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
 .tg{min-width:66px;padding:8px}
 </style></head><body>
 <div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings">⚙</button></div><div class="sub">Play Lichess, your way</div>
@@ -50,11 +60,11 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 
 <div id="lobby" class="hide">
  <div id="inc"></div>
- <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="padding:8px 12px">Log out</button></div>
+ <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="min-height:38px;padding:6px 12px">Log out</button></div>
  <div class="rt" id="rt"></div></div>
  <div class="card"><b>Play a person</b><div class="row chips" id="tcs" style="margin:10px 0"></div>
  <div class="row"><button class="alt" id="rtd" onclick="rated=!rated;lobby()"></button><button id="sk" onclick="seek()">Find game</button></div></div>
- <div class="card"><b>Play a friend</b><p class="dim" style="margin:6px 0">They need a free Lichess account. They get your challenge on Lichess (site or app) and can accept it there or in Blue Chess. Uses the time control and rated setting above.</p><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card"><b>Play a friend</b><p class="dim" style="margin:6px 0">They need a free Lichess account. They get your challenge on Lichess and can accept it there or here. Uses the time control and rated setting above.</p><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
  <div class="card"><b>Play the computer</b><div class="row chips" id="lvs" style="margin:10px 0"></div>
  <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
 </div>
@@ -63,21 +73,70 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
  <div class="pl"><span id="ot"></span><span class="clk" id="oc">--</span></div>
  <div id="bd"></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
- <div class="dim" id="st" style="text-align:center;min-height:22px;font-weight:700"></div>
- <div class="row" id="ctl" style="margin-top:8px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
+ <div class="nav"><button class="alt" id="n0" onclick="go(0)">«</button><button class="alt" id="n1" onclick="go(G.V-1)">‹</button><button class="alt" id="n2" onclick="go(G.V+1)">›</button><button class="alt" id="n3" onclick="go(1e9)">»</button></div>
+ <div id="mlist"></div>
+ <div class="dim" id="st" style="text-align:center;min-height:24px;font-weight:700;margin-top:8px"></div>
+ <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
 </div>
+
 <div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)">✕</button></div><div id="sbody"></div></div></div>
-<div id="toast"></div><div id="promo" class="hide"></div>
+<div id="toast"></div><div id="promo" class="hide"></div><div id="gh" class="hide"></div>
 
 <script>
 const API='https://lichess.org',CID='aiav-blue-chess',RU=location.origin+location.pathname,$=s=>document.querySelector(s);
 const mem={},ls={g:k=>{try{return localStorage.getItem(k)}catch{return mem[k]}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch{mem[k]=v}},d:k=>{try{localStorage.removeItem(k)}catch{delete mem[k]}}};
-let chal={};let tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,rated=false,tc=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false;
-const TCS=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+let chal={},tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,hl=[],rated=false,tc=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false,flipped=false,ac;
+const TCS=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'};
+const DEF={bt:'sky',pc:'solid',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
+BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863']};
+let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
-function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v)}
+function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);if(v=='game')sizeB()}
 const H=()=>({Authorization:'Bearer '+tok});
+// ---------- chess rules (for hints, notation) ----------
+const inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8,isW=p=>p!='.'&&p==p.toUpperCase();
+const KN=[[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]],KG=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+function attacked(b,r,f,byW){const pr=byW?r+1:r-1,pw=byW?'P':'p';
+ for(const d of[-1,1])if(inB(pr,f+d)&&b[pr][f+d]==pw)return true;
+ const n=byW?'N':'n',k=byW?'K':'k',R=byW?'R':'r',Bq=byW?'B':'b',Q=byW?'Q':'q';
+ for(const[a,c]of KN)if(inB(r+a,f+c)&&b[r+a][f+c]==n)return true;
+ for(const[a,c]of KG)if(inB(r+a,f+c)&&b[r+a][f+c]==k)return true;
+ for(const[a,c]of KG){let y=r+a,x=f+c;while(inB(y,x)){const p=b[y][x];if(p!='.'){if(p==Q||(a&&c?p==Bq:p==R))return true;break}y+=a;x+=c}}
+ return false}
+function kingAt(b,w){const k=w?'K':'k';for(let r=0;r<8;r++)for(let f=0;f<8;f++)if(b[r][f]==k)return[r,f];return[0,0]}
+function pseudo(P,r,f){const b=P.b,p=b[r][f],w=isW(p),t=p.toLowerCase(),out=[];
+ const add=(y,x)=>{if(!inB(y,x))return false;const q=b[y][x];if(q=='.'){out.push([y,x]);return true}if(isW(q)!=w)out.push([y,x]);return false};
+ if(t=='p'){const d=w?-1:1,st=w?6:1;if(inB(r+d,f)&&b[r+d][f]=='.'){out.push([r+d,f]);if(r==st&&b[r+2*d][f]=='.')out.push([r+2*d,f])}
+  for(const df of[-1,1]){const y=r+d,x=f+df;if(!inB(y,x))continue;const q=b[y][x];if(q!='.'&&isW(q)!=w)out.push([y,x]);else if(q=='.'&&P.ep&&P.ep[0]==y&&P.ep[1]==x)out.push([y,x])}}
+ else if(t=='n')for(const[a,c]of KN)add(r+a,f+c);
+ else if(t=='k'){for(const[a,c]of KG)add(r+a,f+c);const row=w?7:0,K=w?'K':'k',R=w?'R':'r';
+  if(r==row&&f==4&&b[row][4]==K&&!P.mv.has(row*8+4)&&!attacked(b,row,4,!w)){
+   if(!P.mv.has(row*8+7)&&b[row][7]==R&&b[row][5]=='.'&&b[row][6]=='.'&&!attacked(b,row,5,!w))out.push([row,6]);
+   if(!P.mv.has(row*8)&&b[row][0]==R&&b[row][1]=='.'&&b[row][2]=='.'&&b[row][3]=='.'&&!attacked(b,row,3,!w))out.push([row,2])}}
+ else{const dirs=t=='r'?KG.slice(0,4):t=='b'?KG.slice(4):KG;for(const[a,c]of dirs){let y=r+a,x=f+c;while(add(y,x)){y+=a;x+=c}}}
+ return out}
+function legal(P,r,f){const p=P.b[r][f],w=isW(p);return pseudo(P,r,f).filter(([y,x])=>{const b=P.b.map(a=>a.slice());
+ if(p.toLowerCase()=='p'&&f!=x&&b[y][x]=='.')b[r][x]='.';b[y][x]=p;b[r][f]='.';const[kr,kf]=kingAt(b,w);return!attacked(b,kr,kf,!w)})}
+function step(P,u){const b=P.b.map(a=>a.slice()),ff=u.charCodeAt(0)-97,fr=8-u[1],tf=u.charCodeAt(2)-97,tr=8-u[3],p=b[fr][ff],t=p.toLowerCase(),mv=new Set(P.mv);let ep=null;
+ mv.add(fr*8+ff);mv.add(tr*8+tf);
+ if(t=='k'&&Math.abs(tf-ff)==2){const rf=tf>ff?7:0,rt=tf>ff?5:3;b[tr][rt]=b[tr][rf];b[tr][rf]='.'}
+ if(t=='p'&&ff!=tf&&b[tr][tf]=='.')b[fr][tf]='.';
+ if(t=='p'&&Math.abs(tr-fr)==2)ep=[(fr+tr)/2,ff];
+ b[tr][tf]=u[4]?(isW(p)?u[4].toUpperCase():u[4]):p;b[fr][ff]='.';return{b,mv,ep}}
+function san(P,u){const b=P.b,ff=u.charCodeAt(0)-97,fr=8-u[1],tf=u.charCodeAt(2)-97,tr=8-u[3],p=b[fr][ff],t=p.toUpperCase(),w=isW(p),cap=b[tr][tf]!='.'||(t=='P'&&ff!=tf);let s;
+ if(t=='K'&&Math.abs(tf-ff)==2)s=tf>ff?'O-O':'O-O-O';
+ else{s=t=='P'?(cap?'abcdefgh'[ff]:''):t;
+  if(t!='P'&&t!='K'){const o=[];for(let r=0;r<8;r++)for(let f=0;f<8;f++)if((r!=fr||f!=ff)&&b[r][f]==p&&legal(P,r,f).some(m=>m[0]==tr&&m[1]==tf))o.push([r,f]);
+   if(o.length)s+=o.some(q=>q[1]==ff)?(o.some(q=>q[0]==fr)?'abcdefgh'[ff]+(8-fr):(8-fr)):'abcdefgh'[ff]}
+  if(cap)s+='x';s+='abcdefgh'[tf]+(8-tr);if(u[4])s+='='+u[4].toUpperCase()}
+ const N=step(P,u),[kr,kf]=kingAt(N.b,!w);
+ if(attacked(N.b,kr,kf,w)){let any=false;for(let r=0;r<8&&!any;r++)for(let f=0;f<8&&!any;f++){const q=N.b[r][f];if(q!='.'&&isW(q)!=w&&legal(N,r,f).length)any=true}s+=any?'+':'#'}
+ return s}
+const START={b:'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/').map(r=>[...r.replace(/\d/g,n=>'.'.repeat(n))]),mv:new Set(),ep:null};
+function extend(){while(G.pos.length<=G.moves.length){const i=G.pos.length-1,u=G.moves[i];try{G.san.push(san(G.pos[i],u));G.pos.push(step(G.pos[i],u))}catch{G.san.push(u);G.pos.push(G.pos[i])}}}
+const cnt=P=>P.b.flat().filter(x=>x!='.').length,cur=()=>G.pos[G.V];
+// ---------- login ----------
 const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 async function login(){try{const v=b64(crypto.getRandomValues(new Uint8Array(32))),ch=b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v))),st=b64(crypto.getRandomValues(new Uint8Array(8)));
  ls.s('bcV',v);ls.s('bcS',st);location.href=API+'/oauth?'+new URLSearchParams({response_type:'code',client_id:CID,redirect_uri:RU,scope:'board:play challenge:write',code_challenge_method:'S256',code_challenge:ch,state:st})}catch{toast('Log in needs https. Try pasting a token.')}}
@@ -93,76 +152,92 @@ async function boot(){const q=new URLSearchParams(location.search);
  if(!tok)return show('login');
  try{const r=await fetch(API+'/api/account',{headers:H()});if(!r.ok)throw 0;me=await r.json()}catch{toast('Could not load your account');ls.d('bcTok');tok=null;return show('login')}
  if(!G)lobby();events()}
+// ---------- lobby ----------
 function lobby(){show('lobby');incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
  $('#rt').innerHTML=['bullet','blitz','rapid','classical'].map(k=>`<div><b>${me.perfs?.[k]?.rating??'-'}</b><small>${k}</small></div>`).join('');
- $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'on':'alt'}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
- $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'on':'alt'}" onclick="lv=${n};lobby()">Lv ${n}</button>`).join('');
- $('#rtd').textContent=rated?'Rated':'Casual';$('#rtd').className=rated?'on':'alt';
+ $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'':'alt'}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
+ $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'':'alt'}" onclick="lv=${n};lobby()">Lv ${n}</button>`).join('');
+ $('#rtd').textContent=rated?'Rated':'Casual';$('#rtd').className=rated?'':'alt';
  $('#sk').textContent=seekAbort?'Cancel search':'Find game';$('#sk').className=seekAbort?'alt':''}
+function incChal(){$('#inc').innerHTML=Object.values(chal).map(c=>`<div class="card" style="border-color:var(--blue2)"><b>${c.challenger.name}</b> challenges you<br><small>${c.timeControl?.show||''} · ${c.rated?'rated':'casual'}</small><div class="row" style="margin-top:8px"><button onclick="resp('${c.id}','accept')">Accept</button><button class="alt" onclick="resp('${c.id}','decline')">Decline</button></div></div>`).join('')}
+async function resp(id,a){delete chal[id];incChal();const r=await fetch(`${API}/api/challenge/${id}/${a}`,{method:'POST',headers:H()});if(!r.ok)toast('That challenge is gone')}
+async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)return toast("Type your friend's username");ls.s('bcFr',u);
+ const r=await fetch(`${API}/api/challenge/${encodeURIComponent(u)}`,{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({rated,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+ if(r.ok)toast('Sent! The game starts when '+u+' accepts');else{let m='Could not send';try{m=(await r.json()).error||m}catch{}toast(m)}}
+async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+ if(!r.ok)toast('Computer game failed (check token scopes)')}
 async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
  seekAbort=new AbortController();lobby();
  try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated,time:tc[0],increment:tc[1]})});
   if(!r.ok)toast('Could not start a search')}catch{}
  seekAbort=null;if(!G)lobby()}
-function incChal(){$('#inc').innerHTML=Object.values(chal).map(c=>`<div class="card" style="border-color:var(--blue2)"><b>${c.challenger.name}</b> challenges you<br><small>${c.timeControl?.show||''} · ${c.rated?'rated':'casual'}</small><div class="row" style="margin-top:8px"><button onclick="resp('${c.id}','accept')">Accept</button><button class="alt" onclick="resp('${c.id}','decline')">Decline</button></div></div>`).join('')}
-async function resp(id,a){delete chal[id];incChal();const r=await fetch(`${API}/api/challenge/${id}/${a}`,{method:'POST',headers:H()});if(!r.ok)toast('That challenge is gone')}
-async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)return toast('Type your friend\'s username');ls.s('bcFr',u);
- const r=await fetch(`${API}/api/challenge/${encodeURIComponent(u)}`,{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({rated,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
- if(r.ok)toast('Sent! The game starts when '+u+' accepts');else{let m='Could not send';try{m=(await r.json()).error||m}catch{}toast(m)}}
-async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
- if(!r.ok)toast('Computer game failed (check token scopes)')}
+// ---------- game ----------
 function openGame(id){if(G&&G.id==id)return;if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
- G={id,moves:[],status:'created'};flipped=false;sel=null;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
+ G={id,moves:[],status:'created',pos:[START],san:[],V:0};sel=null;hl=[];flipped=false;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
  stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
 const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
 function onGame(d){if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
-function apply(s){const n0=G.moves.length,c0=B?B.flat().filter(x=>x!='.').length:0;G.moves=s.moves?s.moves.split(' '):[];G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
- G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');sel=null;B=build(G.moves);if(G.seen&&G.moves.length>n0)beep(B.flat().filter(x=>x!='.').length<c0);G.seen=true;render()}
-function build(ms){const b='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/').map(r=>[...r.replace(/\d/g,n=>'.'.repeat(n))]);
- for(const m of ms){const ff=m.charCodeAt(0)-97,fr=8-m[1],tf=m.charCodeAt(2)-97,tr=8-m[3],p=b[fr][ff];
-  if(p.toLowerCase()=='k'&&Math.abs(tf-ff)==2){const rf=tf>ff?7:0,rt=tf>ff?5:3;b[tr][rt]=b[tr][rf];b[tr][rf]='.'}
-  if(p.toLowerCase()=='p'&&ff!=tf&&b[tr][tf]=='.')b[fr][tf]='.';
-  b[tr][tf]=m[4]?(p==p.toUpperCase()?m[4].toUpperCase():m[4]):p;b[fr][ff]='.'}return b}
-const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.me=='white'));
-function render(){if(!G||!B)return;const fl=bcol()=='black',lm=G.moves.at(-1);let h='';
- for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r);
-  const c=((r+f)%2?'d':'l')+(sel&&sel[0]==r&&sel[1]==f?' sel':'')+(S.lm&&lm&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)&&!(sel&&sel[0]==r&&sel[1]==f)?' lm':'');
-  h+=`<div class="${c}" data-r="${r}" data-f="${f}">${p=='.'?'':`<span class="${S.pc=='classic'?'pc':p==p.toUpperCase()?'pw':'pb'}">${(S.pc=='classic'&&p==p.toUpperCase()?GW:GL)[p.toLowerCase()]}\uFE0E</span>`}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
+function apply(s){const n0=G.moves.length,c0=cnt(G.pos[n0]||START),wasLive=G.V>=n0;
+ G.moves=s.moves?s.moves.split(' '):[];G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
+ G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');extend();if(wasLive)G.V=G.moves.length;
+ cancelDrag();sel=null;hl=[];if(G.seen&&G.moves.length>n0)beep(cnt(G.pos[G.moves.length])<c0);G.seen=true;render()}
+const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.me=='white')),
+ canMove=()=>live()&&turn()==G.me&&G.V==G.moves.length,bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
+function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
+onresize=()=>{sizeB();if(G&&B)render()};
+function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase();return`<span class="g ${S.pc=='classic'?'pc':w?'pw':'pb'}">${(S.pc=='classic'&&w?GW:GL)[t]}︎</span>`}
+function go(i){if(!G)return;G.V=Math.max(0,Math.min(G.moves.length,i));sel=null;hl=[];render()}
+function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
+ const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm);let h='';
+ for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r),isSel=sel&&sel[0]==r&&sel[1]==f;
+  const c=((r+f)%2?'d':'l')+(isSel?' sel':'')+(S.lm&&lm&&!isSel&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)?' lm':'')+(inchk&&r==kr&&f==kf?' ck':'')+(S.ht&&hs.has(r*8+f)?(p=='.'?' hn':' hc'):'');
+  h+=`<div class="${c}" data-r="${r}" data-f="${f}">${p=='.'?'':glyph(p)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
  $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
- if(live())$('#st').textContent=turn()==G.me?'Your move':"Opponent's move";
+ let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}</span>`}
+ const ml=$('#mlist');ml.innerHTML=m||'<small>Moves will show here</small>';const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
+ const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
+ if(live())$('#st').textContent=G.V<n?'Looking back — tap » to return':turn()==G.me?'Your move':"Opponent's move";
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}clocks()}
 function result(){const s=G.status,w=G.winner;if(s=='aborted'||s=='noStart')return 'Game aborted';if(!w)return s=='stalemate'?'Draw by stalemate':'Draw';
  return(w==G.me?'You won':'You lost')+' by '+({mate:'checkmate',resign:'resignation',outoftime:'time',timeout:'time'}[s]||s)}
 const fmt=ms=>{if(ms==null)return'--';ms=Math.max(0,ms);return ms<10000?(ms/1000).toFixed(1):Math.floor(ms/60000)+':'+String(Math.floor(ms/1000)%60).padStart(2,'0')}
-function clocks(){if(!G||!B)return;const run=live()&&G.moves.length>=2,el=Date.now()-G.t0,t=turn();
+function clocks(){if(!G||!G.me)return;const run=live()&&G.moves.length>=2,el=Date.now()-G.t0,t=turn();
  const w=G.wt!=null?G.wt-(run&&t=='white'?el:0):null,b=G.bt!=null?G.bt-(run&&t=='black'?el:0):null,mw=bcol()=='white';
  $('#mc').textContent=fmt(mw?w:b);$('#oc').textContent=fmt(mw?b:w);
  $('#mc').classList.toggle('run',run&&t==bcol());$('#oc').classList.toggle('run',run&&t!=bcol())}
 setInterval(clocks,200);
-$('#bd').addEventListener('click',e=>{const d=e.target.closest('[data-r]');if(!d||!live()||turn()!=G.me)return;const r=+d.dataset.r,f=+d.dataset.f,p=B[r][f];
- if(mine(p)){sel=[r,f];return render()}if(!sel)return;
- const fp=B[sel[0]][sel[1]],u='abcdefgh'[sel[1]]+(8-sel[0])+'abcdefgh'[f]+(8-r);sel=null;
- if(fp.toLowerCase()=='p'&&(r==0||r==7)){if(S.aq)return send(u+'q');const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')"><span class="${G.me=='white'?'pw':'pb'}" style="color:#fff;text-shadow:0 0 3px #000">${GL[x]}︎</span></button>`).join('');return render()}
- send(u)});
+addEventListener('keydown',e=>{if(G&&!$('#game').classList.contains('hide')){if(e.key=='ArrowLeft')go(G.V-1);if(e.key=='ArrowRight')go(G.V+1)}});
+// ---------- input: tap and drag ----------
+const bd=$('#bd');let drg=null;
+function sqAt(x,y){const R=bd.getBoundingClientRect(),c=Math.floor((x-R.left)/R.width*8),w=Math.floor((y-R.top)/R.height*8);if(c<0||c>7||w<0||w>7)return null;const fl=bcol()=='black';return[fl?7-w:w,fl?7-c:c]}
+function mkGhost(p,x,y){const g=$('#gh');g.innerHTML=glyph(p);g.classList.remove('hide');moveGhost(x,y);const s=bd.querySelector(`[data-r="${drg.r}"][data-f="${drg.f}"] .g`);if(s)s.style.opacity=.3}
+function moveGhost(x,y){const g=$('#gh');g.style.left=x+'px';g.style.top=y+'px'}
+function cancelDrag(){drg=null;$('#gh').classList.add('hide')}
+bd.addEventListener('pointerdown',e=>{if(!G||!G.me||!canMove())return;const s=sqAt(e.clientX,e.clientY);if(!s)return;const[r,f]=s,p=B[r][f];
+ if(sel&&!mine(p)){const t=sel;sel=null;hl=[];tryMove(t,s);return}
+ if(mine(p)){sel=[r,f];hl=legal(cur(),r,f);drg={r,f,p,x:e.clientX,y:e.clientY,mv:false};try{bd.setPointerCapture(e.pointerId)}catch{}render()}else{sel=null;hl=[];render()}});
+bd.addEventListener('pointermove',e=>{if(!drg)return;if(!drg.mv&&Math.hypot(e.clientX-drg.x,e.clientY-drg.y)>8){drg.mv=true;mkGhost(drg.p,e.clientX,e.clientY)}if(drg.mv)moveGhost(e.clientX,e.clientY)});
+bd.addEventListener('pointerup',e=>{if(!drg)return;const d=drg;cancelDrag();if(d.mv){const s=sqAt(e.clientX,e.clientY);if(s&&(s[0]!=d.r||s[1]!=d.f)){sel=null;hl=[];tryMove([d.r,d.f],s)}else{sel=null;hl=[];render()}}});
+bd.addEventListener('pointercancel',()=>{cancelDrag();render()});
+function tryMove(a,b){const L=legal(cur(),a[0],a[1]);if(!L.some(m=>m[0]==b[0]&&m[1]==b[1])){toast('Not a legal move');return render()}
+ const p=B[a[0]][a[1]],u='abcdefgh'[a[1]]+(8-a[0])+'abcdefgh'[b[1]]+(8-b[0]);
+ if(p.toLowerCase()=='p'&&(b[0]==0||b[0]==7)){if(S.aq)return send(u+'q');const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')">${GW[x]}︎</button>`).join('');return render()}
+ render();send(u)}
 function pick(u){$('#promo').classList.add('hide');send(u)}
-async function send(u){const r=await fetch(`${API}/api/board/game/${G.id}/move/${u}`,{method:'POST',headers:H()});if(!r.ok){toast('Not a legal move');render()}}
+async function send(u){try{const r=await fetch(`${API}/api/board/game/${G.id}/move/${u}`,{method:'POST',headers:H()});if(!r.ok){toast('Move rejected');render()}}catch{toast('No connection')}}
 const act=p=>fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
 function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game?'))return;act(G.moves.length<2?'abort':'resign')}
-function draw(){act('draw/'+(G.offer?'yes':'yes'));toast(G.offer?'Draw accepted':'Draw offered')}
-function lobbyBack(){G=null;B=null;if(gAbort)gAbort.abort();lobby()}
-const DEF={bt:'sky',pc:'solid',co:true,lm:true,snd:true,vib:true,aq:false,cr:true},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'},
-BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863']};
-let S={...DEF},flipped=false,ac;try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
-const bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
+function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
+function lobbyBack(){G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
+// ---------- settings ----------
 function applyS(){const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
 function renderSet(){$('#sbody').innerHTML=`<div class="opt" style="border:0">Board colour</div><div class="sws">${Object.entries(BT).map(([k,t])=>`<button class="swb ${k==S.bt?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('bt','${k}')"></button>`).join('')}</div>
 <div class="opt"><span>Piece style</span><span style="display:flex;gap:6px"><button class="${S.pc=='solid'?'':'alt'}" onclick="setS('pc','solid')">Solid</button><button class="${S.pc=='classic'?'':'alt'}" onclick="setS('pc','classic')">Classic</button></span></div>`+
-[['co','Show coordinates'],['lm','Highlight last move'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
+[['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
 function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
-applyS();
-boot();
+applyS();boot();
 </script></body></html>
