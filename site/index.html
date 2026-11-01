@@ -92,14 +92,51 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
 .opt{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e1eefc;font-weight:600}
 .sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;min-height:44px;height:44px;border-radius:50%;padding:0;border:3px solid var(--surf);box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
 .tg{min-width:66px;padding:8px}
+
+/* polish */
+:root{--gs:#2f7de855}
+[data-theme=night]{--gs:#2f6fd899}[data-theme=sunset]{--gs:#e8643b55}[data-theme=mint]{--gs:#1fa67c55}
+body{font-family:"SF Pro Rounded",-apple-system,"Segoe UI",Roboto,system-ui,sans-serif}
+h1{font-size:26px;font-weight:800;letter-spacing:-.6px}.top{margin:2px 0 10px}
+.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:14px;font-weight:700;letter-spacing:.1px;line-height:1.15;border:1px solid #0000001f;
+ background:linear-gradient(180deg,var(--g1),var(--g2));color:#fff;box-shadow:inset 0 1px 0 #ffffff59,0 1px 2px #12335e30,0 6px 16px var(--gs);transition:transform .12s,filter .12s,box-shadow .12s}
+button:active{transform:translateY(1px) scale(.975);filter:brightness(.95);box-shadow:inset 0 1px 0 #ffffff40,0 1px 2px #12335e30}
+button.alt{background:var(--surf);color:var(--blue2);border:1px solid var(--line);box-shadow:inset 0 1px 0 #ffffffb0,0 1px 2px #12335e12,0 4px 12px #12335e0d}
+.gear{width:46px;min-height:46px;padding:0;border-radius:50%;background:var(--surf);color:var(--blue2);border:1px solid var(--line);box-shadow:0 1px 2px #12335e14,0 6px 16px #12335e14}
+.card{border-radius:22px;padding:16px;box-shadow:0 1px 2px #12335e0f,0 10px 30px #2f7de81c}
+.card>b:first-child{display:block;font-size:12px;letter-spacing:.9px;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.seg{display:flex;background:var(--chip);border-radius:15px;padding:3px;gap:3px;border:1px solid var(--line)}
+.seg.g3{display:grid;grid-template-columns:repeat(3,1fr)}.seg.g4{display:grid;grid-template-columns:repeat(4,1fr)}.seg.g5{display:grid;grid-template-columns:repeat(5,1fr)}
+.seg button{flex:1;min-height:42px;padding:0 4px;border-radius:12px;background:transparent;color:var(--dim);border:0;box-shadow:none;font-size:14px;font-weight:700}
+.seg button.on{background:var(--surf);color:var(--blue2);box-shadow:0 1px 3px #12335e26,0 0 0 1px var(--line)}
+.seg button:active{filter:none;transform:scale(.97)}
+.swt{width:54px;min-width:54px;min-height:32px;height:32px;padding:0;border-radius:16px;background:#c4d4ea;border:0;box-shadow:inset 0 1px 3px #12335e40;position:relative;display:block}
+.swt i{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #12335e66;transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.swt.on{background:linear-gradient(180deg,var(--g1),var(--g2))}.swt.on i{transform:translateX(22px)}
+[data-theme=night] .swt{background:#2b4d99}
+.pcb{border-radius:14px;min-height:0;padding:8px 2px;color:var(--txt);background:var(--chip);border:1px solid transparent;box-shadow:none;flex-direction:column;gap:2px}.pcb.s2{border-color:var(--blue);background:var(--surf)}
+.swb{width:44px;min-width:44px;padding:0}
+.nav{gap:8px}.nav button{min-height:46px;padding:0}
+.nav button:disabled{opacity:.35;box-shadow:none}
+.opt{padding:12px 0;font-weight:650}
+.sheet{border-radius:28px 28px 0 0;padding-top:12px}.sheet::before{content:'';display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+.av{display:inline-flex;width:30px;height:30px;border-radius:10px;align-items:center;justify-content:center;font-weight:800;font-size:14px;margin-right:9px;vertical-align:middle;box-shadow:0 1px 3px #12335e30}
+.av.white{background:#fff;color:#12335e;border:1px solid var(--line)}.av.black{background:#1b2233;color:#fff}
+.pl{padding:8px 2px}
+.clk{min-width:86px;text-align:center;border-radius:12px;font-weight:800;box-shadow:0 1px 3px #12335e12}.clk.run{box-shadow:0 4px 14px var(--gs)}
+#mlist{border-radius:14px;padding:7px;gap:5px}#mlist .mv{border-radius:9px;padding:6px 10px}
+.evb{height:10px;border-radius:5px}
+#bw{filter:drop-shadow(0 12px 24px #2f7de826)}#bd{box-shadow:none;border-radius:14px}
+input{border-radius:14px;min-height:48px;padding:0 14px}
+summary{cursor:pointer}
 </style></head><body>
-<div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings">⚙</button></div><div class="sub">Play Lichess, your way</div>
+<div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></div>
 
 <div id="login" class="hide">
- <div class="card"><p>Log in with your free Lichess account to play. Your login stays in this browser only.</p>
- <button style="width:100%" onclick="login()">Log in with Lichess</button></div>
+ <div class="card"> <button style="width:100%" onclick="login()">Log in with Lichess</button></div>
  <div class="card"><details><summary>Or paste a token</summary>
- <p class="dim">Make one at lichess.org/account/oauth/token with <b>Play games with the board API</b> and <b>Create, update, and join games</b> ticked. Never share it.</p>
+ <p class="dim" style="margin:8px 0">lichess.org/account/oauth/token · tick board play and challenges</p>
  <input id="tk" placeholder="lip_..." autocomplete="off"><button class="alt" style="width:100%" onclick="saveTok()">Use token</button></details></div>
 </div>
 
@@ -107,11 +144,11 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
  <div id="inc"></div>
  <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="min-height:38px;padding:6px 12px">Log out</button></div>
  <div class="rt" id="rt"></div></div>
- <div class="card"><b>Play a person</b><div class="row chips" id="tcs" style="margin:10px 0"></div>
- <div class="row"><button class="alt" id="rtd" onclick="rated=!rated;lobby()"></button><button id="sk" onclick="seek()">Find game</button></div></div>
- <div class="card"><b>Play a friend</b><p class="dim" style="margin:6px 0">They need a free Lichess account. They get your challenge on Lichess and can accept it there or here. Uses the time control and rated setting above.</p><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
- <div class="card"><b>Analysis board</b><p class="dim" style="margin:6px 0">Move pieces for both sides with the engine alongside, or review one of your finished games.</p><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">My recent games</button></div><div id="rg"></div></div>
- <div class="card"><b>Play the computer</b><div class="row chips" id="lvs" style="margin:10px 0"></div>
+ <div class="card"><b>Play a person</b><div class="seg g3" id="tcs" style="margin-bottom:10px"></div>
+ <div class="seg" style="margin-bottom:12px"><button id="rcas" onclick="rated=false;lobby()">Casual</button><button id="rrat" onclick="rated=true;lobby()">Rated</button></div><button id="sk" style="width:100%" onclick="seek()">Find game</button></div>
+ <div class="card"><b>Play a friend</b><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">Recent games</button></div><div id="rg"></div></div>
+ <div class="card"><b>Play the computer</b><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
  <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
 </div>
 
@@ -120,7 +157,7 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
  <div id="bw"><div id="bd"></div><svg id="arr" viewBox="0 0 8 8"></svg></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
  <div id="mk"></div>
- <div class="nav"><button class="alt" id="n0" onclick="go(0)">«</button><button class="alt" id="n1" onclick="go(G.V-1)">‹</button><button class="alt" id="n2" onclick="go(G.V+1)">›</button><button class="alt" id="n3" onclick="go(1e9)">»</button></div>
+ <div class="nav"><button class="alt" id="n0" onclick="go(0)"><svg class="ic" viewBox="0 0 24 24"><path d="M11 6l-6 6 6 6M19 6l-6 6 6 6"/></svg></button><button class="alt" id="n1" onclick="go(G.V-1)"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="alt" id="n2" onclick="go(G.V+1)"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="alt" id="n3" onclick="go(1e9)"><svg class="ic" viewBox="0 0 24 24"><path d="M5 6l6 6-6 6M13 6l6 6-6 6"/></svg></button></div>
  <div id="mlist"></div>
  <div id="lv" class="card hide" style="padding:12px"></div>
  <div id="ana" class="card hide" style="padding:12px"></div>
@@ -130,7 +167,7 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
 </div>
 
-<div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)">✕</button></div><div id="sbody"></div></div></div>
+<div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)" aria-label="Close"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="sbody"></div></div></div>
 <div id="toast"></div><div id="promo" class="hide"></div><div id="gh" class="hide"></div>
 
 <script>
@@ -225,9 +262,9 @@ async function boot(){const q=new URLSearchParams(location.search);
 // ---------- lobby ----------
 function lobby(){show('lobby');incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
  $('#rt').innerHTML=['bullet','blitz','rapid','classical'].map(k=>`<div><b>${me.perfs?.[k]?.rating??'-'}</b><small>${k}</small></div>`).join('');
- $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'':'alt'}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
- $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'':'alt'}" onclick="lv=${n};lobby()">Lv ${n}</button>`).join('');
- $('#rtd').textContent=rated?'Rated':'Casual';$('#rtd').className=rated?'':'alt';
+ $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'on':''}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
+ $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'on':''}" onclick="lv=${n};lobby()">${n}</button>`).join('');
+ $('#rcas').className=rated?'':'on';$('#rrat').className=rated?'on':'';
  $('#sk').textContent=seekAbort?'Cancel search':'Find game';$('#sk').className=seekAbort?'alt':''}
 function incChal(){$('#inc').innerHTML=Object.values(chal).map(c=>`<div class="card" style="border-color:var(--blue2)"><b>${c.challenger.name}</b> challenges you<br><small>${c.timeControl?.show||''} · ${c.rated?'rated':'casual'}</small><div class="row" style="margin-top:8px"><button onclick="resp('${c.id}','accept')">Accept</button><button class="alt" onclick="resp('${c.id}','decline')">Decline</button></div></div>`).join('')}
 async function resp(id,a){delete chal[id];incChal();const r=await fetch(`${API}/api/challenge/${id}/${a}`,{method:'POST',headers:H()});if(!r.ok)toast('That challenge is gone')}
@@ -291,7 +328,7 @@ function classify(){const A=G.an;A.cls=[];for(let i=1;i<=G.moves.length;i++){con
   A.cls[i]=k}}
 function tag(i){const A=G.an,k=A&&A.done&&A.cls&&A.cls[i];return k&&!/^(best|exc|good)$/.test(k)?`<sup class="${k=='bril'?'s-bril':k=='great'?'s-great':'t'+({inacc:1,mist:2,blun:3})[k]}">${KN2[k][0]}</sup>`:''}
 function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.length>0;el.classList.toggle('hide',!over);$('#arr').innerHTML='';if(!over)return;
- if(!A||A.failed)return el.innerHTML=`<button style="width:100%" onclick="analyse()">${A?'Try analysis again':'Analyse game'}</button><div class="dim" style="font-size:12px;margin-top:6px;text-align:center">Runs the Stockfish engine on your phone after the game. Takes about a minute.</div>`;
+ if(!A||A.failed)return el.innerHTML=`<button style="width:100%" onclick="analyse()">${A?'Try analysis again':'Analyse game'}</button>`;
  if(A.run)return el.innerHTML=`<div id="anp" style="text-align:center;font-weight:700">Analysing… ${A.p}/${G.moves.length+1}</div><button class="alt" style="width:100%;margin-top:8px" onclick="stopAna()">Cancel</button>`;
  if(!A.done)return el.innerHTML=`<button style="width:100%" onclick="analyse()">Analyse game</button>`;
  const n=G.moves.length,acc=[[],[]],cc=[{},{}];for(let i=1;i<=n;i++){const l=loss(i),s=(i-1)%2;acc[s].push(Math.max(0,Math.min(100,103.1668*Math.exp(-0.04354*l)-3.1669)));const k=A.cls[i];if(k)cc[s][k]=(cc[s][k]||0)+1}
@@ -301,7 +338,7 @@ function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.lengt
  tbl=`<table class="cl"><tr><th></th><td>White</td><td>Black</td></tr>`+ORD.map(k=>`<tr><th><i class="bdg2 k-${k}">${KN2[k][0]}</i>${KN2[k][1].replace(' move','')}</th><td>${cc[0][k]||0}</td><td>${cc[1][k]||0}</td></tr>`).join('')+`</table>`;
  el.innerHTML=`<div style="display:flex;justify-content:space-between;font-weight:800"><span>Engine says</span><span>${txt}</span></div><div class="evb"><i style="width:${wp(cp).toFixed(1)}%"></i></div>
  <svg viewBox="0 0 ${W} ${Hh}" style="width:100%;height:80px;background:#12335e;border-radius:10px;touch-action:manipulation" onclick="const r=this.getBoundingClientRect();go(Math.round((event.clientX-r.left)/r.width*${n}))"><polyline points="0,${Hh/2} ${pts}${W},${Hh/2}" fill="#fff" fill-opacity=".85" stroke="#fff"/><line x1="0" x2="${W}" y1="${Hh/2}" y2="${Hh/2}" stroke="#7fb2ee" stroke-width=".6"/><line x1="${cx}" x2="${cx}" y1="0" y2="${Hh}" stroke="#ffd84d" stroke-width="2"/></svg>
- <div class="sum"><div><b>${av(acc[0])}%</b>White accuracy</div><div><b>${av(acc[1])}%</b>Black accuracy</div></div>${tbl}<div class="dim" style="font-size:12px;text-align:center">Blue arrow = engine's best move. Tap the graph or the moves to jump around.</div>`;
+ <div class="sum"><div><b>${av(acc[0])}%</b>White accuracy</div><div><b>${av(acc[1])}%</b>Black accuracy</div></div>${tbl}`;
  if(e&&e.best)drawArrow(e.best)}
 function drawArrow(u){const fl=bcol()=='black',pt=(a,b)=>{const f=a.charCodeAt(0)-97,r=8-b;return[(fl?7-f:f)+.5,(fl?7-r:r)+.5]},[x1,y1]=pt(u[0],u[1]),[x2,y2]=pt(u[2],u[3]),d=Math.hypot(x2-x1,y2-y1)||1,k=.22/d;
  $('#arr').innerHTML=`<defs><marker id="ah" markerWidth="3.2" markerHeight="3.2" refX="2" refY="1.6" orient="auto"><path d="M0,0L3.2,1.6L0,3.2z" fill="#1f6fd6"/></marker></defs><line x1="${x1}" y1="${y1}" x2="${x2-(x2-x1)*k}" y2="${y2-(y2-y1)*k}" stroke="#1f6fd6" stroke-opacity=".85" stroke-width=".2" stroke-linecap="round" marker-end="url(#ah)"/>`}
@@ -349,12 +386,12 @@ function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol(
   const am=an&&an.m.find(m=>m.r==r&&m.f==f),cg=an&&an.cap&&an.cap.r==r&&an.cap.f==f?`<b class="capg">${glyph(an.cap.p)}</b>`:'';
   h+=`<div class="${c}${bg?' bz':''}${am?' mvz':''}" data-r="${r}" data-f="${f}">${bg}${cg}${p=='.'?'':am?`<b class="mvp ${S.an}" style="--dx:${am.dx};--dy:${am.dy}">${glyph(p)}</b>`:glyph(p)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
- $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
+ const av=(n,c)=>`<span class="av ${c}">${(n||'?')[0].toUpperCase()}</span>`,mc=bcol(),oc=mc=='white'?'black':'white';$('#ot').innerHTML=av(nm(opp),oc)+nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=av(nm(mp),mc)+nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
  let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}${tag(i+1)}</span>`}
- const ml=$('#mlist');ml.innerHTML=m||'<small>Moves will show here</small>';const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
+ const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
- if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Looking back — tap » to return':turn()==G.me?'Your move':pm?'Premove set · tap an empty square to cancel':"Opponent's move";
+ if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Viewing an earlier move':turn()==G.me?'Your move':pm?'Premove set':"Opponent's move";
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
  if(ck=='bril'&&fresh)chime()}
@@ -400,12 +437,12 @@ function lobbyBack(){pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbo
 function applyS(){document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
-const AN=()=>`<div class="pcs" style="grid-template-columns:repeat(5,1fr)">${[['none','Off'],['slide','Slide'],['hop','Hop'],['bounce','Bounce'],['fade','Pop']].map(([k,n])=>`<button class="pcb ${S.an==k?'s2':''}" style="padding:12px 2px" onclick="setS('an','${k}');demoAn()">${n}</button>`).join('')}</div><div class="row" style="padding:2px 0 8px">${[['fast','Fast'],['normal','Normal'],['slow','Slow']].map(([k,n])=>`<button class="${S.sp==k?'':'alt'}" onclick="setS('sp','${k}')">${n}</button>`).join('')}</div>`;
+const AN=()=>`<div class="seg g5">${[['none','Off'],['slide','Slide'],['hop','Hop'],['bounce','Bounce'],['fade','Pop']].map(([k,n])=>`<button class="${S.an==k?'on':''}" onclick="setS('an','${k}');demoAn()">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[['fast','Fast'],['normal','Normal'],['slow','Slow']].map(([k,n])=>`<button class="${S.sp==k?'on':''}" onclick="setS('sp','${k}')">${n}</button>`).join('')}</div>`;
 function demoAn(){if(G&&G.moves.length&&G.me){G.noAnim=false;G.pvV=Math.max(0,G.V-1);render()}}
-const EN=()=>`<div class="row" style="padding:6px 0"><button class="${engKey()=='sf10'?'':'alt'}" onclick="setS('eng','sf10')">Standard<br><small style="color:inherit;opacity:.8">Stockfish 10 · fast</small></button><button class="${engKey()=='sf19'?'':'alt'}" onclick="setS('eng','sf19')">Strong<br><small style="color:inherit;opacity:.8">Stockfish 19 · ~2MB</small></button></div><div class="row" style="padding:2px 0 8px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'':'alt'}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
+const EN=()=>`<div class="seg">${[['sf10','Standard'],['sf19','Strong']].map(([k,n])=>`<button class="${engKey()==k?'on':''}" onclick="setS('eng','${k}')">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'on':''}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
 function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
  $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
- [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
+ [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')}
 function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
 applyS();boot();
 </script></body></html>
