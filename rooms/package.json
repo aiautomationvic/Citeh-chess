@@ -1,0 +1,9 @@
+{
+  "name": "citeh-rooms",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "dev": "wrangler dev --local --port 8787", "deploy": "wrangler deploy" },
+  "dependencies": { "chess.js": "^1.0.0" },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}

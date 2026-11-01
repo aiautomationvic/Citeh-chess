@@ -55,3 +55,10 @@ A phone-first Lichess client. One page, plain JavaScript, no build step. The own
 - Loves dramatic, funny animations, but as options in Settings.
 - Wants the checkmate and brilliant effects to feel cinematic, with sound.
 - Ask before anything public or hard to undo (publishing, permanent deletes). The Pages site and repo are already public, so pushing to `main` is fine when asked for changes.
+
+## Friend games without Lichess (rooms server)
+- `rooms/`: Cloudflare Worker + Durable Object (chess.js checks moves, server keeps clocks). Not part of `site/`; deployed separately from the `rooms` folder (see `rooms/README.md`). Default URL `wss://citeh-rooms.finndoolan.workers.dev`, override with `?rooms=` (saved in localStorage `bcRooms`).
+- Client code is the "friend games" block in index.html (`makeRoom`, `joinRoom`, `netOpen`, `netMsg`, `netUI`). The server sends a Lichess-shaped state, so `apply()`, clocks, resign/draw and all the cutscenes are reused. `G.net` marks a room game. Invite link = `?room=CODE`; works with no Lichess login.
+- `worker/` is the older Lichess relay (`?api=`), `rooms/` is the game server. Both Cloudflare Workers, different folders.
+- Two players mode (lobby, "Play on this phone") is for testing animations: both sides movable, Resign button.
+- Cutscenes: resignation (Napoleon, White flag), checkmate "Siege" (`cine()` scaffold), plus castling, en passant, promotion effects, each with a Settings option.
