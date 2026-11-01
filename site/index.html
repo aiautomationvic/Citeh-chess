@@ -75,6 +75,15 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 #ctl2 button{padding:10px 4px;font-size:14px;white-space:nowrap}
 table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.cl th{text-align:left;font-weight:600}table.cl td{text-align:center;width:22%}table.cl tr+tr{border-top:1px solid var(--line)}
 .bdg2{display:inline-flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;color:#fff;font-size:11px;font-style:normal;margin-right:8px;vertical-align:middle}
+.pm{box-shadow:inset 0 0 0 100px #e0463c77}
+.mvz{z-index:6}.mvp{display:flex;align-items:center;justify-content:center;width:100%;height:100%;pointer-events:none}
+@keyframes aSlide{from{transform:translate(calc(var(--dx)*var(--cs)),calc(var(--dy)*var(--cs)))}to{transform:translate(0,0)}}
+@keyframes aHop{0%{transform:translate(calc(var(--dx)*var(--cs)),calc(var(--dy)*var(--cs))) scale(1)}50%{transform:translate(calc(var(--dx)*var(--cs)*.5),calc(var(--dy)*var(--cs)*.5)) scale(1.45)}100%{transform:translate(0,0) scale(1)}}
+@keyframes aPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes capout{to{opacity:0;transform:scale(.4)}}
+.mvp.slide{animation:aSlide var(--ad) cubic-bezier(.2,.8,.3,1)}.mvp.hop{animation:aHop calc(var(--ad)*1.5) ease-in-out}
+.mvp.bounce{animation:aSlide calc(var(--ad)*1.5) cubic-bezier(.3,1.7,.5,1)}.mvp.fade{animation:aPop calc(var(--ad)*1.4) ease-out}
+.capg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:capout var(--ad) ease-out forwards}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
 #promo button{font-size:44px;padding:8px 14px;background:var(--surf);border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
@@ -148,7 +157,7 @@ const SVGST=Object.keys(SVGP);
 (function(){let d='';for(const k of SVGST)for(const t of 'prnbqk')d+=`<symbol id="${k}-${t}" viewBox="0 0 100 100"><g style="fill:var(--pf);stroke:var(--ps);stroke-width:${SVGP[k].sw};stroke-linejoin:round;stroke-linecap:round">${SVGP[k][t]}</g></symbol>`;
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
-const DEF={eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'neo',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
+const DEF={pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'neo',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
 BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
 const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
@@ -234,7 +243,7 @@ async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobb
  seekAbort=null;if(!G)lobby()}
 // ---------- game ----------
 function openGame(id){if(G&&G.id==id)return;if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
- G={id,moves:[],status:'created',pos:[START],san:[],V:0};sel=null;hl=[];flipped=false;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
+ pm=null;G={id,moves:[],status:'created',pos:[START],san:[],V:0};sel=null;hl=[];flipped=false;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
  stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
 const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
 function onGame(d){if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
@@ -242,9 +251,9 @@ function apply(s){const old=G.moves,n0=old.length,c0=cnt(G.pos[n0]||START),wasLi
  if(G.pend&&n0>nm.length&&old.slice(0,nm.length).join()==nm.join())nm=old;else G.pend=null;
  let k=0;while(k<n0&&k<nm.length&&old[k]==nm[k])k++;G.pos.length=Math.min(G.pos.length,k+1);G.san.length=Math.min(G.san.length,k);G.moves=nm;if(G.V>nm.length)G.V=nm.length;G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
  G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');extend();if(wasLive)G.V=G.moves.length;
- cancelDrag();sel=null;hl=[];if(G.seen&&G.moves.length>n0)beep(cnt(G.pos[G.moves.length])<c0);G.seen=true;render()}
+ cancelDrag();sel=null;hl=[];if(G.seen&&G.moves.length>n0)beep(cnt(G.pos[G.moves.length])<c0);G.seen=true;firePre();render()}
 const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.analysis?G.V%2==0:G.me=='white')),
- canMove=()=>G.analysis||(live()&&turn()==G.me&&G.V==G.moves.length),bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
+ canPre=()=>S.pm&&!G.analysis&&live()&&G.V==G.moves.length&&turn()!=G.me,canMove=()=>G.analysis||(live()&&turn()==G.me&&G.V==G.moves.length),bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
 function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
 onresize=()=>{sizeB();if(G&&B)render()};
 function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase(),pc=S.pc;if(SVGP[pc])return`<svg class="pcsvg ${w?'w':'b'} ${pc}" viewBox="0 0 100 100"><use href="#${pc}-${t}"/></svg>`;const c=pc=='solid'?(w?'pw':'pb'):pc=='classic'?'pc':`p-${pc}-${w?'w':'b'}`;return`<span class="g ${c}">${(pc=='classic'&&w?GW:GL)[t]}\uFE0E</span>`}
@@ -297,8 +306,8 @@ function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.lengt
 function drawArrow(u){const fl=bcol()=='black',pt=(a,b)=>{const f=a.charCodeAt(0)-97,r=8-b;return[(fl?7-f:f)+.5,(fl?7-r:r)+.5]},[x1,y1]=pt(u[0],u[1]),[x2,y2]=pt(u[2],u[3]),d=Math.hypot(x2-x1,y2-y1)||1,k=.22/d;
  $('#arr').innerHTML=`<defs><marker id="ah" markerWidth="3.2" markerHeight="3.2" refX="2" refY="1.6" orient="auto"><path d="M0,0L3.2,1.6L0,3.2z" fill="#1f6fd6"/></marker></defs><line x1="${x1}" y1="${y1}" x2="${x2-(x2-x1)*k}" y2="${y2-(y2-y1)*k}" stroke="#1f6fd6" stroke-opacity=".85" stroke-width=".2" stroke-linecap="round" marker-end="url(#ah)"/>`}
 // ---------- analysis board + game review ----------
-let evTok=0,evPend=null,RG=[];
-function openAnalysis(ms,info){if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();stopAna();if(!Array.isArray(ms))ms=[];
+let evTok=0,evPend=null,RG=[],pm=null;
+function openAnalysis(ms,info){pm=null;if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();stopAna();if(!Array.isArray(ms))ms=[];
  G={id:'an',analysis:true,live:G&&G.analysis?G.live:true,me:'white',w:{name:info?.w||'White',rating:info?.wr},b:{name:info?.b||'Black',rating:info?.br},review:info?.txt||'',moves:ms,status:'analysis',pos:[START],san:[],V:0,seen:true,lastV:null};
  sel=null;hl=[];flipped=false;extend();G.V=ms.length;show('game');$('#nw').classList.add('hide');render()}
 function playAn(u){const c0=cnt(cur());G.moves=G.moves.slice(0,G.V);G.moves.push(u);G.pos.length=G.V+1;G.san.length=G.V;stopAna();G.an=null;extend();G.V=G.moves.length;sel=null;hl=[];beep(cnt(cur())<c0);render()}
@@ -328,18 +337,24 @@ function review(i){const g=RG[i];if(g.variant&&g.variant!='standard')return toas
  const nn=p=>p.user?.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest'),pl=g.players;openAnalysis(ms,{w:nn(pl.white),wr:pl.white.rating,b:nn(pl.black),br:pl.black.rating,txt:`${g.winner?(g.winner=='white'?'1-0':'0-1'):'Draw'} · ${g.status}`})}
 function go(i){if(!G)return;G.V=Math.max(0,Math.min(G.moves.length,i));sel=null;hl=[];render()}
 function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
- const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm),ck=G.an&&G.an.done&&G.an.cls&&G.V>0?G.an.cls[G.V]:null,fresh=G.lastV!==G.V;G.lastV=G.V;let h='';
+ const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm),ck=G.an&&G.an.done&&G.an.cls&&G.V>0?G.an.cls[G.V]:null,fresh=G.lastV!==G.V;G.lastV=G.V;let an=null;
+ if(S.an!='none'&&!G.noAnim&&G.pvV!=null&&G.pvId===G.id){const d=G.V-G.pvV,u=d==1?G.moves[G.V-1]:d==-1?G.moves[G.V]:null,pp=G.pos[G.pvV];if(u&&pp){const ff=u.charCodeAt(0)-97,fr=8-u[1],tf=u.charCodeAt(2)-97,tr=8-u[3],col=x=>fl?7-x:x,
+  mk=(r0,f0,r1,f1)=>({r:d==1?r1:r0,f:d==1?f1:f0,dx:d==1?col(f0)-col(f1):col(f1)-col(f0),dy:d==1?col(r0)-col(r1):col(r1)-col(r0)});
+  an={m:[mk(fr,ff,tr,tf)],cap:d==1&&pp.b[tr][tf]!='.'?{r:tr,f:tf,p:pp.b[tr][tf]}:null};
+  const pc=G.pos[Math.max(G.V,G.pvV)].b[tr][tf];if(pc&&pc.toLowerCase()=='k'&&Math.abs(tf-ff)==2){const rf=tf>ff?7:0,rt=tf>ff?5:3;an.m.push(mk(tr,rf,tr,rt))}}}
+ G.pvV=G.V;G.pvId=G.id;G.noAnim=false;let h='';
  for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r),isSel=sel&&sel[0]==r&&sel[1]==f;
-  const c=((r+f)%2?'d':'l')+(isSel?' sel':'')+(S.lm&&lm&&!isSel&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)?' lm':'')+(inchk&&r==kr&&f==kf?' ck':'')+(S.ht&&hs.has(r*8+f)?(p=='.'?' hn':' hc'):'');
+  const c=((r+f)%2?'d':'l')+(isSel?' sel':'')+(S.lm&&lm&&!isSel&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)?' lm':'')+(inchk&&r==kr&&f==kf?' ck':'')+(S.ht&&hs.has(r*8+f)?(p=='.'?' hn':' hc'):'')+(pm&&G.V==G.moves.length&&((pm.a[0]==r&&pm.a[1]==f)||(pm.b[0]==r&&pm.b[1]==f))?' pm':'');
   const bg=ck&&lm&&lm.slice(2,4)==sq?`<i class="bdg k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</i>`+(ck=='bril'&&fresh?'<u class="rg"></u>'+[0,1,2,3,4,5,6,7].map(q=>`<u class="sp" style="--a:${q*45}deg"></u>`).join(''):''):'';
-  h+=`<div class="${c}${bg?' bz':''}" data-r="${r}" data-f="${f}">${bg}${p=='.'?'':glyph(p)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
+  const am=an&&an.m.find(m=>m.r==r&&m.f==f),cg=an&&an.cap&&an.cap.r==r&&an.cap.f==f?`<b class="capg">${glyph(an.cap.p)}</b>`:'';
+  h+=`<div class="${c}${bg?' bz':''}${am?' mvz':''}" data-r="${r}" data-f="${f}">${bg}${cg}${p=='.'?'':am?`<b class="mvp ${S.an}" style="--dx:${am.dx};--dy:${am.dy}">${glyph(p)}</b>`:glyph(p)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
  $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
  let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}${tag(i+1)}</span>`}
  const ml=$('#mlist');ml.innerHTML=m||'<small>Moves will show here</small>';const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
- if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Looking back — tap » to return':turn()==G.me?'Your move':"Opponent's move";
+ if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Looking back — tap » to return':turn()==G.me?'Your move':pm?'Premove set · tap an empty square to cancel':"Opponent's move";
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
  if(ck=='bril'&&fresh)chime()}
@@ -359,14 +374,18 @@ function sqAt(x,y){const R=bd.getBoundingClientRect(),c=Math.floor((x-R.left)/R.
 function mkGhost(p,x,y){const g=$('#gh');g.innerHTML=glyph(p);g.classList.remove('hide');moveGhost(x,y);const s=bd.querySelector(`[data-r="${drg.r}"][data-f="${drg.f}"] .g`);if(s)s.style.opacity=.3}
 function moveGhost(x,y){const g=$('#gh');g.style.left=x+'px';g.style.top=y+'px'}
 function cancelDrag(){drg=null;$('#gh').classList.add('hide')}
-bd.addEventListener('pointerdown',e=>{if(!G||!G.me||!canMove())return;const s=sqAt(e.clientX,e.clientY);if(!s)return;const[r,f]=s,p=B[r][f];
+bd.addEventListener('pointerdown',e=>{if(!G||!G.me||!(canMove()||canPre()))return;const s=sqAt(e.clientX,e.clientY);if(!s)return;const[r,f]=s,p=B[r][f];
  if(sel&&!mine(p)){const t=sel;sel=null;hl=[];tryMove(t,s);return}
- if(mine(p)){sel=[r,f];hl=legal(cur(),r,f);drg={r,f,p,x:e.clientX,y:e.clientY,mv:false};try{bd.setPointerCapture(e.pointerId)}catch{}render()}else{sel=null;hl=[];render()}});
+ if(mine(p)){sel=[r,f];hl=lg(cur(),r,f);drg={r,f,p,x:e.clientX,y:e.clientY,mv:false};try{bd.setPointerCapture(e.pointerId)}catch{}render()}else{sel=null;hl=[];pm=null;render()}});
 bd.addEventListener('pointermove',e=>{if(!drg)return;if(!drg.mv&&Math.hypot(e.clientX-drg.x,e.clientY-drg.y)>8){drg.mv=true;mkGhost(drg.p,e.clientX,e.clientY)}if(drg.mv)moveGhost(e.clientX,e.clientY)});
-bd.addEventListener('pointerup',e=>{if(!drg)return;const d=drg;cancelDrag();if(d.mv){const s=sqAt(e.clientX,e.clientY);if(s&&(s[0]!=d.r||s[1]!=d.f)){sel=null;hl=[];tryMove([d.r,d.f],s)}else{sel=null;hl=[];render()}}});
+bd.addEventListener('pointerup',e=>{if(!drg)return;const d=drg;cancelDrag();if(d.mv){const s=sqAt(e.clientX,e.clientY);if(s&&(s[0]!=d.r||s[1]!=d.f)){sel=null;hl=[];G.noAnim=true;tryMove([d.r,d.f],s)}else{sel=null;hl=[];render()}}});
 bd.addEventListener('pointercancel',()=>{cancelDrag();render()});
-function tryMove(a,b){const L=legal(cur(),a[0],a[1]);if(!L.some(m=>m[0]==b[0]&&m[1]==b[1])){toast('Not a legal move');return render()}
+const lg=(P,r,f)=>canMove()?legal(P,r,f):pseudo(P,r,f);
+function setPre(a,b,u){pm={a,b,u};sel=null;hl=[];render()}
+function firePre(){if(!pm)return;if(!live()||G.analysis){pm=null;return}if(turn()!=G.me||G.V!=G.moves.length)return;const x=pm;pm=null;if(legal(cur(),x.a[0],x.a[1]).some(m=>m[0]==x.b[0]&&m[1]==x.b[1]))setTimeout(()=>{if(live()&&turn()==G.me)play(x.u)},30);else toast('Premove cancelled')}
+function tryMove(a,b){const L=lg(cur(),a[0],a[1]);if(!L.some(m=>m[0]==b[0]&&m[1]==b[1])){toast(canMove()?'Not a legal move':"Can't premove there");return render()}
  const p=B[a[0]][a[1]],u='abcdefgh'[a[1]]+(8-a[0])+'abcdefgh'[b[1]]+(8-b[0]);
+ if(!canMove())return setPre(a,b,u+(p.toLowerCase()=='p'&&(b[0]==0||b[0]==7)?'q':''));
  if(p.toLowerCase()=='p'&&(b[0]==0||b[0]==7)){if(S.aq)return play(u+'q');const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')">${glyph(isW(p)?x.toUpperCase():x)}</button>`).join('');return render()}
  play(u)}
 function pick(u){$('#promo').classList.add('hide');play(u)}
@@ -376,15 +395,17 @@ async function send(u){try{const r=await fetch(`${API}/api/board/game/${G.id}/mo
 const act=p=>fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
 function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game?'))return;act(G.moves.length<2?'abort':'resign')}
 function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
-function lobbyBack(){stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
+function lobbyBack(){pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
 // ---------- settings ----------
-function applyS(){document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+function applyS(){document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
+const AN=()=>`<div class="pcs" style="grid-template-columns:repeat(5,1fr)">${[['none','Off'],['slide','Slide'],['hop','Hop'],['bounce','Bounce'],['fade','Pop']].map(([k,n])=>`<button class="pcb ${S.an==k?'s2':''}" style="padding:12px 2px" onclick="setS('an','${k}');demoAn()">${n}</button>`).join('')}</div><div class="row" style="padding:2px 0 8px">${[['fast','Fast'],['normal','Normal'],['slow','Slow']].map(([k,n])=>`<button class="${S.sp==k?'':'alt'}" onclick="setS('sp','${k}')">${n}</button>`).join('')}</div>`;
+function demoAn(){if(G&&G.moves.length&&G.me){G.noAnim=false;G.pvV=Math.max(0,G.V-1);render()}}
 const EN=()=>`<div class="row" style="padding:6px 0"><button class="${engKey()=='sf10'?'':'alt'}" onclick="setS('eng','sf10')">Standard<br><small style="color:inherit;opacity:.8">Stockfish 10 · fast</small></button><button class="${engKey()=='sf19'?'':'alt'}" onclick="setS('eng','sf19')">Strong<br><small style="color:inherit;opacity:.8">Stockfish 19 · ~2MB</small></button></div><div class="row" style="padding:2px 0 8px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'':'alt'}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
 function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
- $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+sec('Analysis engine')+EN()+
- [['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
+ $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
+ [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
 function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
 applyS();boot();
 </script></body></html>
