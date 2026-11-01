@@ -62,3 +62,4 @@ A phone-first Lichess client. One page, plain JavaScript, no build step. The own
 - `worker/` is the older Lichess relay (`?api=`), `rooms/` is the game server. Both Cloudflare Workers, different folders.
 - Two players mode (lobby, "Play on this phone") is for testing animations: both sides movable, Resign button.
 - Cutscenes: resignation (Napoleon, White flag), checkmate "Siege" (`cine()` scaffold), plus castling, en passant, promotion effects, each with a Settings option.
+- Brand picker (round button top right of login/lobby): Citeh (default), Dhruv (Arsenal red/white/gold), Jethro (US flag red/white/blue). `S.bn`, `BRANDS`, `setBrand()`, CSS `html[data-brand=...]` at the end of the style block. Non-Citeh brands force the Sky theme, override its colours and switch the board colour (`gunner` / `stars` presets); going back to Citeh restores the old board colour (`S.btp`).
