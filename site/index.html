@@ -21,7 +21,8 @@ input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);ba
 small,.dim{color:var(--dim)}summary{font-weight:700}
 .rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:21px;color:var(--blue2)}
 .hide{display:none!important}
-#bd{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;width:min(100%,max(280px,calc(100dvh - 340px)));aspect-ratio:1/1;margin:0 auto;border-radius:12px;overflow:hidden;border:4px solid #fff;box-shadow:0 10px 30px #2f7de833;touch-action:none}
+#bw{position:relative;width:100%;width:min(100%,max(280px,calc(100dvh - 340px)));aspect-ratio:1/1;margin:0 auto}#arr{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);pointer-events:none}
+#bd{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;height:100%;border-radius:12px;overflow:hidden;border:4px solid #fff;box-shadow:0 10px 30px #2f7de833;touch-action:none}
 #bd>div{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;font-size:calc(var(--cs)*.8);line-height:1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif;font-variant-emoji:text}
 #bd span.g{display:block;pointer-events:none}
 .l{background-color:var(--sqL)}.d{background-color:var(--sqD)}
@@ -39,6 +40,9 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 #mlist{display:flex;gap:6px;align-items:center;overflow-x:auto;white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;min-height:44px;-webkit-overflow-scrolling:touch}
 #mlist .mn{color:var(--dim);font-size:13px;margin-left:4px}
 #mlist .mv{padding:5px 9px;border-radius:8px;font-weight:700;background:#eef6ff;cursor:pointer}#mlist .mv.cur{background:var(--blue);color:#fff}
+#mlist sup{font-size:11px;margin-left:1px}.t1{color:#e6a700}.t2{color:#f07a1a}.t3{color:#e03a3a}.cur sup{color:#fff}
+.evb{height:14px;border-radius:7px;background:#12335e;overflow:hidden;margin:8px 0}.evb i{display:block;height:100%;background:#fff;transition:width .2s}
+.sum{display:flex;justify-content:space-around;text-align:center;margin:8px 0}.sum b{font-size:22px;color:var(--blue2);display:block}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
 #promo button{font-size:44px;padding:8px 14px;background:#fff;border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
@@ -71,10 +75,11 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 
 <div id="game" class="hide">
  <div class="pl"><span id="ot"></span><span class="clk" id="oc">--</span></div>
- <div id="bd"></div>
+ <div id="bw"><div id="bd"></div><svg id="arr" viewBox="0 0 8 8"></svg></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
  <div class="nav"><button class="alt" id="n0" onclick="go(0)">«</button><button class="alt" id="n1" onclick="go(G.V-1)">‹</button><button class="alt" id="n2" onclick="go(G.V+1)">›</button><button class="alt" id="n3" onclick="go(1e9)">»</button></div>
  <div id="mlist"></div>
+ <div id="ana" class="card hide" style="padding:12px"></div>
  <div class="dim" id="st" style="text-align:center;min-height:24px;font-weight:700;margin-top:8px"></div>
  <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
@@ -187,6 +192,40 @@ const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'
 function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
 onresize=()=>{sizeB();if(G&&B)render()};
 function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase();return`<span class="g ${S.pc=='classic'?'pc':w?'pw':'pb'}">${(S.pc=='classic'&&w?GW:GL)[t]}︎</span>`}
+// ---------- analysis (Stockfish, runs on your phone, only after the game) ----------
+let sf=null;
+function startEngine(file){return new Promise((res,rej)=>{let w;try{w=new Worker(file)}catch(e){return rej(e)}const t=setTimeout(()=>{w.terminate();rej('timeout')},20000);
+ w.onerror=e=>{clearTimeout(t);rej(e)};w.onmessage=e=>{if(String(e.data).includes('uciok')){clearTimeout(t);w.onmessage=null;res(w)}};w.postMessage('uci')})}
+async function getEngine(){if(sf)return sf;try{sf=await startEngine('stockfish.wasm.js')}catch{sf=await startEngine('stockfish.js')}return sf}
+function evalFen(w,fen,depth){return new Promise(res=>{let last=null;w.onmessage=e=>{const l=String(e.data),m=l.match(/score (cp|mate) (-?\d+)/);if(m)last={t:m[1],v:+m[2]};if(l.startsWith('bestmove'))res({sc:last,best:l.split(' ')[1]})};w.postMessage('position fen '+fen);w.postMessage('go depth '+depth)})}
+function fenOf(P,i){const b=P.b;let s=b.map(r=>{let o='',n=0;for(const c of r){if(c=='.')n++;else{if(n){o+=n;n=0}o+=c}}return o+(n||'')}).join('/');
+ let c='';if(!P.mv.has(60)&&b[7][4]=='K'){if(!P.mv.has(63)&&b[7][7]=='R')c+='K';if(!P.mv.has(56)&&b[7][0]=='R')c+='Q'}
+ if(!P.mv.has(4)&&b[0][4]=='k'){if(!P.mv.has(7)&&b[0][7]=='r')c+='k';if(!P.mv.has(0)&&b[0][0]=='r')c+='q'}
+ return s+' '+(i%2?'b':'w')+' '+(c||'-')+' '+(P.ep?'abcdefgh'[P.ep[1]]+(8-P.ep[0]):'-')+' 0 1'}
+function hasMove(P,w){for(let r=0;r<8;r++)for(let f=0;f<8;f++){const q=P.b[r][f];if(q!='.'&&isW(q)==w&&legal(P,r,f).length)return true}return false}
+async function analyse(){if(G.an&&G.an.run)return;const A=G.an={ev:[],run:true,done:false,p:0};render();
+ try{const w=await getEngine();for(let i=0;i<=G.moves.length;i++){if(A.stop)break;const P=G.pos[i],wtm=i%2==0;
+  if(!hasMove(P,wtm)){const[kr,kf]=kingAt(P.b,wtm);A.ev[i]={cp:attacked(P.b,kr,kf,!wtm)?(wtm?-1:1)*10000:0,best:null}}
+  else{const r=await evalFen(w,fenOf(P,i),14);let cp=0;if(r.sc)cp=r.sc.t=='mate'?(r.sc.v>0?1:-1)*(10000-Math.abs(r.sc.v)):r.sc.v-40;if(!wtm)cp=-cp;A.ev[i]={cp,best:r.best}}
+  A.p=i+1;const e=$('#anp');if(e)e.textContent=`Analysing… ${A.p}/${G.moves.length+1}`}
+  A.done=!A.stop}catch(e){A.failed=true;toast('Analysis engine could not load')}A.run=false;if(G&&G.an===A)render()}
+function stopAna(){if(G&&G.an){G.an.stop=true;if(sf)sf.postMessage('stop')}}
+const wp=cp=>50+50*(2/(1+Math.exp(-0.00368208*Math.max(-1000,Math.min(1000,cp))))-1);
+function loss(i){const A=G.an;if(!A||!A.done)return 0;const a=wp(A.ev[i-1].cp),b=wp(A.ev[i].cp);return Math.max(0,i%2?a-b:b-a)}
+function tag(i){const A=G.an;if(!A||!A.done)return'';const l=loss(i);return l>=15?'<sup class="t3">??</sup>':l>=10?'<sup class="t2">?</sup>':l>=5?'<sup class="t1">?!</sup>':''}
+function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.length>0;el.classList.toggle('hide',!over);$('#arr').innerHTML='';if(!over)return;
+ if(!A||A.failed)return el.innerHTML=`<button style="width:100%" onclick="analyse()">${A?'Try analysis again':'Analyse game'}</button><div class="dim" style="font-size:12px;margin-top:6px;text-align:center">Runs the Stockfish engine on your phone after the game. Takes about a minute.</div>`;
+ if(A.run)return el.innerHTML=`<div id="anp" style="text-align:center;font-weight:700">Analysing… ${A.p}/${G.moves.length+1}</div><button class="alt" style="width:100%;margin-top:8px" onclick="stopAna()">Cancel</button>`;
+ if(!A.done)return el.innerHTML=`<button style="width:100%" onclick="analyse()">Analyse game</button>`;
+ const n=G.moves.length,acc=[[],[]],cnt2=[[0,0,0],[0,0,0]];for(let i=1;i<=n;i++){const l=loss(i),s=(i-1)%2;acc[s].push(Math.max(0,Math.min(100,103.1668*Math.exp(-0.04354*l)-3.1669)));if(l>=15)cnt2[s][2]++;else if(l>=10)cnt2[s][1]++;else if(l>=5)cnt2[s][0]++}
+ const av=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):'-',e=A.ev[G.V],cp=e?e.cp:0,txt=Math.abs(cp)>=9000?'Mate':(cp>0?'+':'')+(cp/100).toFixed(1);
+ let pts='',W=300,Hh=70;for(let i=0;i<=n;i++)pts+=`${(i/Math.max(1,n)*W).toFixed(1)},${(Hh/2-Math.max(-800,Math.min(800,A.ev[i].cp))/800*(Hh/2-3)).toFixed(1)} `;
+ const cx=(G.V/Math.max(1,n)*W).toFixed(1),row=(nm,s)=>`<div><b>${av(acc[s])}%</b>${nm}<br><small>${cnt2[s][2]} blunder · ${cnt2[s][1]} mistake · ${cnt2[s][0]} inaccuracy</small></div>`;
+ el.innerHTML=`<div style="display:flex;justify-content:space-between;font-weight:800"><span>Engine says</span><span>${txt}</span></div><div class="evb"><i style="width:${wp(cp).toFixed(1)}%"></i></div>
+ <svg viewBox="0 0 ${W} ${Hh}" style="width:100%;height:80px;background:#12335e;border-radius:10px;touch-action:manipulation" onclick="const r=this.getBoundingClientRect();go(Math.round((event.clientX-r.left)/r.width*${n}))"><polyline points="0,${Hh/2} ${pts}${W},${Hh/2}" fill="#fff" fill-opacity=".85" stroke="#fff"/><line x1="0" x2="${W}" y1="${Hh/2}" y2="${Hh/2}" stroke="#7fb2ee" stroke-width=".6"/><line x1="${cx}" x2="${cx}" y1="0" y2="${Hh}" stroke="#ffd84d" stroke-width="2"/></svg>
+ <div class="sum">${row('White',0)}${row('Black',1)}</div><div class="dim" style="font-size:12px;text-align:center">Blue arrow = engine's best move. Tap the graph or the moves to jump around.</div>`;
+ if(e&&e.best){const fl=bcol()=='black',u=e.best,pt=(a,b)=>{const f=a.charCodeAt(0)-97,r=8-b;return[(fl?7-f:f)+.5,(fl?7-r:r)+.5]},[x1,y1]=pt(u[0],u[1]),[x2,y2]=pt(u[2],u[3]),d=Math.hypot(x2-x1,y2-y1)||1,k=.22/d;
+  $('#arr').innerHTML=`<defs><marker id="ah" markerWidth="3.2" markerHeight="3.2" refX="2" refY="1.6" orient="auto"><path d="M0,0L3.2,1.6L0,3.2z" fill="#1f6fd6"/></marker></defs><line x1="${x1}" y1="${y1}" x2="${x2-(x2-x1)*k}" y2="${y2-(y2-y1)*k}" stroke="#1f6fd6" stroke-opacity=".85" stroke-width=".2" stroke-linecap="round" marker-end="url(#ah)"/>`}}
 function go(i){if(!G)return;G.V=Math.max(0,Math.min(G.moves.length,i));sel=null;hl=[];render()}
 function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
  const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm);let h='';
@@ -196,11 +235,11 @@ function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol(
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
  $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
- let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}</span>`}
+ let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}${tag(i+1)}</span>`}
  const ml=$('#mlist');ml.innerHTML=m||'<small>Moves will show here</small>';const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
  if(live())$('#st').textContent=G.V<n?'Looking back — tap » to return':turn()==G.me?'Your move':"Opponent's move";
- else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}clocks()}
+ else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks()}
 function result(){const s=G.status,w=G.winner;if(s=='aborted'||s=='noStart')return 'Game aborted';if(!w)return s=='stalemate'?'Draw by stalemate':'Draw';
  return(w==G.me?'You won':'You lost')+' by '+({mate:'checkmate',resign:'resignation',outoftime:'time',timeout:'time'}[s]||s)}
 const fmt=ms=>{if(ms==null)return'--';ms=Math.max(0,ms);return ms<10000?(ms/1000).toFixed(1):Math.floor(ms/60000)+':'+String(Math.floor(ms/1000)%60).padStart(2,'0')}
@@ -233,7 +272,7 @@ async function send(u){try{const r=await fetch(`${API}/api/board/game/${G.id}/mo
 const act=p=>fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
 function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game?'))return;act(G.moves.length<2?'abort':'resign')}
 function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
-function lobbyBack(){G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
+function lobbyBack(){stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
 // ---------- settings ----------
 function applyS(){const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
