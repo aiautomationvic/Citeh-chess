@@ -394,6 +394,7 @@ html[data-brand=jethro] .logo{background:#2d2b63;box-shadow:inset 0 0 0 2px #fff
 <div class="top"><h1 onclick="goHome()" style="cursor:pointer"><span class="logo"><svg viewBox="4 4 32 32"><use href="#wn"/></svg></span><span id="bnm">Citeh</span> <span>Chess</span></h1><span style="display:flex;gap:8px"><button class="gear hide" id="bpb" onclick="bpick(true)" aria-label="Choose style"><i id="bdot" style="display:block;width:20px;height:20px;border-radius:50%"></i></button><button class="gear" onclick="goHome()" aria-label="Home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/></svg></button><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></span></div>
 
 <div id="login" class="hide">
+ <div class="card hide" id="lnote"><b>Reconnecting to Lichess…</b><p class="dim" style="margin:6px 0 12px;font-size:13px">You are still signed in. Trying again.</p><button style="width:100%" onclick="boot()">Try again now</button></div>
  <div class="card" id="fc1"></div>
  <div class="card" style="padding:22px 18px"><button style="width:100%" onclick="login()">Continue with Lichess</button></div>
  <details style="margin:14px 4px"><summary class="dim" style="font-weight:600;font-size:14px">Use an access token</summary>
@@ -529,8 +530,9 @@ async function events(){if(evRun)return;evRun=true;while(tok){try{await stream('
 async function boot(){const q=new URLSearchParams(location.search),rc=(q.get('room')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
  if(rc){history.replaceState(null,'',RU);joinRoom(rc,{name:ls.g('bcName')||''})}
  if(q.get('code')&&q.get('state')==ls.g('bcS')){await exchange(q.get('code'));history.replaceState(null,'',RU)}
- if(!tok)return rc?0:show('login');
- try{const r=await fetch(API+'/api/account',{headers:H(),signal:AbortSignal.timeout(8000)});if(!r.ok)throw r.status;me=await r.json()}catch(e){toast(API!=AUTH?'Relay did not answer ('+(e&&e.name||e)+')':'Could not load your account');if(e==401){ls.d('bcTok');tok=null}return rc?0:show('login')}
+ $('#lnote').classList.add('hide');if(!tok)return rc?0:show('login');
+ try{const r=await fetch(API+'/api/account',{headers:H(),signal:AbortSignal.timeout(8000)});if(!r.ok)throw r.status;me=await r.json()}catch(e){toast(API!=AUTH?'Relay did not answer ('+(e&&e.name||e)+')':'Could not load your account');if(e==401){ls.d('bcTok');tok=null;return rc?0:show('login')}if(rc)return;show('login');$('#lnote').classList.remove('hide');if((boot.n=(boot.n||0)+1)<8)setTimeout(boot,5000);return}
+ boot.n=0;try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch{}
  if(!G)lobby();events()}
 // ---------- lobby ----------
 function lobby(){show('lobby');$('#res').innerHTML=G&&G.me&&!G.analysis&&live()?'<div class="card" style="border-color:var(--blue2)"><b>Game in progress</b><button style="width:100%" onclick="resumeGame()">Back to game</button></div>':'';incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
