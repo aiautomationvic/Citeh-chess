@@ -517,7 +517,7 @@ async function events(){if(evRun)return;evRun=true;while(tok){try{await stream('
 async function boot(){const q=new URLSearchParams(location.search);
  if(q.get('code')&&q.get('state')==ls.g('bcS')){await exchange(q.get('code'));history.replaceState(null,'',RU)}
  if(!tok)return show('login');
- try{const r=await fetch(API+'/api/account',{headers:H()});if(!r.ok)throw 0;me=await r.json()}catch{toast('Could not load your account');ls.d('bcTok');tok=null;return show('login')}
+ try{const r=await fetch(API+'/api/account',{headers:H(),signal:AbortSignal.timeout(8000)});if(!r.ok)throw r.status;me=await r.json()}catch(e){toast(API!=AUTH?'Relay did not answer ('+(e&&e.name||e)+')':'Could not load your account');if(e==401){ls.d('bcTok');tok=null}return show('login')}
  if(!G)lobby();events()}
 // ---------- lobby ----------
 function lobby(){show('lobby');$('#res').innerHTML=G&&G.me&&!G.analysis&&live()?'<div class="card" style="border-color:var(--blue2)"><b>Game in progress</b><button style="width:100%" onclick="resumeGame()">Back to game</button></div>':'';incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
