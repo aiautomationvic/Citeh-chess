@@ -671,9 +671,10 @@ function execFx(kr,kf,ww){const bw=$('#bw');if(!bw||!bw.animate)return false;con
   const ban=document.createElement('div');ban.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';
   ban.innerHTML=`<div style="background:linear-gradient(180deg,#ee5a4d,#b3261e);color:#fff;border-radius:18px;padding:${c*.16}px ${c*.5}px;text-align:center;font-weight:900;font-size:${c*.62}px;line-height:1.05;letter-spacing:.5px;box-shadow:0 14px 44px #000a,inset 0 1px 0 #fff5;border:2px solid #ffffff55">Checkmate<div style="font-size:${c*.3}px;font-weight:700;opacity:.92;margin-top:4px">${ww?'White':'Black'} wins</div></div>`;box.appendChild(ban);
   ban.firstChild.animate([{transform:'scale(.2) rotate(-8deg)',opacity:0},{transform:'scale(1.18) rotate(2deg)',opacity:1,offset:.45},{transform:'scale(.97)',offset:.62},{transform:'scale(1)',opacity:1}],{duration:1100,delay:350,fill:'both'});ban.animate([{opacity:1},{opacity:0}],{duration:500,delay:1900,fill:'both'})};
- const END=5100,restore=()=>hid.forEach(e=>{e.style.visibility=''});
+ const bdgD=D0.el.querySelector('.bdg');D0.el.style.boxShadow='none';if(bdgD)bdgD.style.visibility='hidden';
+ const END=5100,restore=()=>{hid.forEach(e=>{e.style.visibility=''});D0.el.style.boxShadow='';if(bdgD)bdgD.style.visibility=''};
  const frame=now=>{if(!box.isConnected){restore();return}const t=now-T.clk;if(t>=END){box.remove();restore();return}
-  const ph=t*.019,mvD=(t>=500&&t<2300)||(t>=3600&&t<4500),lf=1-Math.abs(Math.sin(ph)),stepN=Math.floor(ph/Math.PI);
+  const ph=t*.019,mvD=t>=500&&t<3050,lf=1-Math.abs(Math.sin(ph)),stepN=Math.floor(ph/Math.PI);
   // loser king
   let lx=L0.x,ly=L0.y,lrot=0,s=0;
   if(t<1100){const j=cl(t/500);lx+=Math.sin(t*.09)*c*.035*j;ly+=Math.cos(t*.11)*c*.02*j}
@@ -683,11 +684,10 @@ function execFx(kr,kf,ww){const bw=$('#bw');if(!bw||!bw.animate)return false;con
   let px=D0.x,py=D0.y;const base={x:P1.x+d.x*smax,y:P1.y+d.y*smax};
   if(t>=500&&t<1100){const p=eio(cl((t-500)/600));px=lerp(D0.x,P1.x,p);py=lerp(D0.y,P1.y,p)}
   else if(t>=1100&&t<2300){px=P1.x+d.x*s;py=P1.y+d.y*s}
-  else if(t>=2300&&t<3600){const p=eio(cl((t-2300)/500));px=base.x+n.x*c*.5*p;py=base.y+n.y*c*.5*p}
-  else if(t>=3600){const p=eio(cl((t-3600)/900)),h={x:base.x+n.x*c*.5,y:base.y+n.y*c*.5};px=lerp(h.x,D0.x,p);py=lerp(h.y,D0.y,p)}
-  const wr=mvD?Math.sin(ph)*14:Math.sin(t*.004)*1.5,wb=mvD?-Math.abs(Math.sin(ph))*c*.12:0;
-  tr(aD,px,py+wb,wr,1+(mvD?.08*lf:0),1-(mvD?.08*lf:0));
-  if(mvD&&stepN!==T.step){T.step=stepN;const e=document.createElement('i'),z=c*.22;e.style.cssText=`position:absolute;left:${px}px;top:${py+c*.38}px;width:${z}px;height:${z}px;margin:${-z/2}px 0 0 ${-z/2}px;border-radius:50%;background:#e8eef7bb;filter:blur(1.5px);pointer-events:none`;box.appendChild(e);e.animate([{transform:'scale(.4)',opacity:.8},{transform:`translate(${(Math.random()-.5)*c*.5}px,${-c*.15}px) scale(1.6)`,opacity:0}],{duration:450,fill:'both'})}
+  else if(t>=2300&&t<3050){const p=eio(cl((t-2300)/750));px=lerp(base.x,D0.x,p);py=lerp(base.y,D0.y,p)}
+  const pd=t>=2300?t*.034:ph,lfd=1-Math.abs(Math.sin(pd)),wr=mvD?Math.sin(pd)*(t>=2300?18:14):Math.sin(t*.004)*1.5,wb=mvD?-Math.abs(Math.sin(pd))*c*(t>=2300?.16:.12):0;
+  tr(aD,px,py+wb,wr,1+(mvD?.08*lfd:0),1-(mvD?.08*lfd:0));
+  const stepD=Math.floor(pd/Math.PI);if(mvD&&stepD!==T.step){T.step=stepD;const e=document.createElement('i'),z=c*.22;e.style.cssText=`position:absolute;left:${px}px;top:${py+c*.38}px;width:${z}px;height:${z}px;margin:${-z/2}px 0 0 ${-z/2}px;border-radius:50%;background:#e8eef7bb;filter:blur(1.5px);pointer-events:none`;box.appendChild(e);e.animate([{transform:'scale(.4)',opacity:.8},{transform:`translate(${(Math.random()-.5)*c*.5}px,${-c*.15}px) scale(1.6)`,opacity:0}],{duration:450,fill:'both'})}
   // rope
   const ra=t<900?0:t<1100?cl((t-900)/200):t<2300?1:cl(1-(t-2300)/200);rope.style.opacity=ra;if(ra>0){const ex=px-lx,ey=py-ly,len=Math.hypot(ex,ey);rope.style.width=len+'px';rope.style.transform=`translate(${lx}px,${ly-Math.max(4,c*.07)/2}px) rotate(${Math.atan2(ey,ex)*180/Math.PI}deg)`}
   // dust
