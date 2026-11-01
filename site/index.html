@@ -2,7 +2,10 @@
 <meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Citeh Chess</title>
 <style>
-:root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffe6;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee;--cs:40px}
+:root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffe6;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee;--cs:40px;--surf:#fff;--chip:#eef6ff;--g1:#4a9bff;--g2:#2f7de8}
+[data-theme=night]{--bg1:#0d1f45;--bg2:#06132e;--card:#122a5ee6;--line:#2b4d99;--txt:#e8f0ff;--dim:#9db6e6;--surf:#14306a;--chip:#1b3b7e;--blue:#5b9bff;--blue2:#8cbaff;--g1:#4a9bff;--g2:#2f6fd8}
+[data-theme=sunset]{--bg1:#fff7f0;--bg2:#ffd7bf;--line:#f4c3a6;--blue:#f0803f;--blue2:#d9622a;--txt:#4a2410;--dim:#a2674a;--chip:#ffefe4;--g1:#ff9a5b;--g2:#e8643b}
+[data-theme=mint]{--bg1:#f2fffa;--bg2:#c8f0e0;--line:#a6e0cb;--blue:#2fb98c;--blue2:#1a9272;--txt:#0e3d30;--dim:#4f8f7c;--chip:#e6faf2;--g1:#4fd1a5;--g2:#1fa67c}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 html,body{margin:0;min-height:100%;background:linear-gradient(170deg,var(--bg1),var(--bg2)) fixed;color:var(--txt);font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-user-select:none;user-select:none}
@@ -10,19 +13,19 @@ body{padding:calc(12px + env(safe-area-inset-top)) 12px calc(28px + env(safe-are
 .top{display:flex;align-items:center;justify-content:space-between;margin:4px 0}
 h1{margin:0;font-size:28px;letter-spacing:-.5px}h1 span{color:var(--blue)}
 .sub{color:var(--dim);margin-bottom:8px;font-size:14px}
-button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 14px;min-height:46px;background:linear-gradient(180deg,#4a9bff,#2f7de8);color:#fff;box-shadow:0 3px 10px #2f7de844;touch-action:manipulation;-webkit-appearance:none;appearance:none;cursor:pointer}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 14px;min-height:46px;background:linear-gradient(180deg,var(--g1),var(--g2));color:#fff;box-shadow:0 3px 10px #2f7de844;touch-action:manipulation;-webkit-appearance:none;appearance:none;cursor:pointer}
 button:active{transform:scale(.96)}button[disabled]{opacity:.4}
-button.alt{background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:none}
-.gear{width:46px;padding:0;border-radius:50%;font-size:20px;background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:0 3px 12px #3b8cf033}
+button.alt{background:var(--surf);border:1px solid var(--line);color:var(--blue2);box-shadow:none}
+.gear{width:46px;padding:0;border-radius:50%;font-size:20px;background:var(--surf);border:1px solid var(--line);color:var(--blue2);box-shadow:0 3px 12px #3b8cf033}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 6px 22px #3b8cf022}
 .row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
 .chips button{flex:1 0 28%;padding:10px 4px}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
 small,.dim{color:var(--dim)}summary{font-weight:700}
 .rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:21px;color:var(--blue2)}
 .hide{display:none!important}
 #bw{position:relative;width:100%;width:min(100%,max(280px,calc(100dvh - 340px)));aspect-ratio:1/1;margin:0 auto}#arr{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);pointer-events:none}
-#bd{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;height:100%;border-radius:12px;overflow:hidden;border:4px solid #fff;box-shadow:0 10px 30px #2f7de833;touch-action:none}
+#bd{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;height:100%;border-radius:12px;overflow:hidden;border:4px solid var(--surf);box-shadow:0 10px 30px #2f7de833;touch-action:none}
 #bd>div{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;font-size:calc(var(--cs)*.8);line-height:1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif;font-variant-emoji:text}
 #bd span.g{display:block;pointer-events:none}
 .l{background-color:var(--sqL)}.d{background-color:var(--sqD)}
@@ -31,15 +34,15 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 .hn::after{content:'';position:absolute;width:30%;height:30%;border-radius:50%;background:#12335e38;pointer-events:none}
 .hc::after{content:'';position:absolute;inset:3%;border-radius:50%;border:4px solid #12335e44;pointer-events:none}
 .co{position:absolute;font-family:-apple-system,system-ui,sans-serif;font-size:10px;font-style:normal;font-weight:800;opacity:.65;color:var(--txt);pointer-events:none}.co.r{top:2px;left:3px}.co.f{bottom:1px;right:3px}
-.pw{color:#fff;text-shadow:0 0 2px #12335e,0 0 2px #12335e,0 1px 3px #12335e}.pb{color:#0f2a52;text-shadow:0 0 1px #e8f3ff}.pc{color:#12335e}
+.pw{color:#fff;text-shadow:0 0 2px #12335e,0 0 2px #12335e,0 1px 3px #12335e}.pb{color:#0f2a52;text-shadow:0 0 1px #e8f3ff}.pc{color:var(--txt)}
 #gh{position:fixed;z-index:6;pointer-events:none;transform:translate(-50%,-62%);font-size:calc(var(--cs)*1.25);line-height:1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif}
 .pl{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;font-weight:700}
-.clk{background:#fff;border:1px solid var(--line);padding:5px 14px;border-radius:12px;font-variant-numeric:tabular-nums;font-size:20px}
+.clk{background:var(--surf);border:1px solid var(--line);padding:5px 14px;border-radius:12px;font-variant-numeric:tabular-nums;font-size:20px}
 .clk.run{background:var(--blue);border-color:var(--blue);color:#fff}
 .nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 6px}.nav button{font-size:26px;line-height:1;padding:6px}
-#mlist{display:flex;gap:6px;align-items:center;overflow-x:auto;white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;min-height:44px;-webkit-overflow-scrolling:touch}
+#mlist{display:flex;gap:6px;align-items:center;overflow-x:auto;white-space:nowrap;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:8px;min-height:44px;-webkit-overflow-scrolling:touch}
 #mlist .mn{color:var(--dim);font-size:13px;margin-left:4px}
-#mlist .mv{padding:5px 9px;border-radius:8px;font-weight:700;background:#eef6ff;cursor:pointer}#mlist .mv.cur{background:var(--blue);color:#fff}
+#mlist .mv{padding:5px 9px;border-radius:8px;font-weight:700;background:var(--chip);cursor:pointer}#mlist .mv.cur{background:var(--blue);color:#fff}
 #mlist sup{font-size:11px;margin-left:1px}.t1{color:#e6a700}.t2{color:#f07a1a}.t3{color:#e03a3a}.cur sup{color:#fff}
 .evb{height:14px;border-radius:7px;background:#12335e;overflow:hidden;margin:8px 0}.evb i{display:block;height:100%;background:#fff;transition:width .2s}
 .sum{display:flex;justify-content:space-around;text-align:center;margin:8px 0}.sum b{font-size:22px;color:var(--blue2);display:block}
@@ -54,13 +57,22 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 .mkb{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:14px;padding:0 6px;color:#fff;font-size:15px}
 .mkb.k-bril{box-shadow:0 0 14px 2px #1cc2b6aa}
 #mlist sup{font-size:11px;margin-left:1px;font-weight:800}.s-bril{color:#13a89c}.s-great{color:#3f74c4}
+#promo button{color:var(--txt)}
+.p-ivory-w{color:#fff8e7;text-shadow:0 0 1px #5a3a1a,0 0 2px #5a3a1a,0 1px 2px #5a3a1a}.p-ivory-b{color:#3a2412;text-shadow:0 0 1px #e8d3a8}
+.p-neon-w{color:#fff;text-shadow:0 0 4px #4df,0 0 10px #4df}.p-neon-b{color:#14143a;text-shadow:0 0 3px #f4f,0 0 8px #f4f}
+.p-ice-w{color:#f2fbff;text-shadow:0 0 2px #2f7de8,0 0 3px #2f7de8,0 1px 3px #1f4f9a}.p-ice-b{color:#1c4a9c;text-shadow:0 0 1px #cfe8ff}
+.p-gold-w,.p-gold-b{-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.p-gold-w{background-image:linear-gradient(160deg,#fff3b0,#e0a92e 60%,#fff0a0);filter:drop-shadow(0 1px 1px #6a4a00)}.p-gold-b{background-image:linear-gradient(160deg,#6b46a8,#2a1250);filter:drop-shadow(0 1px 1px #e9d8ff)}
+.sws{flex-wrap:wrap}.pcs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:6px 0}
+.pcb{background:var(--chip);color:var(--txt);border:2px solid transparent;font-size:12px;padding:6px 2px;min-height:0;box-shadow:none}.pcb.s2{border-color:var(--blue)}
+.pv{display:flex;justify-content:center;font-size:28px;line-height:1.1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif}.pv .g{display:inline}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
-#promo button{font-size:44px;padding:8px 14px;background:#fff;border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
+#promo button{font-size:44px;padding:8px 14px;background:var(--surf);border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
 #set{position:fixed;inset:0;background:#12335e66;display:flex;z-index:7}
-.sheet{background:#fff;width:100%;max-width:520px;margin:auto auto 0;border-radius:24px 24px 0 0;padding:18px 18px calc(28px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet{background:var(--surf);width:100%;max-width:520px;margin:auto auto 0;border-radius:24px 24px 0 0;padding:18px 18px calc(28px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
 .opt{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e1eefc;font-weight:600}
-.sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;min-height:44px;height:44px;border-radius:50%;padding:0;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
+.sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;min-height:44px;height:44px;border-radius:50%;padding:0;border:3px solid var(--surf);box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
 .tg{min-width:66px;padding:8px}
 </style></head><body>
 <div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings">⚙</button></div><div class="sub">Play Lichess, your way</div>
@@ -105,8 +117,9 @@ const API='https://lichess.org',CID='aiav-blue-chess',RU=location.origin+locatio
 const mem={},ls={g:k=>{try{return localStorage.getItem(k)}catch{return mem[k]}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch{mem[k]=v}},d:k=>{try{localStorage.removeItem(k)}catch{delete mem[k]}}};
 let chal={},tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,hl=[],rated=false,tc=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false,flipped=false,ac;
 const TCS=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'};
-const DEF={bt:'sky',pc:'solid',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
-BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863']};
+const DEF={th:'sky',bt:'sky',pc:'solid',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
+BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
+const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
 function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);if(v=='game')sizeB()}
@@ -203,7 +216,8 @@ const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'
  canMove=()=>live()&&turn()==G.me&&G.V==G.moves.length,bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
 function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
 onresize=()=>{sizeB();if(G&&B)render()};
-function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase();return`<span class="g ${S.pc=='classic'?'pc':w?'pw':'pb'}">${(S.pc=='classic'&&w?GW:GL)[t]}︎</span>`}
+function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase(),pc=S.pc,c=pc=='solid'?(w?'pw':'pb'):pc=='classic'?'pc':`p-${pc}-${w?'w':'b'}`;return`<span class="g ${c}">${(pc=='classic'&&w?GW:GL)[t]}\uFE0E</span>`}
+function pv(k){const o=S.pc;S.pc=k;const h=glyph('N')+glyph('n');S.pc=o;return h}
 // ---------- analysis (Stockfish, runs on your phone, only after the game) ----------
 let sf=null;
 function startEngine(file){return new Promise((res,rej)=>{let w;try{w=new Worker(file)}catch(e){return rej(e)}const t=setTimeout(()=>{w.terminate();rej('timeout')},20000);
@@ -299,12 +313,12 @@ function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game
 function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
 function lobbyBack(){stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
 // ---------- settings ----------
-function applyS(){const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+function applyS(){document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
-function renderSet(){$('#sbody').innerHTML=`<div class="opt" style="border:0">Board colour</div><div class="sws">${Object.entries(BT).map(([k,t])=>`<button class="swb ${k==S.bt?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('bt','${k}')"></button>`).join('')}</div>
-<div class="opt"><span>Piece style</span><span style="display:flex;gap:6px"><button class="${S.pc=='solid'?'':'alt'}" onclick="setS('pc','solid')">Solid</button><button class="${S.pc=='classic'?'':'alt'}" onclick="setS('pc','classic')">Classic</button></span></div>`+
-[['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
+function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
+ $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+
+ [['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
 function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
 applyS();boot();
 </script></body></html>
