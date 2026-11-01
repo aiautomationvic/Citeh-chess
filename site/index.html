@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Citeh Chess</title>
+<style>
+:root{--bg:#081a3a;--bg2:#0d2a5e;--card:#10316b;--line:#1d4590;--blue:#3b82f6;--blue2:#5b9bff;--txt:#e8f0ff;--dim:#9db6e6;--lt:#a9c6f2;--dk:#4a7bc4}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--txt);font-family:system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+body{padding:14px 10px;max-width:520px;margin:0 auto}
+h1{margin:6px 0 2px;font-size:26px}h1 span{color:var(--blue2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px 16px;background:var(--blue);color:#fff}
+button.alt{background:#0b2350;border:1px solid var(--line);color:var(--txt)}
+button.on{background:var(--blue2);color:#06173a}
+.row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
+.chips button{flex:1 0 28%;padding:10px 4px}
+input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0b2350;color:#fff;font:inherit;margin:6px 0;-webkit-user-select:text;user-select:text}
+small,.dim{color:var(--dim)}
+.rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:20px;color:var(--blue2)}
+.hide{display:none!important}
+#bd{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;border:3px solid var(--line);touch-action:manipulation}
+#bd div{display:flex;align-items:center;justify-content:center;font-size:min(9.5vw,48px);line-height:1;position:relative}
+.l{background:var(--lt)}.d{background:var(--dk)}
+.sel{box-shadow:inset 0 0 0 100px #ffd84d88}.lm{box-shadow:inset 0 0 0 100px #4dffb066}
+.pw{color:#fff;text-shadow:0 0 2px #06173a,0 0 2px #06173a,0 1px 3px #06173a}.pb{color:#0a1632;text-shadow:0 0 1px #cfe0ff}
+.pl{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;font-weight:700}
+.clk{background:#0b2350;border:1px solid var(--line);padding:6px 12px;border-radius:10px;font-variant-numeric:tabular-nums;font-size:20px}
+.clk.run{background:var(--blue);border-color:var(--blue2)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000c;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+#promo{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
+#promo button{font-size:44px;padding:8px 14px;background:var(--card);border:2px solid var(--blue2)}
+</style></head><body>
+<h1>Citeh <span>Chess</span></h1><div class="dim" style="margin-bottom:6px">A fan-made client for Lichess</div>
+
+<div id="login" class="hide">
+ <div class="card"><p>Log in with your free Lichess account to play. Your login stays in this browser only.</p>
+ <button style="width:100%" onclick="login()">Log in with Lichess</button></div>
+ <div class="card"><details><summary>Or paste a token</summary>
+ <p class="dim">Make one at lichess.org/account/oauth/token with <b>Play games with the board API</b> and <b>Create, update, and join games</b> ticked. Never share it.</p>
+ <input id="tk" placeholder="lip_..." autocomplete="off"><button class="alt" style="width:100%" onclick="saveTok()">Use token</button></details></div>
+</div>
+
+<div id="lobby" class="hide">
+ <div id="inc"></div>
+ <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="padding:8px 12px">Log out</button></div>
+ <div class="rt" id="rt"></div></div>
+ <div class="card"><b>Play a person</b><div class="row chips" id="tcs" style="margin:10px 0"></div>
+ <div class="row"><button class="alt" id="rtd" onclick="rated=!rated;lobby()"></button><button id="sk" onclick="seek()">Find game</button></div></div>
+ <div class="card"><b>Play a friend</b><p class="dim" style="margin:6px 0">They need a free Lichess account. They get your challenge on Lichess (site or app) and can accept it there or in Blue Chess. Uses the time control and rated setting above.</p><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card"><b>Play the computer</b><div class="row chips" id="lvs" style="margin:10px 0"></div>
+ <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
+</div>
+
+<div id="game" class="hide">
+ <div class="pl"><span id="ot"></span><span class="clk" id="oc">--</span></div>
+ <div id="bd"></div>
+ <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
+ <div class="dim" id="st" style="text-align:center;min-height:22px;font-weight:700"></div>
+ <div class="row" id="ctl" style="margin-top:8px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
+ <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
+</div>
+<div id="toast"></div><div id="promo" class="hide"></div>
+
+<script>
+const API='https://lichess.org',CID='aiav-blue-chess',RU=location.origin+location.pathname,$=s=>document.querySelector(s);
+const mem={},ls={g:k=>{try{return localStorage.getItem(k)}catch{return mem[k]}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch{mem[k]=v}},d:k=>{try{localStorage.removeItem(k)}catch{delete mem[k]}}};
+let chal={};let tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,rated=false,tc=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false;
+const TCS=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
+function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v)}
+const H=()=>({Authorization:'Bearer '+tok});
+const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+async function login(){try{const v=b64(crypto.getRandomValues(new Uint8Array(32))),ch=b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v))),st=b64(crypto.getRandomValues(new Uint8Array(8)));
+ ls.s('bcV',v);ls.s('bcS',st);location.href=API+'/oauth?'+new URLSearchParams({response_type:'code',client_id:CID,redirect_uri:RU,scope:'board:play challenge:write',code_challenge_method:'S256',code_challenge:ch,state:st})}catch{toast('Log in needs https. Try pasting a token.')}}
+async function exchange(code){const r=await fetch(API+'/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code,code_verifier:ls.g('bcV'),redirect_uri:RU,client_id:CID})});
+ const j=await r.json();if(j.access_token){tok=j.access_token;ls.s('bcTok',tok)}else toast('Log in failed')}
+function saveTok(){const v=$('#tk').value.trim();if(!v)return;tok=v;ls.s('bcTok',v);boot()}
+function logout(){try{fetch(API+'/api/token',{method:'DELETE',headers:H()})}catch{}tok=null;me=null;ls.d('bcTok');if(gAbort)gAbort.abort();G=null;show('login')}
+async function stream(url,cb,signal,opt){const r=await fetch(API+url,{headers:H(),signal,...opt});if(!r.ok)throw r.status;const rd=r.body.getReader(),dc=new TextDecoder();let buf='';
+ for(;;){const{done,value}=await rd.read();if(done)break;buf+=dc.decode(value,{stream:true});let i;while((i=buf.indexOf('\n'))>=0){const l=buf.slice(0,i).trim();buf=buf.slice(i+1);if(l)try{cb(JSON.parse(l))}catch{}}}}
+async function events(){if(evRun)return;evRun=true;while(tok){try{await stream('/api/stream/event',e=>{if(e.type=='gameStart')openGame(e.game.gameId||e.game.id);else if(e.type=='challenge'&&e.challenge.challenger.id!=me.id){chal[e.challenge.id]=e.challenge;incChal()}else if(/^challenge(Canceled|Declined)$/.test(e.type)){delete chal[e.challenge.id];incChal()}})}catch(e){if(e==401){logout();break}}await new Promise(r=>setTimeout(r,3000))}evRun=false}
+async function boot(){const q=new URLSearchParams(location.search);
+ if(q.get('code')&&q.get('state')==ls.g('bcS')){await exchange(q.get('code'));history.replaceState(null,'',RU)}
+ if(!tok)return show('login');
+ try{const r=await fetch(API+'/api/account',{headers:H()});if(!r.ok)throw 0;me=await r.json()}catch{toast('Could not load your account');ls.d('bcTok');tok=null;return show('login')}
+ if(!G)lobby();events()}
+function lobby(){show('lobby');incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
+ $('#rt').innerHTML=['bullet','blitz','rapid','classical'].map(k=>`<div><b>${me.perfs?.[k]?.rating??'-'}</b><small>${k}</small></div>`).join('');
+ $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'on':'alt'}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
+ $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'on':'alt'}" onclick="lv=${n};lobby()">Lv ${n}</button>`).join('');
+ $('#rtd').textContent=rated?'Rated':'Casual';$('#rtd').className=rated?'on':'alt';
+ $('#sk').textContent=seekAbort?'Cancel search':'Find game';$('#sk').className=seekAbort?'alt':''}
+async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
+ seekAbort=new AbortController();lobby();
+ try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated,time:tc[0],increment:tc[1]})});
+  if(!r.ok)toast('Could not start a search')}catch{}
+ seekAbort=null;if(!G)lobby()}
+function incChal(){$('#inc').innerHTML=Object.values(chal).map(c=>`<div class="card" style="border-color:var(--blue2)"><b>${c.challenger.name}</b> challenges you<br><small>${c.timeControl?.show||''} · ${c.rated?'rated':'casual'}</small><div class="row" style="margin-top:8px"><button onclick="resp('${c.id}','accept')">Accept</button><button class="alt" onclick="resp('${c.id}','decline')">Decline</button></div></div>`).join('')}
+async function resp(id,a){delete chal[id];incChal();const r=await fetch(`${API}/api/challenge/${id}/${a}`,{method:'POST',headers:H()});if(!r.ok)toast('That challenge is gone')}
+async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)return toast('Type your friend\'s username');ls.s('bcFr',u);
+ const r=await fetch(`${API}/api/challenge/${encodeURIComponent(u)}`,{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({rated,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+ if(r.ok)toast('Sent! The game starts when '+u+' accepts');else{let m='Could not send';try{m=(await r.json()).error||m}catch{}toast(m)}}
+async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+ if(!r.ok)toast('Computer game failed (check token scopes)')}
+function openGame(id){if(G&&G.id==id)return;if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
+ G={id,moves:[],status:'created'};sel=null;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
+ stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
+const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
+function onGame(d){if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
+function apply(s){G.moves=s.moves?s.moves.split(' '):[];G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
+ G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');sel=null;B=build(G.moves);render()}
+function build(ms){const b='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/').map(r=>[...r.replace(/\d/g,n=>'.'.repeat(n))]);
+ for(const m of ms){const ff=m.charCodeAt(0)-97,fr=8-m[1],tf=m.charCodeAt(2)-97,tr=8-m[3],p=b[fr][ff];
+  if(p.toLowerCase()=='k'&&Math.abs(tf-ff)==2){const rf=tf>ff?7:0,rt=tf>ff?5:3;b[tr][rt]=b[tr][rf];b[tr][rf]='.'}
+  if(p.toLowerCase()=='p'&&ff!=tf&&b[tr][tf]=='.')b[fr][tf]='.';
+  b[tr][tf]=m[4]?(p==p.toUpperCase()?m[4].toUpperCase():m[4]):p;b[fr][ff]='.'}return b}
+const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.me=='white'));
+function render(){if(!G||!B)return;const fl=G.me=='black',lm=G.moves.at(-1);let h='';
+ for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r);
+  const c=((r+f)%2?'d':'l')+(sel&&sel[0]==r&&sel[1]==f?' sel':'')+(lm&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)&&!(sel&&sel[0]==r&&sel[1]==f)?' lm':'');
+  h+=`<div class="${c}" data-r="${r}" data-f="${f}">${p=='.'?'':`<span class="${p==p.toUpperCase()?'pw':'pb'}">${GL[p.toLowerCase()]}︎</span>`}</div>`}
+ $('#bd').innerHTML=h;const opp=G.me=='white'?G.b:G.w,mp=G.me=='white'?G.w:G.b;
+ $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
+ $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
+ if(live())$('#st').textContent=turn()==G.me?'Your move':"Opponent's move";
+ else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}clocks()}
+function result(){const s=G.status,w=G.winner;if(s=='aborted'||s=='noStart')return 'Game aborted';if(!w)return s=='stalemate'?'Draw by stalemate':'Draw';
+ return(w==G.me?'You won':'You lost')+' by '+({mate:'checkmate',resign:'resignation',outoftime:'time',timeout:'time'}[s]||s)}
+const fmt=ms=>{if(ms==null)return'--';ms=Math.max(0,ms);return ms<10000?(ms/1000).toFixed(1):Math.floor(ms/60000)+':'+String(Math.floor(ms/1000)%60).padStart(2,'0')}
+function clocks(){if(!G||!B)return;const run=live()&&G.moves.length>=2,el=Date.now()-G.t0,t=turn();
+ const w=G.wt!=null?G.wt-(run&&t=='white'?el:0):null,b=G.bt!=null?G.bt-(run&&t=='black'?el:0):null,mw=G.me=='white';
+ $('#mc').textContent=fmt(mw?w:b);$('#oc').textContent=fmt(mw?b:w);
+ $('#mc').classList.toggle('run',run&&t==G.me);$('#oc').classList.toggle('run',run&&t!=G.me)}
+setInterval(clocks,200);
+$('#bd').addEventListener('click',e=>{const d=e.target.closest('[data-r]');if(!d||!live()||turn()!=G.me)return;const r=+d.dataset.r,f=+d.dataset.f,p=B[r][f];
+ if(mine(p)){sel=[r,f];return render()}if(!sel)return;
+ const fp=B[sel[0]][sel[1]],u='abcdefgh'[sel[1]]+(8-sel[0])+'abcdefgh'[f]+(8-r);sel=null;
+ if(fp.toLowerCase()=='p'&&(r==0||r==7)){const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')"><span class="${G.me=='white'?'pw':'pb'}" style="color:#fff;text-shadow:0 0 3px #000">${GL[x]}︎</span></button>`).join('');return render()}
+ send(u)});
+function pick(u){$('#promo').classList.add('hide');send(u)}
+async function send(u){const r=await fetch(`${API}/api/board/game/${G.id}/move/${u}`,{method:'POST',headers:H()});if(!r.ok){toast('Not a legal move');render()}}
+const act=p=>fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
+function resign(){act(G.moves.length<2?'abort':'resign')}
+function draw(){act('draw/'+(G.offer?'yes':'yes'));toast(G.offer?'Draw accepted':'Draw offered')}
+function lobbyBack(){G=null;B=null;if(gAbort)gAbort.abort();lobby()}
+boot();
+</script></body></html>
