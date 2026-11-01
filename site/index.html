@@ -87,7 +87,9 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
 .capg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:capout var(--ad) ease-out forwards}
 .fx{position:absolute;inset:0;pointer-events:none;z-index:12}
 #opn{text-align:center;font-size:13px;font-weight:700;color:var(--dim);min-height:18px;margin-top:6px}
-.k-book{background:#a0845f}.bdg svg{width:70%;height:70%;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.k-book{background:#a0845f}.bdg{width:calc(var(--cs)*.4);height:calc(var(--cs)*.4);min-width:0}
+.bdg svg,.mkb svg,.bdg2 svg{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:none;pointer-events:none}
+.bdg svg{width:calc(var(--cs)*.25);height:calc(var(--cs)*.25)}.mkb svg{width:17px;height:17px}.bdg2 svg{width:13px;height:13px}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
 #promo button{font-size:44px;padding:8px 14px;background:var(--surf);border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
