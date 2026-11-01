@@ -1,35 +1,44 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Citeh Chess</title>
 <style>
-:root{--bg:#081a3a;--bg2:#0d2a5e;--card:#10316b;--line:#1d4590;--blue:#3b82f6;--blue2:#5b9bff;--txt:#e8f0ff;--dim:#9db6e6;--lt:#a9c6f2;--dk:#4a7bc4}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:linear-gradient(160deg,var(--bg),var(--bg2));color:var(--txt);font-family:system-ui,sans-serif;-webkit-user-select:none;user-select:none}
-body{padding:14px 10px;max-width:520px;margin:0 auto}
-h1{margin:6px 0 2px;font-size:26px}h1 span{color:var(--blue2)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
-button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px 16px;background:var(--blue);color:#fff}
-button.alt{background:#0b2350;border:1px solid var(--line);color:var(--txt)}
-button.on{background:var(--blue2);color:#06173a}
+:root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffd9;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:linear-gradient(170deg,var(--bg1),var(--bg2)) fixed;color:var(--txt);font-family:ui-rounded,system-ui,-apple-system,sans-serif;-webkit-user-select:none;user-select:none}
+body{padding:14px 12px 30px;max-width:520px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 4px}
+h1{margin:0;font-size:30px;letter-spacing:-.5px}h1 span{background:linear-gradient(90deg,#2f7de8,#7cc4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);margin-bottom:8px;font-size:14px}
+.gear{width:44px;height:44px;border-radius:50%;padding:0;font-size:21px;background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:0 4px 14px #3b8cf033}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 8px 26px #3b8cf022;backdrop-filter:blur(8px)}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 16px;background:linear-gradient(180deg,#4a9bff,#2f7de8);color:#fff;box-shadow:0 4px 12px #2f7de844;transition:transform .1s}
+button:active{transform:scale(.96)}
+button.alt{background:#fff;border:1px solid var(--line);color:var(--blue2);box-shadow:none}
 .row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
 .chips button{flex:1 0 28%;padding:10px 4px}
-input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0b2350;color:#fff;font:inherit;margin:6px 0;-webkit-user-select:text;user-select:text}
-small,.dim{color:var(--dim)}
-.rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:20px;color:var(--blue2)}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--txt);font:inherit;margin:6px 0;-webkit-user-select:text;user-select:text}
+small,.dim{color:var(--dim)}summary{font-weight:700}
+.rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:21px;color:var(--blue2)}
 .hide{display:none!important}
-#bd{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;border:3px solid var(--line);touch-action:manipulation}
+#bd{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;border:5px solid #fff;box-shadow:0 12px 34px #2f7de833;touch-action:manipulation}
 #bd div{display:flex;align-items:center;justify-content:center;font-size:min(9.5vw,48px);line-height:1;position:relative}
-.l{background:var(--lt)}.d{background:var(--dk)}
-.sel{box-shadow:inset 0 0 0 100px #ffd84d88}.lm{box-shadow:inset 0 0 0 100px #4dffb066}
-.pw{color:#fff;text-shadow:0 0 2px #06173a,0 0 2px #06173a,0 1px 3px #06173a}.pb{color:#0a1632;text-shadow:0 0 1px #cfe0ff}
-.pl{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;font-weight:700}
-.clk{background:#0b2350;border:1px solid var(--line);padding:6px 12px;border-radius:10px;font-variant-numeric:tabular-nums;font-size:20px}
-.clk.run{background:var(--blue);border-color:var(--blue2)}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000c;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
-#promo{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
-#promo button{font-size:44px;padding:8px 14px;background:var(--card);border:2px solid var(--blue2)}
+.l{background:var(--sqL)}.d{background:var(--sqD)}
+.sel{box-shadow:inset 0 0 0 100px #ffe36699}.lm{box-shadow:inset 0 0 0 100px #5be6a355}
+.co{position:absolute;font-size:10px;font-style:normal;font-weight:800;opacity:.65;color:var(--txt)}.co.r{top:2px;left:3px}.co.f{bottom:1px;right:3px}
+.pw{color:#fff;text-shadow:0 0 2px #12335e,0 0 2px #12335e,0 1px 3px #12335e}.pb{color:#0f2a52;text-shadow:0 0 1px #e8f3ff}.pc{color:#12335e}
+.pl{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;font-weight:700}
+.clk{background:#fff;border:1px solid var(--line);padding:6px 14px;border-radius:12px;font-variant-numeric:tabular-nums;font-size:21px}
+.clk.run{background:var(--blue);border-color:var(--blue);color:#fff}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+#promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
+#promo button{font-size:44px;padding:8px 14px;background:#fff;border:2px solid var(--blue)}
+#set{position:fixed;inset:0;background:#12335e66;display:flex;z-index:7}
+.sheet{background:#fff;width:100%;max-width:520px;margin:auto auto 0;border-radius:26px 26px 0 0;padding:18px 18px 28px;max-height:88vh;overflow:auto}
+.opt{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #e1eefc;font-weight:600}
+.sws{display:flex;gap:10px;padding:8px 0 6px}.swb{width:44px;height:44px;border-radius:50%;padding:0;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}.swb.s2{box-shadow:0 0 0 3px var(--blue)}
+.tg{min-width:66px;padding:8px}
 </style></head><body>
-<h1>Citeh <span>Chess</span></h1><div class="dim" style="margin-bottom:6px">A fan-made client for Lichess</div>
+<div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings">⚙</button></div><div class="sub">Play Lichess, your way</div>
 
 <div id="login" class="hide">
  <div class="card"><p>Log in with your free Lichess account to play. Your login stays in this browser only.</p>
@@ -55,9 +64,10 @@ small,.dim{color:var(--dim)}
  <div id="bd"></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
  <div class="dim" id="st" style="text-align:center;min-height:22px;font-weight:700"></div>
- <div class="row" id="ctl" style="margin-top:8px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
+ <div class="row" id="ctl" style="margin-top:8px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
 </div>
+<div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)">✕</button></div><div id="sbody"></div></div></div>
 <div id="toast"></div><div id="promo" class="hide"></div>
 
 <script>
@@ -102,23 +112,23 @@ async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)
 async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
  if(!r.ok)toast('Computer game failed (check token scopes)')}
 function openGame(id){if(G&&G.id==id)return;if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
- G={id,moves:[],status:'created'};sel=null;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
+ G={id,moves:[],status:'created'};flipped=false;sel=null;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
  stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
 const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
 function onGame(d){if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
-function apply(s){G.moves=s.moves?s.moves.split(' '):[];G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
- G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');sel=null;B=build(G.moves);render()}
+function apply(s){const n0=G.moves.length,c0=B?B.flat().filter(x=>x!='.').length:0;G.moves=s.moves?s.moves.split(' '):[];G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();G.status=s.status;G.winner=s.winner;
+ G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');sel=null;B=build(G.moves);if(G.seen&&G.moves.length>n0)beep(B.flat().filter(x=>x!='.').length<c0);G.seen=true;render()}
 function build(ms){const b='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.split('/').map(r=>[...r.replace(/\d/g,n=>'.'.repeat(n))]);
  for(const m of ms){const ff=m.charCodeAt(0)-97,fr=8-m[1],tf=m.charCodeAt(2)-97,tr=8-m[3],p=b[fr][ff];
   if(p.toLowerCase()=='k'&&Math.abs(tf-ff)==2){const rf=tf>ff?7:0,rt=tf>ff?5:3;b[tr][rt]=b[tr][rf];b[tr][rf]='.'}
   if(p.toLowerCase()=='p'&&ff!=tf&&b[tr][tf]=='.')b[fr][tf]='.';
   b[tr][tf]=m[4]?(p==p.toUpperCase()?m[4].toUpperCase():m[4]):p;b[fr][ff]='.'}return b}
 const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.me=='white'));
-function render(){if(!G||!B)return;const fl=G.me=='black',lm=G.moves.at(-1);let h='';
+function render(){if(!G||!B)return;const fl=bcol()=='black',lm=G.moves.at(-1);let h='';
  for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r);
-  const c=((r+f)%2?'d':'l')+(sel&&sel[0]==r&&sel[1]==f?' sel':'')+(lm&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)&&!(sel&&sel[0]==r&&sel[1]==f)?' lm':'');
-  h+=`<div class="${c}" data-r="${r}" data-f="${f}">${p=='.'?'':`<span class="${p==p.toUpperCase()?'pw':'pb'}">${GL[p.toLowerCase()]}︎</span>`}</div>`}
- $('#bd').innerHTML=h;const opp=G.me=='white'?G.b:G.w,mp=G.me=='white'?G.w:G.b;
+  const c=((r+f)%2?'d':'l')+(sel&&sel[0]==r&&sel[1]==f?' sel':'')+(S.lm&&lm&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)&&!(sel&&sel[0]==r&&sel[1]==f)?' lm':'');
+  h+=`<div class="${c}" data-r="${r}" data-f="${f}">${p=='.'?'':`<span class="${S.pc=='classic'?'pc':p==p.toUpperCase()?'pw':'pb'}">${(S.pc=='classic'&&p==p.toUpperCase()?GW:GL)[p.toLowerCase()]}\uFE0E</span>`}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
+ $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
  $('#ot').innerHTML=nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
  if(live())$('#st').textContent=turn()==G.me?'Your move':"Opponent's move";
@@ -127,20 +137,32 @@ function result(){const s=G.status,w=G.winner;if(s=='aborted'||s=='noStart')retu
  return(w==G.me?'You won':'You lost')+' by '+({mate:'checkmate',resign:'resignation',outoftime:'time',timeout:'time'}[s]||s)}
 const fmt=ms=>{if(ms==null)return'--';ms=Math.max(0,ms);return ms<10000?(ms/1000).toFixed(1):Math.floor(ms/60000)+':'+String(Math.floor(ms/1000)%60).padStart(2,'0')}
 function clocks(){if(!G||!B)return;const run=live()&&G.moves.length>=2,el=Date.now()-G.t0,t=turn();
- const w=G.wt!=null?G.wt-(run&&t=='white'?el:0):null,b=G.bt!=null?G.bt-(run&&t=='black'?el:0):null,mw=G.me=='white';
+ const w=G.wt!=null?G.wt-(run&&t=='white'?el:0):null,b=G.bt!=null?G.bt-(run&&t=='black'?el:0):null,mw=bcol()=='white';
  $('#mc').textContent=fmt(mw?w:b);$('#oc').textContent=fmt(mw?b:w);
- $('#mc').classList.toggle('run',run&&t==G.me);$('#oc').classList.toggle('run',run&&t!=G.me)}
+ $('#mc').classList.toggle('run',run&&t==bcol());$('#oc').classList.toggle('run',run&&t!=bcol())}
 setInterval(clocks,200);
 $('#bd').addEventListener('click',e=>{const d=e.target.closest('[data-r]');if(!d||!live()||turn()!=G.me)return;const r=+d.dataset.r,f=+d.dataset.f,p=B[r][f];
  if(mine(p)){sel=[r,f];return render()}if(!sel)return;
  const fp=B[sel[0]][sel[1]],u='abcdefgh'[sel[1]]+(8-sel[0])+'abcdefgh'[f]+(8-r);sel=null;
- if(fp.toLowerCase()=='p'&&(r==0||r==7)){const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')"><span class="${G.me=='white'?'pw':'pb'}" style="color:#fff;text-shadow:0 0 3px #000">${GL[x]}︎</span></button>`).join('');return render()}
+ if(fp.toLowerCase()=='p'&&(r==0||r==7)){if(S.aq)return send(u+'q');const pr=$('#promo');pr.classList.remove('hide');pr.innerHTML=['q','r','b','n'].map(x=>`<button onclick="pick('${u}${x}')"><span class="${G.me=='white'?'pw':'pb'}" style="color:#fff;text-shadow:0 0 3px #000">${GL[x]}︎</span></button>`).join('');return render()}
  send(u)});
 function pick(u){$('#promo').classList.add('hide');send(u)}
 async function send(u){const r=await fetch(`${API}/api/board/game/${G.id}/move/${u}`,{method:'POST',headers:H()});if(!r.ok){toast('Not a legal move');render()}}
 const act=p=>fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
-function resign(){act(G.moves.length<2?'abort':'resign')}
+function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game?'))return;act(G.moves.length<2?'abort':'resign')}
 function draw(){act('draw/'+(G.offer?'yes':'yes'));toast(G.offer?'Draw accepted':'Draw offered')}
 function lobbyBack(){G=null;B=null;if(gAbort)gAbort.abort();lobby()}
+const DEF={bt:'sky',pc:'solid',co:true,lm:true,snd:true,vib:true,aq:false,cr:true},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'},
+BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863']};
+let S={...DEF},flipped=false,ac;try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
+const bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
+function applyS(){const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
+function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
+function renderSet(){$('#sbody').innerHTML=`<div class="opt" style="border:0">Board colour</div><div class="sws">${Object.entries(BT).map(([k,t])=>`<button class="swb ${k==S.bt?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('bt','${k}')"></button>`).join('')}</div>
+<div class="opt"><span>Piece style</span><span style="display:flex;gap:6px"><button class="${S.pc=='solid'?'':'alt'}" onclick="setS('pc','solid')">Solid</button><button class="${S.pc=='classic'?'':'alt'}" onclick="setS('pc','classic')">Classic</button></span></div>`+
+[['co','Show coordinates'],['lm','Highlight last move'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="tg ${S[k]?'':'alt'}" onclick="setS('${k}',${!S[k]})">${S[k]?'On':'Off'}</button></div>`).join('')}
+function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
+applyS();
 boot();
 </script></body></html>
