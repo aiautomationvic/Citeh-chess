@@ -402,6 +402,7 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
  <div class="card"><b>Play a person</b><div class="seg g3" id="tcs" style="margin-bottom:10px"></div>
  <div class="seg" style="margin-bottom:12px"><button id="rcas" onclick="rated=false;lobby()">Casual</button><button id="rrat" onclick="rated=true;lobby()">Rated</button></div><button id="sk" style="width:100%" onclick="seek()">Find game</button></div>
  <div class="card"><b>Play a friend</b><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
  <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">Recent games</button></div><div id="rg"></div></div>
  <div class="card"><b>Play the computer</b><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
  <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
@@ -420,7 +421,7 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
  <div id="ana" class="card hide" style="padding:12px"></div>
  <div class="dim" id="st" style="text-align:center;min-height:24px;font-weight:700;margin-top:8px"></div>
  <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="setS('zen',true)">Zen</button><button class="alt" id="rs" onclick="resign()">Resign</button><button class="alt" onclick="fs()" aria-label="Fullscreen" style="flex:0 0 46px;padding:0"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
- <div class="row hide" id="ctl2" style="margin-top:6px"><button class="alt" id="lvb" onclick="toggleLive()">Engine: On</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="openAnalysis()">Reset</button><button class="alt" onclick="lobbyBack()">Exit</button></div>
+ <div class="row hide" id="ctl2" style="margin-top:6px"><button class="alt" id="lvb" onclick="toggleLive()">Engine: On</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt hide" id="rsb" onclick="resignTest()">Resign</button><button class="alt" onclick="G.two?openTwo():openAnalysis()">Reset</button><button class="alt" onclick="lobbyBack()">Exit</button></div>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
  </div>
 </div>
@@ -618,6 +619,8 @@ let evTok=0,evPend=null,RG=[],pm=null;
 function openAnalysis(ms,info){pm=null;loadBook();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();stopAna();if(!Array.isArray(ms))ms=[];
  G={id:'an',analysis:true,live:G&&G.analysis?G.live:true,me:'white',w:{name:info?.w||'White',rating:info?.wr},b:{name:info?.b||'Black',rating:info?.br},review:info?.txt||'',moves:ms,status:'analysis',pos:[START],san:[],V:0,seen:true,lastV:null};
  sel=null;hl=[];flipped=false;extend();G.V=ms.length;show('game');$('#nw').classList.add('hide');render()}
+function openTwo(){openAnalysis([],{w:'White',b:'Black',txt:'Two players: move both sides'});G.live=false;G.two=true;render()}
+function resignTest(){if(!G||!G.two)return;if(rsv()=='off')return toast('Resignation cutscene is off in Settings');resignFx(G.moves.length%2?'black':'white')}
 function playAn(u){const c0=cnt(cur());G.moves=G.moves.slice(0,G.V);G.moves.push(u);G.pos.length=G.V+1;G.san.length=G.V;stopAna();G.an=null;extend();G.V=G.moves.length;sel=null;hl=[];moveSfx(G.moves.length);render()}
 function toggleLive(){G.live=!G.live;G.evKey=null;G.lv=null;if(!G.live){evTok++;const w=sfs[engKey()];if(w)w.postMessage('stop');$('#arr').innerHTML=''}render()}
 async function liveEval(){if(!G||!G.analysis||!G.live||(G.an&&G.an.run))return;const key=G.moves.slice(0,G.V).join(' ');if(G.evKey===key)return;G.evKey=key;G.lv=null;G.evc=G.evc||{};const tk=++evTok,P=cur(),V=G.V,wtm=V%2==0;paintLive();
@@ -667,7 +670,7 @@ function render(){if(!G||!G.me)return;applyView();sizeB();const pre=!!(G.pre&&G.
  const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;if(ml.scrollHeight>ml.clientHeight+4)ml.scrollTop=ce?ce.offsetTop-ml.clientHeight/2:0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
  if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Viewing an earlier move':turn()==G.me?'Your move':pm?'Premove set':"Opponent's move";
- else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
+ else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);$('#rsb').classList.toggle('hide',!G.two);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  const on=openingAt(G.V);$('#opn').textContent=on?on.replace(' ',' · '):'';
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
  if(ck&&fresh&&lm)reactFx(ck,lm.slice(2,4));else if(st1&&!mm&&lm)moveFx(G.V);if(mm&&fresh){const ww=G.V%2==1,Vn=G.V,later=ck=='bril'&&S.br=='awaken'?9700:0;const go2=()=>{if(!G||G.V!==Vn)return;if((S.mf=='quick'||S.mf=='drama')&&execFx(kr,kf,ww,S.mf)){}else if(S.mf=='ufo')ufoFx(kr,kf,ww);else if(S.mf=='party')partyFx(kr,kf,ww);else if(S.mf=='siege')setTimeout(()=>siegeFx(ww,Vn),700);else{mateFx(kr,kf,ww);sfx('mate')}};if(later)setTimeout(go2,later);else go2()}}
