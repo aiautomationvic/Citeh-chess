@@ -811,7 +811,8 @@ function clocks(){if(!G||!G.me)return;const run=live()&&G.moves.length>=2,el=Dat
  $('#mc').textContent=fmt(mw?w:b);$('#oc').textContent=fmt(mw?b:w);
  $('#mc').classList.toggle('run',run&&t==bcol());$('#oc').classList.toggle('run',run&&t!=bcol())}
 setInterval(clocks,200);
-addEventListener('keydown',e=>{if(G&&!$('#game').classList.contains('hide')){if(e.key=='ArrowLeft')go(G.V-1);if(e.key=='ArrowRight')go(G.V+1)}});
+addEventListener('keydown',e=>{if(!G||$('#game').classList.contains('hide')||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target&&e.target.tagName;if(t=='INPUT'||t=='TEXTAREA')return;
+ const k=e.key,m={ArrowLeft:()=>go(G.V-1),ArrowRight:()=>go(G.V+1),ArrowUp:()=>go(0),ArrowDown:()=>go(1e9),Home:()=>go(0),End:()=>go(1e9)}[k];if(!m)return;e.preventDefault();m()});
 // ---------- input: tap and drag ----------
 const bd=$('#bd');let drg=null;
 function sqAt(x,y){const R=bd.getBoundingClientRect(),c=Math.floor((x-R.left)/R.width*8),w=Math.floor((y-R.top)/R.height*8);if(c<0||c>7||w<0||w>7)return null;const fl=bcol()=='black';return[fl?7-w:w,fl?7-c:c]}
