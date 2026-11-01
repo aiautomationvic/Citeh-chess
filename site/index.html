@@ -68,7 +68,6 @@ small,.dim{color:var(--dim)}summary{font-weight:700}
 .pv{display:flex;justify-content:center;font-size:28px;line-height:1.1;font-family:"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols 2","DejaVu Sans",sans-serif}.pv .g{display:inline}
 .pcsvg{width:94%;height:94%;display:block;pointer-events:none;overflow:visible}
 .pcsvg.w{--pf:#fff;--ps:#27324f}.pcsvg.b{--pf:#3a3f52;--ps:#0e1220}
-.pcsvg.ink.w{--pf:#fff;--ps:#111;--pd:#111}.pcsvg.ink.b{--pf:#2b2b32;--ps:#050505;--pd:#f2f2f2}
 .pcsvg.neo.w{--pf:#f7f9fc;--ps:#56627a}.pcsvg.neo.b{--pf:#505a70;--ps:#1b2233}.pcsvg.neo{filter:drop-shadow(0 2px 1.5px #0004)}
 #gh .pcsvg{width:calc(var(--cs)*1.3);height:calc(var(--cs)*1.3)}.pv .pcsvg{width:34px;height:34px}#promo .pcsvg{width:58px;height:58px}
 .k-best{background:#81b64c}.k-exc{background:#96bc4b}.k-good{background:#a3b58f}
@@ -85,6 +84,7 @@ table.cl{width:100%;border-collapse:collapse;margin:8px 0;font-weight:600}table.
 .mvp.slide{animation:aSlide var(--ad) cubic-bezier(.2,.8,.3,1)}.mvp.hop{animation:aHop calc(var(--ad)*1.5) ease-in-out}
 .mvp.bounce{animation:aSlide calc(var(--ad)*1.5) cubic-bezier(.3,1.7,.5,1)}.mvp.fade{animation:aPop calc(var(--ad)*1.4) ease-out}
 .capg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:capout var(--ad) ease-out forwards}
+.fx{position:absolute;inset:0;pointer-events:none;z-index:12}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#12335ee6;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
 #promo{position:fixed;inset:0;background:#12335eaa;display:flex;align-items:center;justify-content:center;gap:10px;z-index:8}
 #promo button{font-size:44px;padding:8px 14px;background:var(--surf);border:2px solid var(--blue);font-family:"Apple Symbols","Segoe UI Symbol","DejaVu Sans",sans-serif}
@@ -132,6 +132,179 @@ button.alt{background:var(--surf);color:var(--blue2);border:1px solid var(--line
 input{border-radius:14px;min-height:48px;padding:0 14px}
 summary{cursor:pointer}
 </style></head><body>
+<!-- Chess pieces: Cburnett (Wikimedia Commons), CC BY-SA 3.0, via cm-chessboard (MIT) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" viewBox="0 0 40 40">
+    
+    
+
+    <g id="wk" stroke-linecap="round" stroke-linejoin="round" transform="translate(5.000000, 5.000000)" stroke="#000000"
+       stroke-width="1.5">
+        <line x1="15" y1="4.96764706" x2="15" y2="0" id="Shape"/>
+        <line x1="12.8571429" y1="1.76470588" x2="17.1428571" y2="1.76470588" id="Shape"/>
+        <path d="M17.5714286,7.5 C17.5714286,7.5 16.7142857,5.29411765 15,5.29411765 C13.2857143,5.29411765 12.4285714,7.5 12.4285714,7.5 C11.1428571,10.1470588 15,16.7647059 15,16.7647059 C15,16.7647059 18.8571429,10.1470588 17.5714286,7.5 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M5.57142857,27.3529412 C10.2857143,30.4411765 18.8571429,30.4411765 23.5714286,27.3529412 L23.5714286,21.1764706 C23.5714286,21.1764706 31.2857143,17.2058824 28.7142857,11.9117647 C25.2857143,6.17647059 17.1428571,8.82352941 15,15.4411765 L15,18.5294118 L15,15.4411765 C12,8.82352941 3.85714286,6.17647059 1.28571429,11.9117647 C-1.28571429,17.2058824 5.57142857,20.7352941 5.57142857,20.7352941 L5.57142857,27.3529412 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M5.57142857,21.1764706 C10.2857143,18.5294118 18.8571429,18.5294118 23.5714286,21.1764706" id="Shape"
+              fill-opacity="0" fill="#000000"/>
+        <path d="M5.57142857,24.2647059 C10.2857143,21.6176471 18.8571429,21.6176471 23.5714286,24.2647059" id="Shape"
+              fill-opacity="0" fill="#000000" stroke-linecap="square"/>
+        <path d="M5.57142857,27.3529412 C10.2857143,24.7058824 18.8571429,24.7058824 23.5714286,27.3529412" id="Shape"
+              fill-opacity="0" fill="#000000"/>
+    </g>
+    <g id="wq" stroke-linecap="round" stroke-linejoin="round" transform="translate(4.000000, 5.000000)" stroke="#000000"
+       stroke-width="1.5">
+        <path d="M3.45945946,6.2 C3.45945946,7.17833299 2.68503308,7.97142857 1.72972973,7.97142857 C0.774426379,7.97142857 0,7.17833299 0,6.2 C0,5.22166701 0.774426379,4.42857143 1.72972973,4.42857143 C2.68503308,4.42857143 3.45945946,5.22166701 3.45945946,6.2 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M17.7297297,2.21428571 C17.7297297,3.1926187 16.9553034,3.98571429 16,3.98571429 C15.0446966,3.98571429 14.2702703,3.1926187 14.2702703,2.21428571 C14.2702703,1.23595273 15.0446966,0.442857143 16,0.442857143 C16.9553034,0.442857143 17.7297297,1.23595273 17.7297297,2.21428571 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M32,6.2 C32,7.17833299 31.2255736,7.97142857 30.2702703,7.97142857 C29.3149669,7.97142857 28.5405405,7.17833299 28.5405405,6.2 C28.5405405,5.22166701 29.3149669,4.42857143 30.2702703,4.42857143 C31.2255736,4.42857143 32,5.22166701 32,6.2 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M10.3783784,3.1 C10.3783784,4.07833299 9.603952,4.87142857 8.64864865,4.87142857 C7.6933453,4.87142857 6.91891892,4.07833299 6.91891892,3.1 C6.91891892,2.12166701 7.6933453,1.32857143 8.64864865,1.32857143 C9.603952,1.32857143 10.3783784,2.12166701 10.3783784,3.1 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M25.0810811,3.54285714 C25.0810811,4.52119013 24.3066547,5.31428571 23.3513514,5.31428571 C22.396048,5.31428571 21.6216216,4.52119013 21.6216216,3.54285714 C21.6216216,2.56452416 22.396048,1.77142857 23.3513514,1.77142857 C24.3066547,1.77142857 25.0810811,2.56452416 25.0810811,3.54285714 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M4.32432432,18.6 C11.6756757,17.2714286 22.4864865,17.2714286 27.6756757,18.6 L29.4054054,7.97142857 L23.3513514,17.7142857 L23.3513514,5.31428571 L18.5945946,17.2714286 L16,3.98571429 L13.4054054,17.2714286 L8.64864865,4.87142857 L8.64864865,17.7142857 L2.59459459,7.97142857 L4.32432432,18.6 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M4.32432432,18.6 C4.32432432,20.3714286 5.62162162,20.3714286 6.48648649,22.1428571 C7.35135135,23.4714286 7.35135135,23.0285714 6.91891892,25.2428571 C5.62162162,26.1285714 5.62162162,27.4571429 5.62162162,27.4571429 C4.32432432,28.7857143 6.05405405,29.6714286 6.05405405,29.6714286 C11.6756757,30.5571429 20.3243243,30.5571429 25.9459459,29.6714286 C25.9459459,29.6714286 27.2432432,28.7857143 25.9459459,27.4571429 C25.9459459,27.4571429 26.3783784,26.1285714 25.0810811,25.2428571 C24.6486486,23.0285714 24.6486486,23.4714286 25.5135135,22.1428571 C26.3783784,20.3714286 27.6756757,20.3714286 27.6756757,18.6 C20.3243243,17.2714286 11.6756757,17.2714286 4.32432432,18.6 Z"
+              id="Shape" fill="#FFFFFF"/>
+        <path d="M6.48648649,22.1428571 C9.51351351,21.2571429 22.4864865,21.2571429 25.5135135,22.1428571" id="Shape"/>
+        <path d="M6.91891892,25.2428571 C12.1081081,24.3571429 19.8918919,24.3571429 25.0810811,25.2428571" id="Shape"/>
+    </g>
+    <g id="wb" stroke-linecap="round" stroke-linejoin="round" transform="translate(6.000000, 5.000000)" stroke="#000000"
+       stroke-width="1.5">
+        <g id="Group" fill="#FFFFFF">
+            <path d="M2.54545455,27.3529412 C5.42181818,26.4970588 11.1236364,27.7323529 14,25.5882353 C16.8763636,27.7323529 22.5781818,26.4970588 25.4545455,27.3529412 C25.4545455,27.3529412 26.8545455,27.8294118 28,29.1176471 C27.4230303,29.9735294 26.6,29.9911765 25.4545455,29.5588235 C22.5781818,28.7029412 16.8763636,29.9647059 14,28.6764706 C11.1236364,29.9647059 5.42181818,28.7029412 2.54545455,29.5588235 C1.39660606,29.9911765 0.574424242,29.9735294 0,29.1176471 C1.14884848,27.4058824 2.54545455,27.3529412 2.54545455,27.3529412 Z"
+                  id="Shape"/>
+            <path d="M7.63636364,23.8235294 C9.75757576,26.0294118 18.2424242,26.0294118 20.3636364,23.8235294 C20.7878788,22.5 20.3636364,22.0588235 20.3636364,22.0588235 C20.3636364,19.8529412 18.2424242,18.5294118 18.2424242,18.5294118 C22.9090909,17.2058824 23.3333333,8.38235294 14,4.85294118 C4.66666667,8.38235294 5.09090909,17.2058824 9.75757576,18.5294118 C9.75757576,18.5294118 7.63636364,19.8529412 7.63636364,22.0588235 C7.63636364,22.0588235 7.21212121,22.5 7.63636364,23.8235294 Z"
+                  id="Shape"/>
+            <path d="M16.1212121,2.64705882 C16.1212121,3.86533401 15.1715131,4.85294118 14,4.85294118 C12.8284869,4.85294118 11.8787879,3.86533401 11.8787879,2.64705882 C11.8787879,1.42878364 12.8284869,0.441176471 14,0.441176471 C15.1715131,0.441176471 16.1212121,1.42878364 16.1212121,2.64705882 Z"
+                  id="Shape"/>
+        </g>
+        <path d="M9.75757576,18.5294118 L18.2424242,18.5294118 M7.63636364,22.0588235 L20.3636364,22.0588235 M14,9.26470588 L14,13.6764706 M11.8787879,11.4705882 L16.1212121,11.4705882"
+              id="Shape"/>
+    </g>
+    <g id="wn" stroke-linecap="round" stroke-linejoin="round" transform="translate(6.000000, 6.000000)"
+       stroke="#000000">
+        <path d="M13.5757576,2.625 C22.4848485,3.5 27.5757576,9.625 27.1515152,28 L7.63636364,28 C7.63636364,20.125 16.1212121,22.3125 14.4242424,9.625"
+              id="Shape" stroke-width="1.5" fill="#FFFFFF"/>
+        <path d="M15.2727273,9.625 C15.5951515,12.17125 10.5636364,16.07375 8.48484848,17.5 C5.93939394,19.25 6.09212121,21.2975 4.24242424,21 C3.35830303,20.1775 5.43878788,18.34 4.24242424,18.375 C3.39393939,18.375 4.40363636,19.45125 3.39393939,20.125 C2.54545455,20.125 -0.00254545455,21 -1.90580876e-06,16.625 C-1.90580876e-06,14.875 5.09090909,6.125 5.09090909,6.125 C5.09090909,6.125 6.69454545,4.4625 6.78787879,3.0625 C6.16848485,2.19275 6.36363636,1.3125 6.36363636,0.4375 C7.21212121,-0.4375 8.90909091,2.625 8.90909091,2.625 L10.6060606,2.625 C10.6060606,2.625 11.2678788,0.882 12.7272727,0 C13.5757576,0 13.5757576,2.625 13.5757576,2.625"
+              id="Shape" stroke-width="1.5" fill="#FFFFFF"/>
+        <path d="M2.96969697,16.1875 C2.96969697,16.4291246 2.77975717,16.625 2.54545455,16.625 C2.31115192,16.625 2.12121212,16.4291246 2.12121212,16.1875 C2.12121212,15.9458754 2.31115192,15.75 2.54545455,15.75 C2.77975717,15.75 2.96969697,15.9458754 2.96969697,16.1875 Z"
+              id="Shape" stroke-width="1.5" fill="#000000"/>
+        <path d="M7.6363543,7.4375 C7.6363543,8.16235779 7.44641868,8.74997112 7.21212121,8.74997112 C6.97782375,8.74997112 6.78788812,8.16235779 6.78788812,7.4375 C6.78788812,6.71264221 6.97782375,6.12502888 7.21212121,6.12502888 C7.44641868,6.12502888 7.6363543,6.71264221 7.6363543,7.4375 L7.6363543,7.4375 Z"
+              id="Shape" stroke-width="1.499967" fill="#000000"
+              transform="translate(7.212121, 7.437500) rotate(30.000728) translate(-7.212121, -7.437500) "/>
+    </g>
+    <g id="wr" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.000000, 8.000000)" stroke="#000000"
+       stroke-width="1.5">
+        <polygon id="Shape" fill="#FFFFFF" points="0 26 22 26 22 23.4 0 23.4"/>
+        <polygon id="Shape" fill="#FFFFFF"
+                 points="2.44444444 23.4 2.44444444 19.9333333 19.5555556 19.9333333 19.5555556 23.4"/>
+        <polyline id="Shape" fill="#FFFFFF"
+                  points="1.62962963 4.33333333 1.62962963 0 4.88888889 0 4.88888889 1.73333333 8.96296296 1.73333333 8.96296296 0 13.037037 0 13.037037 1.73333333 17.1111111 1.73333333 17.1111111 0 20.3703704 0 20.3703704 4.33333333"/>
+        <polyline id="Shape" fill="#FFFFFF"
+                  points="20.3703704 4.33333333 17.9259259 6.93333333 4.07407407 6.93333333 1.62962963 4.33333333"/>
+        <polyline id="Shape" fill="#FFFFFF"
+                  points="17.9259259 6.93333333 17.9259259 17.7666667 4.07407407 17.7666667 4.07407407 6.93333333"/>
+        <polyline id="Shape" fill="#FFFFFF"
+                  points="17.9259259 17.7666667 19.1481481 19.9333333 2.85185185 19.9333333 4.07407407 17.7666667"/>
+        <line x1="1.62962963" y1="4.33333333" x2="20.3703704" y2="4.33333333" id="Shape"/>
+    </g>
+    <g id="wp" transform="translate(10.000000, 9.000000)" fill="#FFFFFF" stroke="#000000" stroke-linecap="round"
+       stroke-width="1.5">
+        <path d="M10,0 C8.15833333,0 6.66666667,1.50129032 6.66666667,3.35483871 C6.66666667,4.10129032 6.90833333,4.78903226 7.31666667,5.35096774 C5.69166667,6.29032258 4.58333333,8.04322581 4.58333333,10.0645161 C4.58333333,11.7670968 5.36666667,13.2851613 6.59166667,14.2832258 C4.09166667,15.1722581 0.416666667,18.9380645 0.416666667,25.5806452 L19.5833333,25.5806452 C19.5833333,18.9380645 15.9083333,15.1722581 13.4083333,14.2832258 C14.6333333,13.2851613 15.4166667,11.7670968 15.4166667,10.0645161 C15.4166667,8.04322581 14.3083333,6.29032258 12.6833333,5.35096774 C13.0916667,4.78903226 13.3333333,4.10129032 13.3333333,3.35483871 C13.3333333,1.50129032 11.8416667,0 10,0 Z"
+              id="Shape"/>
+    </g>
+    <g id="bk" stroke-linecap="round" stroke-linejoin="round" transform="translate(5.000000, 5.000000)"
+       stroke-width="1.5">
+        <line x1="15" y1="4.96764706" x2="15" y2="0" id="Shape" stroke="#000000"/>
+        <path d="M15,16.7647059 C15,16.7647059 18.8571429,10.1470588 17.5714286,7.5 C17.5714286,7.5 16.7142857,5.29411765 15,5.29411765 C13.2857143,5.29411765 12.4285714,7.5 12.4285714,7.5 C11.1428571,10.1470588 15,16.7647059 15,16.7647059"
+              id="Shape" stroke="#000000" fill="#000000"/>
+        <path d="M5.57142857,27.3529412 C10.2857143,30.4411765 18.8571429,30.4411765 23.5714286,27.3529412 L23.5714286,21.1764706 C23.5714286,21.1764706 31.2857143,17.2058824 28.7142857,11.9117647 C25.2857143,6.17647059 17.1428571,8.82352941 15,15.4411765 L15,18.5294118 L15,15.4411765 C12,8.82352941 3.85714286,6.17647059 1.28571429,11.9117647 C-1.28571429,17.2058824 5.57142857,20.7352941 5.57142857,20.7352941 L5.57142857,27.3529412 Z"
+              id="Shape" stroke="#000000" fill="#000000"/>
+        <line x1="12.8571429" y1="1.76470588" x2="17.1428571" y2="1.76470588" id="Shape" stroke="#000000"/>
+        <path d="M23.1428571,20.7352941 C23.1428571,20.7352941 30.4285714,17.2058824 28.3114286,12.2205882 C24.9857143,7.05882353 17.1428571,10.5882353 15,16.3235294 L15.0085714,18.1764706 L15,16.3235294 C12.8571429,10.5882353 4.20514286,7.05882353 1.71171429,12.2205882 C-0.428571429,17.2058824 5.87142857,20.1617647 5.87142857,20.1617647"
+              id="Shape" stroke="#FFFFFF"/>
+        <path d="M5.57142857,21.1764706 C10.2857143,18.5294118 18.8571429,18.5294118 23.5714286,21.1764706 M5.57142857,24.2647059 C10.2857143,21.6176471 18.8571429,21.6176471 23.5714286,24.2647059 M5.57142857,27.3529412 C10.2857143,24.7058824 18.8571429,24.7058824 23.5714286,27.3529412"
+              id="Shape" stroke="#FFFFFF"/>
+    </g>
+    <g id="bq" stroke-linecap="round" stroke-linejoin="round" transform="translate(3.000000, 4.000000)">
+        <g id="Group" fill="#000000">
+            <ellipse id="Oval" cx="2.61538462" cy="6.22222222" rx="2.3974359" ry="2.44444444"/>
+            <ellipse id="Oval" cx="9.58974359" cy="3.55555556" rx="2.3974359" ry="2.44444444"/>
+            <ellipse id="Oval" cx="17" cy="2.66666667" rx="2.3974359" ry="2.44444444"/>
+            <ellipse id="Oval" cx="24.4102564" cy="3.55555556" rx="2.3974359" ry="2.44444444"/>
+            <ellipse id="Oval" cx="31.3846154" cy="6.22222222" rx="2.3974359" ry="2.44444444"/>
+        </g>
+        <path d="M5.23076923,18.6666667 C12.6410256,17.3333333 23.5384615,17.3333333 28.7692308,18.6666667 L30.9487179,7.55555556 L24.4102564,17.7777778 L24.1487179,5.24444444 L19.6153846,17.3333333 L17,4.44444444 L14.3846154,17.3333333 L9.85128205,5.24444444 L9.58974359,17.7777778 L3.05128205,7.55555556 L5.23076923,18.6666667 Z"
+              id="crown" stroke="#000000" stroke-width="1.5" fill="#000000"/>
+        <path d="M5.23076923,18.6666667 C5.23076923,20.4444444 6.53846154,20.4444444 7.41025641,22.2222222 C8.28205128,23.5555556 8.28205128,23.1111111 7.84615385,25.3333333 C6.53846154,26.2222222 6.53846154,27.5555556 6.53846154,27.5555556 C5.23076923,28.8888889 6.97435897,29.7777778 6.97435897,29.7777778 C12.6410256,30.6666667 21.3589744,30.6666667 27.025641,29.7777778 C27.025641,29.7777778 28.3333333,28.8888889 27.025641,27.5555556 C27.025641,27.5555556 27.4615385,26.2222222 26.1538462,25.3333333 C25.7179487,23.1111111 25.7179487,23.5555556 26.5897436,22.2222222 C27.4615385,20.4444444 28.7692308,20.4444444 28.7692308,18.6666667 C21.3589744,17.3333333 12.6410256,17.3333333 5.23076923,18.6666667 Z"
+              id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"/>
+        <path d="M6.97435897,29.7777778 C13.4672777,32.080866 20.5327223,32.080866 27.025641,29.7777778" id="Shape"
+              stroke="#000000" stroke-width="1.5"/>
+        <path d="M6.97435897,21.3333333 C13.4672777,19.0302452 20.5327223,19.0302452 27.025641,21.3333333" id="Shape"
+              stroke="#FFFFFF" stroke-width="1.5"/>
+        <line x1="8.28205128" y1="23.5555556" x2="25.7179487" y2="23.5555556" id="Shape" stroke="#FFFFFF"
+              stroke-width="1.5"/>
+        <path d="M7.41025641,26.2222222 C13.6372326,28.3241535 20.3627674,28.3241535 26.5897436,26.2222222" id="Shape"
+              stroke="#FFFFFF" stroke-width="1.5"/>
+        <path d="M6.53846154,28.8888889 C13.2948481,31.4031829 20.7051519,31.4031829 27.4615385,28.8888889" id="Shape"
+              stroke="#FFFFFF" stroke-width="1.5"/>
+    </g>
+    <g id="bb" stroke-linecap="round" stroke-linejoin="round" transform="translate(6.000000, 5.000000)"
+       stroke-width="1.5">
+        <g id="Group" fill="#000000" stroke="#000000">
+            <path d="M2.54545455,27.3529412 C5.42181818,26.4970588 11.1236364,27.7323529 14,25.5882353 C16.8763636,27.7323529 22.5781818,26.4970588 25.4545455,27.3529412 C25.4545455,27.3529412 26.8545455,27.8294118 28,29.1176471 C27.4230303,29.9735294 26.6,29.9911765 25.4545455,29.5588235 C22.5781818,28.7029412 16.8763636,29.9647059 14,28.6764706 C11.1236364,29.9647059 5.42181818,28.7029412 2.54545455,29.5588235 C1.39660606,29.9911765 0.574424242,29.9735294 0,29.1176471 C1.14884848,27.4058824 2.54545455,27.3529412 2.54545455,27.3529412 Z"
+                  id="Shape"/>
+            <path d="M7.63636364,23.8235294 C9.75757576,26.0294118 18.2424242,26.0294118 20.3636364,23.8235294 C20.7878788,22.5 20.3636364,22.0588235 20.3636364,22.0588235 C20.3636364,19.8529412 18.2424242,18.5294118 18.2424242,18.5294118 C22.9090909,17.2058824 23.3333333,8.38235294 14,4.85294118 C4.66666667,8.38235294 5.09090909,17.2058824 9.75757576,18.5294118 C9.75757576,18.5294118 7.63636364,19.8529412 7.63636364,22.0588235 C7.63636364,22.0588235 7.21212121,22.5 7.63636364,23.8235294 Z"
+                  id="Shape"/>
+            <path d="M16.1212121,2.64705882 C16.1212121,3.86533401 15.1715131,4.85294118 14,4.85294118 C12.8284869,4.85294118 11.8787879,3.86533401 11.8787879,2.64705882 C11.8787879,1.42878364 12.8284869,0.441176471 14,0.441176471 C15.1715131,0.441176471 16.1212121,1.42878364 16.1212121,2.64705882 Z"
+                  id="Shape"/>
+        </g>
+        <path d="M9.75757576,18.5294118 L18.2424242,18.5294118 M7.63636364,22.0588235 L20.3636364,22.0588235 M14,9.26470588 L14,13.6764706 M11.8787879,11.4705882 L16.1212121,11.4705882"
+              id="Shape" stroke="#FFFFFF"/>
+    </g>
+    <g id="bn" stroke-linecap="round" stroke-linejoin="round" transform="translate(6.000000, 6.000000)">
+        <path d="M13.5757576,2.63636364 C22.4848485,3.51515152 27.5757576,9.66666667 27.1515152,28.1212121 L7.63636364,28.1212121 C7.63636364,20.2121212 16.1212121,22.4090909 14.4242424,9.66666667"
+              id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"/>
+        <path d="M15.2727273,9.66666667 C15.5951515,12.2239394 10.5636364,16.1433333 8.48484848,17.5757576 C5.93939394,19.3333333 6.09212121,21.389697 4.24242424,21.0909091 C3.35830303,20.2648485 5.43878788,18.4193939 4.24242424,18.4545455 C3.39393939,18.4545455 4.40363636,19.5354545 3.39393939,20.2121212 C2.54545455,20.2121212 -0.00254545455,21.0909091 -1.90580876e-06,16.6969697 C-1.90580876e-06,14.9393939 5.09090909,6.15151515 5.09090909,6.15151515 C5.09090909,6.15151515 6.69454545,4.48181818 6.78787879,3.07575758 C6.16848485,2.20224242 6.36363636,1.31818182 6.36363636,0.439393939 C7.21212121,-0.439393939 8.90909091,2.63636364 8.90909091,2.63636364 L10.6060606,2.63636364 C10.6060606,2.63636364 11.2678788,0.885818182 12.7272727,0 C13.5757576,0 13.5757576,2.63636364 13.5757576,2.63636364"
+              id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"/>
+        <path d="M2.96969697,16.2575758 C2.96969697,16.5002463 2.77975717,16.6969697 2.54545455,16.6969697 C2.31115192,16.6969697 2.12121212,16.5002463 2.12121212,16.2575758 C2.12121212,16.0149052 2.31115192,15.8181818 2.54545455,15.8181818 C2.77975717,15.8181818 2.96969697,16.0149052 2.96969697,16.2575758 Z"
+              id="Shape" stroke="#FFFFFF" stroke-width="1.5" fill="#FFFFFF"/>
+        <path d="M7.6363543,7.46969697 C7.6363543,8.19769267 7.44641868,8.78784979 7.21212121,8.78784979 C6.97782375,8.78784979 6.78788812,8.19769267 6.78788812,7.46969697 C6.78788812,6.74170127 6.97782375,6.15154415 7.21212121,6.15154415 C7.44641868,6.15154415 7.6363543,6.74170127 7.6363543,7.46969697 L7.6363543,7.46969697 Z"
+              id="Shape" stroke="#FFFFFF" stroke-width="1.499967" fill="#FFFFFF"
+              transform="translate(7.212121, 7.469697) rotate(30.000728) translate(-7.212121, -7.469697) "/>
+        <path d="M15.7393939,2.98787879 L15.3575758,4.26212121 L15.7818182,4.39393939 C18.4545455,5.27272727 20.5757576,6.58212121 22.4848485,10.3257576 C24.3939394,14.0693939 25.2424242,19.3860606 24.8181818,28.1212121 L24.7757576,28.5606061 L26.6848485,28.5606061 L26.7272727,28.1212121 C27.1515152,19.2806061 25.9806061,13.3136364 23.969697,9.36787879 C21.9587879,5.42212121 19.0569697,3.53272727 16.1721212,3.07575758 L15.7393939,2.98787879 Z"
+              id="Shape" fill="#FFFFFF"/>
+    </g>
+    <g id="br" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.000000, 8.000000)">
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000" points="0 26 22 26 22 23.4 0 23.4"/>
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"
+                 points="2.85185185 19.9333333 4.07407407 17.7666667 17.9259259 17.7666667 19.1481481 19.9333333"/>
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"
+                 points="2.44444444 23.4 2.44444444 19.9333333 19.5555556 19.9333333 19.5555556 23.4"/>
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"
+                 points="4.07407407 17.7666667 4.07407407 6.5 17.9259259 6.5 17.9259259 17.7666667"/>
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"
+                 points="4.07407407 6.5 1.62962963 4.33333333 20.3703704 4.33333333 17.9259259 6.5"/>
+        <polygon id="Shape" stroke="#000000" stroke-width="1.5" fill="#000000"
+                 points="1.62962963 4.33333333 1.62962963 0 4.88888889 0 4.88888889 1.73333333 8.96296296 1.73333333 8.96296296 0 13.037037 0 13.037037 1.73333333 17.1111111 1.73333333 17.1111111 0 20.3703704 0 20.3703704 4.33333333"/>
+        <polyline id="Shape" stroke="#FFFFFF"
+                  points="2.44444444 22.9666667 19.5555556 22.9666667 19.5555556 22.9666667"/>
+        <line x1="3.25925926" y1="19.5" x2="18.7407407" y2="19.5" id="Shape" stroke="#FFFFFF"/>
+        <line x1="4.07407407" y1="17.7666667" x2="17.9259259" y2="17.7666667" id="Shape" stroke="#FFFFFF"/>
+        <line x1="4.07407407" y1="6.5" x2="17.9259259" y2="6.5" id="Shape" stroke="#FFFFFF"/>
+        <line x1="1.62962963" y1="4.33333333" x2="20.3703704" y2="4.33333333" id="Shape" stroke="#FFFFFF"/>
+    </g>
+    <g id="bp" transform="translate(10.000000, 8.000000)" fill="#000000" stroke="#000000" stroke-linecap="round"
+       stroke-width="1.5">
+        <path d="M10,0 C8.15833333,0 6.66666667,1.50129032 6.66666667,3.35483871 C6.66666667,4.10129032 6.90833333,4.78903226 7.31666667,5.35096774 C5.69166667,6.29032258 4.58333333,8.04322581 4.58333333,10.0645161 C4.58333333,11.7670968 5.36666667,13.2851613 6.59166667,14.2832258 C4.09166667,15.1722581 0.416666667,18.9380645 0.416666667,25.5806452 L19.5833333,25.5806452 C19.5833333,18.9380645 15.9083333,15.1722581 13.4083333,14.2832258 C14.6333333,13.2851613 15.4166667,11.7670968 15.4166667,10.0645161 C15.4166667,8.04322581 14.3083333,6.29032258 12.6833333,5.35096774 C13.0916667,4.78903226 13.3333333,4.10129032 13.3333333,3.35483871 C13.3333333,1.50129032 11.8416667,0 10,0 Z"
+              id="Shape"/>
+    </g>
+</svg>
+
+
 <div class="top"><h1>♞ Citeh <span>Chess</span></h1><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></div>
 
 <div id="login" class="hide">
@@ -185,13 +358,6 @@ staunton:{sw:2.2,p:`<path d="M40 48C40 62 34 72 28 78h44c-6-6-12-16-12-30z"/><re
  b:`<path d="M38 52c0 14-6 22-10 26h44c-4-4-10-12-10-26z"/><rect x="33" y="45" width="34" height="8" rx="4"/><path d="M50 17c12 9 16 21 10 28H40c-6-7-2-19 10-28z"/><circle cx="50" cy="14" r="5"/><path d="M50 24v9M46 28h8" fill="none"/>${BASE}`,
  q:`<path d="M24 30l11 25h30l11-25-12 11-6-19-8 19-8-19-6 19z"/><circle cx="24" cy="28" r="4.5"/><circle cx="40" cy="20" r="4.5"/><circle cx="60" cy="20" r="4.5"/><circle cx="76" cy="28" r="4.5"/><circle cx="50" cy="16" r="4.5"/><rect x="31" y="53" width="38" height="8" rx="4"/><path d="M36 61c0 10-4 13-7 17h42c-3-4-7-7-7-17z"/>${BASE}`,
  k:`<path d="M46 5h8v7h7v8h-7v9h-8v-9h-7v-8h7z"/><path d="M31 56c-3-17 6-27 19-27s22 10 19 27z"/><rect x="29" y="54" width="42" height="8" rx="4"/><path d="M36 62c0 10-4 13-7 16h42c-3-3-7-6-7-16z"/>${BASE}`},
-ink:{sw:3.8,
- p:`<path d="M50 38c-9 0-13 6-10 11-8 6-10 17-15 35v7h50v-7c-5-18-7-29-15-35 3-5-1-11-10-11z"/><circle cx="50" cy="26" r="12"/><path d="M25 84h50" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`,
- r:`<path d="M23 12h13v9h8v-9h12v9h8v-9h13v24l-9 7H32l-9-7z"/><path d="M33 43h34v25H33z"/><path d="M33 68l-8 10v11h50V78l-8-10z"/><path d="M25 78h50M33 36h34" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`,
- n:`<path d="M20 90c0-18 8-30 18-39-9 0-18 5-25 13-6-2-4-10 0-16l15-18-2-14 11 8c5-6 11-9 18-8 19 3 30 19 30 42 0 12-2 22-2 32z"/><ellipse cx="29" cy="37" rx="4.2" ry="2.8" style="fill:var(--ps);stroke:none"/><circle cx="14" cy="58" r="1.8" style="fill:var(--ps);stroke:none"/><path d="M45 34c9 10 9 22 1 32M20 80h62" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`,
- b:`<path d="M50 22c13 8 18 20 13 31H37c-5-11 0-23 13-31z"/><circle cx="50" cy="13" r="6.5"/><rect x="34" y="52" width="32" height="8" rx="4"/><path d="M41 60c0 10-4 15-12 20h42c-8-5-12-10-12-20z"/><path d="M22 80h56c0 6-4 10-10 10H32c-6 0-10-4-10-10z"/><path d="M50 28v14M43 35h14" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`,
- q:`<path d="M24 52L17 25l17 15 3-25 9 24 4-27 4 27 9-24 3 25 17-15-7 27z"/><circle cx="17" cy="22" r="5.5"/><circle cx="37" cy="12" r="5.5"/><circle cx="50" cy="8" r="5.5"/><circle cx="63" cy="12" r="5.5"/><circle cx="83" cy="22" r="5.5"/><rect x="26" y="51" width="48" height="10" rx="5"/><path d="M30 61h40l4 17H26z"/><rect x="20" y="77" width="60" height="12" rx="6"/><path d="M28 69h44" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`,
- k:`<path d="M46 3h8v6h6v7h-6v5h-8v-5h-6V9h6z"/><path d="M50 24c-6 6-6 12 0 19 6-7 6-13 0-19z"/><path d="M50 43C40 29 19 33 17 50c-2 13 8 19 13 22h40c5-3 15-9 13-22-2-17-23-21-33-7z"/><rect x="27" y="70" width="46" height="9" rx="4.5"/><rect x="21" y="79" width="58" height="11" rx="5.5"/><path d="M50 43v26" style="fill:none;stroke:var(--pd);stroke-width:2.4"/>`},
 neo:{sw:3.2,p:`<circle cx="50" cy="30" r="13"/><path d="M38 52c0-7 24-7 24 0 0 11 8 18 10 26H28c2-8 10-15 10-26z"/>${PB}`,
  r:`<path d="M27 15h13v9h7v-9h6v9h7v-9h13v27H27z"/><path d="M33 42h34l3 34H30z"/>${PB}`,
  n:`<path d="M28 76C28 56 38 46 46 38c-6 0-12 4-16 10-4-4-2-12 4-18l6-16 6 8c14-6 28 8 28 30 0 8 0 14 0 24z"/><circle cx="50" cy="30" r="3" style="fill:var(--ps);stroke:none"/>${PB}`,
@@ -202,9 +368,9 @@ const SVGST=Object.keys(SVGP);
 (function(){let d='';for(const k of SVGST)for(const t of 'prnbqk')d+=`<symbol id="${k}-${t}" viewBox="0 0 100 100"><g style="fill:var(--pf);stroke:var(--ps);stroke-width:${SVGP[k].sw};stroke-linejoin:round;stroke-linecap:round">${SVGP[k][t]}</g></symbol>`;
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
-const DEF={pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'neo',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
+const DEF={pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
 BT={sky:['#e3f0ff','#7fb2ee'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
-const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',ink:'Ink',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
+const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',cburnett:'Cburnett',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
 function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
@@ -301,7 +467,7 @@ const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'
  canPre=()=>S.pm&&!G.analysis&&live()&&G.V==G.moves.length&&turn()!=G.me,canMove=()=>G.analysis||(live()&&turn()==G.me&&G.V==G.moves.length),bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
 function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
 onresize=()=>{sizeB();if(G&&B)render()};
-function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase(),pc=S.pc;if(SVGP[pc])return`<svg class="pcsvg ${w?'w':'b'} ${pc}" viewBox="0 0 100 100"><use href="#${pc}-${t}"/></svg>`;const c=pc=='solid'?(w?'pw':'pb'):pc=='classic'?'pc':`p-${pc}-${w?'w':'b'}`;return`<span class="g ${c}">${(pc=='classic'&&w?GW:GL)[t]}\uFE0E</span>`}
+function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase(),pc=S.pc;if(pc=='cburnett')return`<svg class="pcsvg" viewBox="4 4 32 32"><use href="#${w?'w':'b'}${t}"/></svg>`;if(SVGP[pc])return`<svg class="pcsvg ${w?'w':'b'} ${pc}" viewBox="0 0 100 100"><use href="#${pc}-${t}"/></svg>`;const c=pc=='solid'?(w?'pw':'pb'):pc=='classic'?'pc':`p-${pc}-${w?'w':'b'}`;return`<span class="g ${c}">${(pc=='classic'&&w?GW:GL)[t]}\uFE0E</span>`}
 function pv(k){const o=S.pc;S.pc=k;const h=glyph('N')+glyph('n');S.pc=o;return h}
 // ---------- analysis (Stockfish, runs on your phone, only after the game) ----------
 let sf=null;
@@ -309,7 +475,7 @@ function startEngine(file){return new Promise((res,rej)=>{let w;try{w=new Worker
  w.onerror=e=>{clearTimeout(t);rej(e)};w.onmessage=e=>{if(String(e.data).includes('uciok')){clearTimeout(t);w.onmessage=null;w.postMessage('setoption name MultiPV value 2');res(w)}};w.postMessage('uci')})}
 const ENG={sf10:{f:['stockfish.wasm.js','stockfish.js'],tempo:40},sf19:{f:['stockfish-19-lite-single.js'],tempo:0}},sfs={},engKey=()=>ENG[S.eng]?S.eng:'sf10';
 async function getEngine(){const k=engKey();if(sfs[k])return sfs[k];let w=null;for(const f of ENG[k].f){try{w=await startEngine(f);break}catch{}}if(!w)throw 'engine';sfs[k]=w;return w}
-function evalFen(w,fen,depth,onInfo){return new Promise(res=>{const sc={},pv={};w.onmessage=e=>{const l=String(e.data),m=l.match(/score (cp|mate) (-?\d+)/);if(m){const mp=l.match(/multipv (\d+)/),k=mp?+mp[1]:1,pm=l.match(/ pv (.+)$/),dm=l.match(/depth (\d+)/);sc[k]={t:m[1],v:+m[2]};if(pm)pv[k]=pm[1];if(onInfo&&k==1)onInfo({sc:sc[1],sc2:sc[2],pv1:pv[1],pv2:pv[2],d:dm?+dm[1]:0})}if(l.startsWith('bestmove'))res({sc:sc[1],sc2:sc[2],pv1:pv[1],pv2:pv[2],best:l.split(' ')[1]})};w.postMessage('position fen '+fen);w.postMessage('go depth '+depth)})}
+function evalFen(w,fen,depth,onInfo){return new Promise(res=>{const sc={},pv={};let dd=0;w.onmessage=e=>{const l=String(e.data),m=l.match(/score (cp|mate) (-?\d+)/);if(m){const mp=l.match(/multipv (\d+)/),k=mp?+mp[1]:1,pm=l.match(/ pv (.+)$/),dm=l.match(/depth (\d+)/);sc[k]={t:m[1],v:+m[2]};if(dm)dd=+dm[1];if(pm)pv[k]=pm[1];if(onInfo&&k==1)onInfo({sc:sc[1],sc2:sc[2],pv1:pv[1],pv2:pv[2],d:dm?+dm[1]:0})}if(l.startsWith('bestmove'))res({sc:sc[1],sc2:sc[2],pv1:pv[1],pv2:pv[2],best:l.split(' ')[1],d:dd})};w.postMessage('position fen '+fen);w.postMessage('go depth '+depth)})}
 const toCp=(sc,wtm)=>{if(!sc)return null;let cp=sc.t=='mate'?(sc.v>0?1:-1)*(10000-Math.abs(sc.v)):sc.v-ENG[engKey()].tempo;return wtm?cp:-cp};
 function fenOf(P,i){const b=P.b;let s=b.map(r=>{let o='',n=0;for(const c of r){if(c=='.')n++;else{if(n){o+=n;n=0}o+=c}}return o+(n||'')}).join('/');
  let c='';if(!P.mv.has(60)&&b[7][4]=='K'){if(!P.mv.has(63)&&b[7][7]=='R')c+='K';if(!P.mv.has(56)&&b[7][0]=='R')c+='Q'}
@@ -328,12 +494,13 @@ function loss(i){const A=G.an;if(!A||!A.done)return 0;const a=wp(A.ev[i-1].cp),b
 const ART={bril:'a brilliant move',great:'a great move',best:'the best move',exc:'an excellent move',good:'a good move',inacc:'an inaccuracy',mist:'a mistake',blun:'a blunder'};
 const MV={p:1,n:3,b:3,r:5,q:9},KN2={best:['★','Best move'],exc:['✔','Excellent move'],good:['✓','Good move'],bril:['!!','Brilliant'],great:['!','Great move'],inacc:['?!','Inaccuracy'],mist:['?','Mistake'],blun:['??','Blunder']};
 const mat=(P,w)=>{let t=0;for(const r of P.b)for(const c of r)if(c!='.'&&isW(c)==w)t+=MV[c.toLowerCase()]||0;return t};
-function classify(){const A=G.an;A.cls=[];for(let i=1;i<=G.moves.length;i++){const w=i%2==1,sg=w?1:-1,before=A.ev[i-1].cp*sg,after=A.ev[i].cp*sg,l=loss(i);let k=null;
-  if(l>=15)k='blun';else if(l>=10)k='mist';else if(l>=5)k='inacc';
-  else{let sac=false;const rp=A.ev[i].best;if(rp&&l<5){try{const P2=step(G.pos[i],rp);sac=(mat(G.pos[i-1],w)-mat(G.pos[i-1],!w))-(mat(P2,w)-mat(P2,!w))>=2}catch{}}
-   if(sac&&after>=-30&&before<400&&G.moves[i-1].length>=4)k='bril';
-   else if(G.moves[i-1]==A.ev[i-1].best&&A.ev[i-1].cp2!=null&&before<600&&wp(before)-wp(A.ev[i-1].cp2*sg)>=15)k='great';else k=G.moves[i-1]==A.ev[i-1].best?'best':l<2?'exc':'good'}
-  A.cls[i]=k}}
+function clsOne(i,eb,ea){const w=i%2==1,sg=w?1:-1,before=eb.cp*sg,after=ea.cp*sg,l=Math.max(0,w?wp(eb.cp)-wp(ea.cp):wp(ea.cp)-wp(eb.cp)),mvu=G.moves[i-1];
+ if(l>=15)return'blun';if(l>=10)return'mist';if(l>=5)return'inacc';
+ let sac=false;if(ea.best){try{const P2=step(G.pos[i],ea.best);sac=(mat(G.pos[i-1],w)-mat(G.pos[i-1],!w))-(mat(P2,w)-mat(P2,!w))>=2}catch{}}
+ if(sac&&after>=-30&&before<400&&mvu.length>=4)return'bril';
+ if(mvu==eb.best&&eb.cp2!=null&&before<600&&wp(before)-wp(eb.cp2*sg)>=15)return'great';
+ return mvu==eb.best?'best':l<2?'exc':'good'}
+function classify(){const A=G.an;A.cls=[];for(let i=1;i<=G.moves.length;i++)A.cls[i]=clsOne(i,A.ev[i-1],A.ev[i])}
 function tag(i){const A=G.an,k=A&&A.done&&A.cls&&A.cls[i];return k&&!/^(best|exc|good)$/.test(k)?`<sup class="${k=='bril'?'s-bril':k=='great'?'s-great':'t'+({inacc:1,mist:2,blun:3})[k]}">${KN2[k][0]}</sup>`:''}
 function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.length>0;el.classList.toggle('hide',!over);$('#arr').innerHTML='';if(!over)return;
  if(!A||A.failed)return el.innerHTML=`<button style="width:100%" onclick="analyse()">${A?'Try analysis again':'Analyse game'}</button>`;
@@ -357,11 +524,14 @@ function openAnalysis(ms,info){pm=null;if(seekAbort){seekAbort.abort();seekAbort
  sel=null;hl=[];flipped=false;extend();G.V=ms.length;show('game');$('#nw').classList.add('hide');render()}
 function playAn(u){const c0=cnt(cur());G.moves=G.moves.slice(0,G.V);G.moves.push(u);G.pos.length=G.V+1;G.san.length=G.V;stopAna();G.an=null;extend();G.V=G.moves.length;sel=null;hl=[];beep(cnt(cur())<c0);render()}
 function toggleLive(){G.live=!G.live;G.evKey=null;G.lv=null;if(!G.live){evTok++;const w=sfs[engKey()];if(w)w.postMessage('stop');$('#arr').innerHTML=''}render()}
-async function liveEval(){if(!G||!G.analysis||!G.live||(G.an&&G.an.run))return;const key=G.moves.slice(0,G.V).join(' ');if(G.evKey===key)return;G.evKey=key;G.lv=null;const tk=++evTok,P=cur(),V=G.V,wtm=V%2==0;paintLive();
+async function liveEval(){if(!G||!G.analysis||!G.live||(G.an&&G.an.run))return;const key=G.moves.slice(0,G.V).join(' ');if(G.evKey===key)return;G.evKey=key;G.lv=null;G.evc=G.evc||{};const tk=++evTok,P=cur(),V=G.V,wtm=V%2==0;paintLive();
  let w;try{w=await getEngine()}catch{toast('Engine could not load');G.live=false;render();return}
  if(evPend){w.postMessage('stop');await evPend}if(tk!=evTok)return;
- if(!hasMove(P,wtm)){G.lv={mate:true,wtm};paintLive();return}
- const pr=evalFen(w,fenOf(P,V),S.dp+4,i=>{if(tk==evTok){G.lv=i;paintLive()}});evPend=pr;await pr;if(evPend===pr)evPend=null}
+ if(V>0){const pk=G.moves.slice(0,V-1).join(' '),pe=G.evc[pk],PP=G.pos[V-1],pw=(V-1)%2==0;if((!pe||pe.d<12)&&hasMove(PP,pw)){const pr0=evalFen(w,fenOf(PP,V-1),12);evPend=pr0;const r0=await pr0;if(evPend===pr0)evPend=null;if(tk!=evTok)return;G.evc[pk]={cp:toCp(r0.sc,pw)??0,best:r0.best,cp2:toCp(r0.sc2,pw),d:r0.d||0}}}
+ if(!hasMove(P,wtm)){const[kr,kf]=kingAt(P.b,wtm);G.evc[key]={cp:attacked(P.b,kr,kf,!wtm)?(wtm?-1:1)*10000:0,best:null,d:99};G.lv={mate:true,wtm};paintLive();tryCls(V);return}
+ const pr=evalFen(w,fenOf(P,V),S.dp+4,i=>{if(tk==evTok){G.lv=i;G.evc[key]={cp:toCp(i.sc,wtm)??0,best:(i.pv1||'').split(' ')[0],cp2:toCp(i.sc2,wtm),d:i.d};paintLive();tryCls(V)}});evPend=pr;await pr;if(evPend===pr)evPend=null}
+function tryCls(V){if(!G||!G.analysis||V<1||!G.evc)return;const key=G.moves.slice(0,V).join(' '),a=G.evc[key],b=G.evc[G.moves.slice(0,V-1).join(' ')];G.lcls=G.lcls||{};
+ if(G.lcls[key]||!a||!b||a.d<14||b.d<12)return;G.lcls[key]=clsOne(V,b,a);if(G.V==V){G.lastV=null;render()}}
 function pvSan(P,pv,n){const out=[];let Q=P;for(const u of(pv||'').split(' ').slice(0,n)){if(!u)break;try{out.push(san(Q,u));Q=step(Q,u)}catch{break}}return out}
 function paintLive(){const el=$('#lv'),on=G&&G.analysis&&G.live;el.classList.toggle('hide',!on);if(!on)return;const L=G.lv,wtm=G.V%2==0;
  if(!L)return el.innerHTML='<div class="dim" style="text-align:center;font-weight:700">Engine thinking…</div>';
@@ -382,7 +552,7 @@ function review(i){const g=RG[i];if(g.variant&&g.variant!='standard')return toas
  const nn=p=>p.user?.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest'),pl=g.players;openAnalysis(ms,{w:nn(pl.white),wr:pl.white.rating,b:nn(pl.black),br:pl.black.rating,txt:`${g.winner?(g.winner=='white'?'1-0':'0-1'):'Draw'} · ${g.status}`})}
 function go(i){if(!G)return;G.V=Math.max(0,Math.min(G.moves.length,i));sel=null;hl=[];render()}
 function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
- const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm),ck=G.an&&G.an.done&&G.an.cls&&G.V>0?G.an.cls[G.V]:null,fresh=G.lastV!==G.V;G.lastV=G.V;let an=null;
+ const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm),ck=G.V>0?((G.an&&G.an.done&&G.an.cls&&G.an.cls[G.V])||(G.analysis&&G.live&&G.lcls&&G.lcls[G.moves.slice(0,G.V).join(' ')])||null):null,fresh=G.lastV!==G.V;G.lastV=G.V;let an=null;
  if(S.an!='none'&&!G.noAnim&&G.pvV!=null&&G.pvId===G.id){const d=G.V-G.pvV,u=d==1?G.moves[G.V-1]:d==-1?G.moves[G.V]:null,pp=G.pos[G.pvV];if(u&&pp){const ff=u.charCodeAt(0)-97,fr=8-u[1],tf=u.charCodeAt(2)-97,tr=8-u[3],col=x=>fl?7-x:x,
   mk=(r0,f0,r1,f1)=>({r:d==1?r1:r0,f:d==1?f1:f0,dx:d==1?col(f0)-col(f1):col(f1)-col(f0),dy:d==1?col(r0)-col(r1):col(r1)-col(r0)});
   an={m:[mk(fr,ff,tr,tf)],cap:d==1&&pp.b[tr][tf]!='.'?{r:tr,f:tf,p:pp.b[tr][tf]}:null};
@@ -390,7 +560,7 @@ function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol(
  G.pvV=G.V;G.pvId=G.id;G.noAnim=false;let h='';
  for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){const r=fl?7-dr:dr,f=fl?7-dc:dc,p=B[r][f],sq='abcdefgh'[f]+(8-r),isSel=sel&&sel[0]==r&&sel[1]==f;
   const c=((r+f)%2?'d':'l')+(isSel?' sel':'')+(S.lm&&lm&&!isSel&&(lm.slice(0,2)==sq||lm.slice(2,4)==sq)?' lm':'')+(inchk&&r==kr&&f==kf?' ck':'')+(S.ht&&hs.has(r*8+f)?(p=='.'?' hn':' hc'):'')+(pm&&G.V==G.moves.length&&((pm.a[0]==r&&pm.a[1]==f)||(pm.b[0]==r&&pm.b[1]==f))?' pm':'');
-  const bg=ck&&lm&&lm.slice(2,4)==sq?`<i class="bdg k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</i>`+(ck=='bril'&&fresh?'<u class="rg"></u>'+[0,1,2,3,4,5,6,7].map(q=>`<u class="sp" style="--a:${q*45}deg"></u>`).join(''):''):'';
+  const bg=ck&&lm&&lm.slice(2,4)==sq?`<i class="bdg k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</i>`:'';
   const am=an&&an.m.find(m=>m.r==r&&m.f==f),cg=an&&an.cap&&an.cap.r==r&&an.cap.f==f?`<b class="capg">${glyph(an.cap.p)}</b>`:'';
   h+=`<div class="${c}${bg?' bz':''}${am?' mvz':''}" data-r="${r}" data-f="${f}">${bg}${cg}${p=='.'?'':am?`<b class="mvp ${S.an}" style="--dx:${am.dx};--dy:${am.dy}">${glyph(p)}</b>`:glyph(p)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
@@ -402,8 +572,22 @@ function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol(
  if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Viewing an earlier move':turn()==G.me?'Your move':pm?'Premove set':"Opponent's move";
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
- if(ck=='bril'&&fresh)chime()}
-function chime(){if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();[660,880,1320].forEach((f,i)=>{const t=ac.currentTime+i*.09,o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.36)})}catch{}}
+ if(ck&&fresh&&lm){if(ck=='bril'){chime();brilFx(lm.slice(2,4))}else if(ck=='great')ding()}}
+function audio(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();return ac}
+function chime(){if(S.vib&&navigator.vibrate)navigator.vibrate([18,40,18,40,70]);if(!S.snd)return;try{const A=audio(),t0=A.currentTime+.02,out=A.createGain(),dl=A.createDelay(),fb=A.createGain();out.gain.value=.55;dl.delayTime.value=.16;fb.gain.value=.38;dl.connect(fb);fb.connect(dl);out.connect(A.destination);out.connect(dl);dl.connect(A.destination);
+ const sw=A.createOscillator(),sg=A.createGain();sw.type='sawtooth';sw.frequency.setValueAtTime(220,t0);sw.frequency.exponentialRampToValueAtTime(1400,t0+.38);sg.gain.setValueAtTime(.0001,t0);sg.gain.linearRampToValueAtTime(.05,t0+.2);sg.gain.exponentialRampToValueAtTime(.0001,t0+.45);const lp=A.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(500,t0);lp.frequency.exponentialRampToValueAtTime(5000,t0+.4);sw.connect(lp);lp.connect(sg);sg.connect(out);sw.start(t0);sw.stop(t0+.5);
+ [659.25,830.61,987.77,1318.51,1661.22,1975.53].forEach((f,i)=>{const t=t0+.3+i*.07;for(const[m,ty,v]of[[1,'sine',.24],[2,'triangle',.07],[3,'sine',.04]]){const o=A.createOscillator(),g=A.createGain();o.type=ty;o.frequency.value=f*m;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.008);g.gain.exponentialRampToValueAtTime(.0008,t+.8);o.connect(g);g.connect(out);o.start(t);o.stop(t+.85)}});
+ const nb=A.createBuffer(1,A.sampleRate*.5,A.sampleRate),d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);const ns=A.createBufferSource(),hp=A.createBiquadFilter(),ng=A.createGain();ns.buffer=nb;hp.type='highpass';hp.frequency.value=7000;ng.gain.value=.12;ns.connect(hp);hp.connect(ng);ng.connect(out);ns.start(t0+.3);}catch{}}
+function ding(){if(!S.snd)return;try{const A=audio(),t=A.currentTime+.01;[880,1318.51].forEach((f,i)=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t+i*.09);g.gain.linearRampToValueAtTime(.2,t+i*.09+.01);g.gain.exponentialRampToValueAtTime(.001,t+i*.09+.4);o.connect(g);g.connect(A.destination);o.start(t+i*.09);o.stop(t+i*.09+.45)})}catch{}}
+function brilFx(sq){const bw=$('#bw');if(!bw||!bw.animate||!sq)return;bw.querySelectorAll('.fx').forEach(e=>e.remove());const fl=bcol()=='black',f=sq.charCodeAt(0)-97,r=8-sq[1],c=bw.clientWidth/8,x=((fl?7-f:f)+.5)*c,y=((fl?7-r:r)+.5)*c,box=document.createElement('div');box.className='fx';bw.appendChild(box);
+ const add=(css,kf,o)=>{const e=document.createElement('i');e.style.cssText=`position:absolute;left:${x}px;top:${y}px;pointer-events:none;${css}`;box.appendChild(e);e.animate(kf,{duration:o.d,delay:o.dl||0,easing:o.e||'cubic-bezier(.2,.7,.2,1)',fill:'both'})},
+ ctr=w=>`width:${w}px;height:${w}px;margin:${-w/2}px 0 0 ${-w/2}px;`;
+ add(ctr(c*2.4)+'border-radius:50%;background:radial-gradient(circle,#fff 0,#8ffaee cc 22%,#1cc2b600 68%)'.replace(' cc','cc'),[{opacity:0,transform:'scale(.2)'},{opacity:1,transform:'scale(1)',offset:.3},{opacity:0,transform:'scale(1.7)'}],{d:950});
+ [0,170].forEach(dl=>add(ctr(c)+'border-radius:50%;border:3px solid #1cc2b6;box-shadow:0 0 14px #1cc2b6,inset 0 0 10px #1cc2b6',[{opacity:.95,transform:'scale(.4)'},{opacity:0,transform:'scale(3.4)'}],{d:850,dl}));
+ for(let k=0;k<18;k++){const a=k/18*6.283+Math.random()*.35,dist=c*(1.2+Math.random()*1.5),sz=4+Math.random()*7;add(ctr(sz)+`background:${k%3?'#fff':'#9ff7ee'};border-radius:${k%2?'50%':'1px'};box-shadow:0 0 8px 2px #1cc2b6`,[{transform:'translate(0,0) rotate(0) scale(1)',opacity:1},{transform:`translate(${Math.cos(a)*dist}px,${Math.sin(a)*dist}px) rotate(${180+Math.random()*200}deg) scale(.1)`,opacity:0}],{d:650+Math.random()*400,dl:50})}
+ [[-1,-1],[1,-.8],[.8,1],[-.9,.8]].forEach(([dx,dy],i)=>{const w=c*.72;add(`width:${w}px;height:${w}px;margin:${-w/2+dy*c*.62}px 0 0 ${-w/2+dx*c*.62}px;background:#fff;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);filter:drop-shadow(0 0 5px #1cc2b6)`,[{transform:'scale(0) rotate(0)',opacity:0},{transform:'scale(1.15) rotate(45deg)',opacity:1,offset:.45},{transform:'scale(0) rotate(100deg)',opacity:0}],{d:700,dl:90+i*110})});
+ const sh=document.createElement('div');sh.style.cssText='position:absolute;inset:4px;border-radius:12px;overflow:hidden;pointer-events:none';sh.innerHTML='<i style="position:absolute;inset:0;background:linear-gradient(110deg,#fff0 38%,#ffffffb0 50%,#fff0 62%)"></i>';box.appendChild(sh);sh.firstChild.animate([{transform:'translateX(-110%)'},{transform:'translateX(110%)'}],{duration:750,easing:'ease-in-out'});
+ bw.animate([{transform:'scale(1)'},{transform:'scale(1.025)'},{transform:'scale(1)'}],{duration:420,easing:'ease-out'});setTimeout(()=>box.remove(),1500)}
 function result(){const s=G.status,w=G.winner;if(s=='aborted'||s=='noStart')return 'Game aborted';if(!w)return s=='stalemate'?'Draw by stalemate':'Draw';
  return(w==G.me?'You won':'You lost')+' by '+({mate:'checkmate',resign:'resignation',outoftime:'time',timeout:'time'}[s]||s)}
 const fmt=ms=>{if(ms==null)return'--';ms=Math.max(0,ms);return ms<10000?(ms/1000).toFixed(1):Math.floor(ms/60000)+':'+String(Math.floor(ms/1000)%60).padStart(2,'0')}
@@ -450,7 +634,7 @@ function demoAn(){if(G&&G.moves.length&&G.me){G.noAnim=false;G.pvV=Math.max(0,G.
 const EN=()=>`<div class="seg">${[['sf10','Standard'],['sf19','Strong']].map(([k,n])=>`<button class="${engKey()==k?'on':''}" onclick="setS('eng','${k}')">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'on':''}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
 function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
  $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
- [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')}
-function beep(cap){if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
+ [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['vib','Vibrate on move'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')+'<div class="dim" style="text-align:center;font-size:11px;padding-top:16px">Cburnett pieces · CC BY-SA 3.0</div>'}
+function beep(cap){try{if(ac&&ac.state=='suspended')ac.resume()}catch{}if(S.vib&&navigator.vibrate)navigator.vibrate(cap?30:12);if(!S.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch{}}
 applyS();boot();
 </script></body></html>
