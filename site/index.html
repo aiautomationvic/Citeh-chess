@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Citeh Chess"><meta name="theme-color" content="#cfe5fb"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Citeh Chess</title>
 <style>
 :root{--bg1:#f4faff;--bg2:#cfe5fb;--card:#ffffffe6;--line:#b9d6f5;--blue:#3b8cf0;--blue2:#1f6fd6;--txt:#12335e;--dim:#5f82ad;--sqL:#e3f0ff;--sqD:#7fb2ee;--cs:40px;--surf:#fff;--chip:#eef6ff;--g1:#4a9bff;--g2:#2f7de8}
@@ -190,6 +190,27 @@ table.cl th,table.cl td{font-weight:600}
 #opn{font-weight:600}
 #st{font-weight:600;color:var(--dim)}
 .dim,small{color:var(--dim)}
+#mlist{position:relative}
+#ctl{flex-wrap:nowrap}#ctl button{min-width:0;padding:0 6px}
+#zb{display:none;position:fixed;top:calc(8px + env(safe-area-inset-top));right:10px;z-index:6;opacity:.55}
+body.zen #zb{display:flex}
+body.zen .top,body.zen #opn,body.zen #mk,body.zen .nav,body.zen #mlist,body.zen #lv,body.zen #ana,body.zen .pl small,body.zen .co{display:none}
+body.zen #st{display:none}body.zen.over #st{display:block}
+body.zen{padding-top:calc(34px + env(safe-area-inset-top))}
+body.fill{padding-left:0;padding-right:0;max-width:none}
+body.fill #bd{border-radius:0;border-left-width:0;border-right-width:0}
+body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #side>.card,body.fill #side>.row{margin-left:12px;margin-right:12px}
+@media (min-width:760px){
+ body.gw{max-width:1180px}
+ body.gw #game{display:grid;grid-template-columns:minmax(0,1fr) 380px;column-gap:26px;align-items:start}
+ body.gw #game>.pl:first-child{grid-column:1;grid-row:1}
+ body.gw #bw{grid-column:1;grid-row:2;width:min(100%,max(300px,calc(100dvh - 190px)))}
+ body.gw #game>.pl:nth-child(3){grid-column:1;grid-row:3}
+ body.gw #side{grid-column:2;grid-row:1/span 3}
+ body.gw #mlist{flex-wrap:wrap;overflow-x:hidden;overflow-y:auto;max-height:280px;white-space:normal;align-content:flex-start}
+ body.gw.zen #game{grid-template-columns:1fr}body.gw.zen #side{grid-column:1;grid-row:4}
+ body.gw.zen #bw{width:min(100%,max(300px,calc(100dvh - 210px)))}
+}
 </style></head><body>
 <!-- Chess pieces: Cburnett (Wikimedia Commons), CC BY-SA 3.0, via cm-chessboard (MIT) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" viewBox="0 0 40 40">
@@ -390,6 +411,7 @@ table.cl th,table.cl td{font-weight:600}
  <div class="pl"><span id="ot"></span><span class="clk" id="oc">--</span></div>
  <div id="bw"><div id="bd"></div><svg id="arr" viewBox="0 0 8 8"></svg></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
+ <div id="side">
  <div id="opn"></div>
  <div id="mk"></div>
  <div class="nav"><button class="alt" id="n0" onclick="go(0)"><svg class="ic" viewBox="0 0 24 24"><path d="M11 6l-6 6 6 6M19 6l-6 6 6 6"/></svg></button><button class="alt" id="n1" onclick="go(G.V-1)"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="alt" id="n2" onclick="go(G.V+1)"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="alt" id="n3" onclick="go(1e9)"><svg class="ic" viewBox="0 0 24 24"><path d="M5 6l6 6-6 6M13 6l6 6-6 6"/></svg></button></div>
@@ -397,12 +419,14 @@ table.cl th,table.cl td{font-weight:600}
  <div id="lv" class="card hide" style="padding:12px"></div>
  <div id="ana" class="card hide" style="padding:12px"></div>
  <div class="dim" id="st" style="text-align:center;min-height:24px;font-weight:700;margin-top:8px"></div>
- <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" id="rs" onclick="resign()">Resign</button></div>
+ <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="setS('zen',true)">Zen</button><button class="alt" id="rs" onclick="resign()">Resign</button><button class="alt" onclick="fs()" aria-label="Fullscreen" style="flex:0 0 46px;padding:0"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
  <div class="row hide" id="ctl2" style="margin-top:6px"><button class="alt" id="lvb" onclick="toggleLive()">Engine: On</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="openAnalysis()">Reset</button><button class="alt" onclick="lobbyBack()">Exit</button></div>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
+ </div>
 </div>
 
 <div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)" aria-label="Close"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="sbody"></div></div></div>
+<button id="zb" class="gear" onclick="setS('zen',false)" aria-label="Leave zen mode"><svg class="ic" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
 <div id="toast"></div><div id="promo" class="hide"></div><div id="gh" class="hide"></div>
 
 <script>
@@ -429,13 +453,13 @@ const SVGST=Object.keys(SVGP);
 (function(){let d='';for(const k of SVGST)for(const t of 'prnbqk')d+=`<symbol id="${k}-${t}" viewBox="0 0 100 100"><g style="fill:var(--pf);stroke:var(--ps);stroke-width:${SVGP[k].sw};stroke-linejoin:round;stroke-linecap:round">${SVGP[k][t]}</g></symbol>`;
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
-const DEF={bl:'clown',br:'classic',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
+const DEF={zen:false,wide:true,fill:false,bl:'clown',br:'classic',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true},
 BT={sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
 const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',cburnett:'Cburnett',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 if(S.mf=='exec')S.mf='drama';
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
-function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
+function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
 const H=()=>({Authorization:'Bearer '+tok});
 // ---------- chess rules (for hints, notation) ----------
 const inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8,isW=p=>p!='.'&&p==p.toUpperCase();
@@ -624,7 +648,7 @@ async function recent(){const el=$('#rg');el.innerHTML='<small>Loading…</small
 function review(i){const g=RG[i];if(g.variant&&g.variant!='standard')return toast('Only standard chess can be reviewed here');const ms=[];let P=START;(g.moves?g.moves.split(' '):[]).every((m,k)=>{const u=sanToUci(P,k%2==0,m);if(!u)return false;ms.push(u);P=step(P,u);return true});
  const nn=p=>p.user?.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest'),pl=g.players;openAnalysis(ms,{w:nn(pl.white),wr:pl.white.rating,b:nn(pl.black),br:pl.black.rating,txt:`${g.winner?(g.winner=='white'?'1-0':'0-1'):'Draw'} · ${g.status}`})}
 function go(i){if(!G)return;G.V=Math.max(0,Math.min(G.moves.length,i));sel=null;hl=[];render()}
-function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
+function render(){if(!G||!G.me)return;applyView();sizeB();const P=cur();B=P.b;const fl=bcol()=='black',lm=G.V>0?G.moves[G.V-1]:null,hs=new Set(hl.map(m=>m[0]*8+m[1]));
  const wtm=G.V%2==0,[kr,kf]=kingAt(B,wtm),inchk=attacked(B,kr,kf,!wtm),ck=G.V>0?((G.an&&G.an.done&&G.an.cls&&G.an.cls[G.V])||(G.analysis&&G.live&&G.lcls&&G.lcls[G.moves.slice(0,G.V).join(' ')])||null):null,fresh=G.lastV!==G.V,mate=G.V>0&&/#$/.test(G.san[G.V-1]||''),mm=S.mf!='off'&&mate;G.lastV=G.V;const gl=(p,r,f)=>mm&&r==kr&&f==kf?(S.mf=='ufo'?`<b class="kfall late" style="--kd:4.7s">${glyph(p)}</b>`:S.mf=='quick'||S.mf=='drama'?`<b class="kcut${fresh?' fresh':''}" style="--kd:${S.mf=='drama'?10.4:5.6}s"><span>${glyph(p)}</span><span>${glyph(p)}</span></b>`:`<b class="kfall${fresh?' fresh':''}">${glyph(p)}</b>`):glyph(p);let an=null;
  if(S.an!='none'&&!G.noAnim&&G.pvV!=null&&G.pvId===G.id){const d=G.V-G.pvV,u=d==1?G.moves[G.V-1]:d==-1?G.moves[G.V]:null,pp=G.pos[G.pvV];if(u&&pp){const ff=u.charCodeAt(0)-97,fr=8-u[1],tf=u.charCodeAt(2)-97,tr=8-u[3],col=x=>fl?7-x:x,
   mk=(r0,f0,r1,f1)=>({r:d==1?r1:r0,f:d==1?f1:f0,dx:d==1?col(f0)-col(f1):col(f1)-col(f0),dy:d==1?col(r0)-col(r1):col(r1)-col(r0)});
@@ -640,7 +664,7 @@ function render(){if(!G||!G.me)return;sizeB();const P=cur();B=P.b;const fl=bcol(
  const av=(n,c)=>`<span class="av ${c}">${(n||'?')[0].toUpperCase()}</span>`,mc=bcol(),oc=mc=='white'?'black':'white';$('#ot').innerHTML=av(nm(opp),oc)+nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=av(nm(mp),mc)+nm(mp)+` <small>${mp?.rating||''}</small>`;
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
  let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}${tag(i+1)}</span>`}
- const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;
+ const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;if(ml.scrollHeight>ml.clientHeight+4)ml.scrollTop=ce?ce.offsetTop-ml.clientHeight/2:0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
  if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Viewing an earlier move':turn()==G.me?'Your move':pm?'Premove set':"Opponent's move";
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
@@ -924,15 +948,17 @@ function goHome(){toggleSet(false);if(!me)return;if(G&&G.me&&!G.analysis&&live()
 function resumeGame(){show('game');render()}
 function lobbyBack(){pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();lobby()}
 // ---------- settings ----------
-function applyS(){document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+function applyView(){const gv=!$('#game').classList.contains('hide'),b=document.body.classList;b.toggle('zen',gv&&!!S.zen&&!!G&&!G.analysis);b.toggle('gw',gv&&!!S.wide);b.toggle('fill',gv&&!!S.fill);b.toggle('over',!!G&&!live());if(gv)sizeB()}
+function applyS(){applyView();document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
+function fs(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d);return}const r=e.requestFullscreen||e.webkitRequestFullscreen;if(r){const q=r.call(e);if(q&&q.catch)q.catch(()=>{setS('fill',!S.fill);toast(S.fill?'Edge-to-edge on':'Edge-to-edge off')})}else{setS('fill',!S.fill);toast(S.fill?'Edge-to-edge on. Add to Home Screen for full screen':'Edge-to-edge off')}}catch{setS('fill',!S.fill)}}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
 const AN=()=>`<div class="seg g5">${[['none','Off'],['slide','Slide'],['hop','Hop'],['bounce','Bounce'],['fade','Pop']].map(([k,n])=>`<button class="${S.an==k?'on':''}" onclick="setS('an','${k}');demoAn()">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[['fast','Fast'],['normal','Normal'],['slow','Slow']].map(([k,n])=>`<button class="${S.sp==k?'on':''}" onclick="setS('sp','${k}')">${n}</button>`).join('')}</div>`;
 function demoAn(){if(G&&G.moves.length&&G.me){G.noAnim=false;G.pvV=Math.max(0,G.V-1);render()}}
 const EN=()=>`<div class="seg">${[['sf10','Standard'],['sf19','Strong']].map(([k,n])=>`<button class="${engKey()==k?'on':''}" onclick="setS('eng','${k}')">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'on':''}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
 function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
- $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+sec('Brilliant reaction')+`<div class="seg g4">${[['classic','Thud'],['aura','Aura'],['sigma','Sigma'],['fire','Fire']].map(([k,n])=>`<button class="${S.br==k?'on':''}" onclick="setS('br','${k}')">${n}</button>`).join('')}</div>`+sec('Blunder reaction')+`<div class="seg g4">${[['off','Off'],['banana','Banana'],['clown','Clown'],['skull','Skull']].map(([k,n])=>`<button class="${S.bl==k?'on':''}" onclick="setS('bl','${k}')">${n}</button>`).join('')}</div>`+sec('Checkmate animation')+`<div class="seg g3">${[['topple','Topple'],['quick','Quick'],['drama','Dramatic'],['ufo','UFO'],['party','Party'],['off','Off']].map(([k,n])=>`<button class="${S.mf==k?'on':''}" onclick="setS('mf','${k}')">${n}</button>`).join('')}</div>`+sec('Move sound')+`<div class="seg g3">${[['wood','Wood'],['soft','Soft'],['beep','Beep']].map(([k,n])=>`<button class="${S.ms==k?'on':''}" onclick="setS('ms','${k}');sfx('move')">${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
- [['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')+'<div class="dim" style="text-align:center;font-size:11px;padding-top:16px">Cburnett pieces · CC BY-SA 3.0</div>'}
+ $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+`<div class="opt"><span>Fullscreen</span><button class="alt" style="min-height:38px" onclick="fs();toggleSet(false)">Enter</button></div>`+sec('Brilliant reaction')+`<div class="seg g4">${[['classic','Thud'],['aura','Aura'],['sigma','Sigma'],['fire','Fire']].map(([k,n])=>`<button class="${S.br==k?'on':''}" onclick="setS('br','${k}')">${n}</button>`).join('')}</div>`+sec('Blunder reaction')+`<div class="seg g4">${[['off','Off'],['banana','Banana'],['clown','Clown'],['skull','Skull']].map(([k,n])=>`<button class="${S.bl==k?'on':''}" onclick="setS('bl','${k}')">${n}</button>`).join('')}</div>`+sec('Checkmate animation')+`<div class="seg g3">${[['topple','Topple'],['quick','Quick'],['drama','Dramatic'],['ufo','UFO'],['party','Party'],['off','Off']].map(([k,n])=>`<button class="${S.mf==k?'on':''}" onclick="setS('mf','${k}')">${n}</button>`).join('')}</div>`+sec('Move sound')+`<div class="seg g3">${[['wood','Wood'],['soft','Soft'],['beep','Beep']].map(([k,n])=>`<button class="${S.ms==k?'on':''}" onclick="setS('ms','${k}');sfx('move')">${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
+ [['zen','Zen mode'],['wide','Wide layout'],['fill','Edge-to-edge board'],['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['aq','Auto-queen promotions'],['cr','Confirm before resigning']].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')+'<div class="dim" style="text-align:center;font-size:11px;padding-top:16px">Cburnett pieces · CC BY-SA 3.0</div>'}
 function beep(cap){if(!S.snd)return;try{const A=audio(),o=A.createOscillator(),g=A.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,A.currentTime);g.gain.exponentialRampToValueAtTime(.001,A.currentTime+.12);o.connect(g);g.connect(A.destination);o.start();o.stop(A.currentTime+.13)}catch{}}
 let nbuf=null;
 function master(A){if(!A._m){const g=A.createGain(),c=A.createDynamicsCompressor();g.gain.value=1.1;g.connect(c);c.connect(A.destination);A._m=g}return A._m}
