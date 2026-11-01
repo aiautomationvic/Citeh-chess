@@ -216,10 +216,10 @@ html[data-brand=dhruv]{--bg1:#fffafa;--bg2:#fde4e4;--card:#fff;--line:#f1cdd0;--
 html[data-brand=jethro]{--bg1:#fbfbff;--bg2:#e4e7f6;--card:#fff;--line:#cdd1ea;--txt:#171a3d;--dim:#5b6190;--chip:#eef0fa;--surf:#fff;--blue:#b22234;--blue2:#8d1a29;--g1:#c2263a;--g2:#9a1c2d;--gs:transparent}
 html[data-brand=dhruv] .logo{background:#c8000a;box-shadow:inset 0 0 0 2px #d9bd7b}html[data-brand=dhruv] .clk.run,html[data-brand=dhruv] #mlist .mv.cur{background:#7d0008;border-color:#7d0008}
 html[data-brand=jethro] .logo{background:#2d2b63;box-shadow:inset 0 0 0 2px #fff}html[data-brand=jethro] .clk.run,html[data-brand=jethro] #mlist .mv.cur{background:#2d2b63;border-color:#2d2b63}
-html[data-brand=dhruv]{--wf:#fffaf2;--ws:#8a0610;--bf:#d6101c;--bs:#4a0309;--bh:#f1d58a}
-html[data-brand=jethro]{--wf:#ffffff;--ws:#b22234;--bf:#233f94;--bs:#0a1740;--bh:#ffffff}
-html[data-brand=dhruv] #bd{border:5px solid #d9bd7b;box-shadow:0 0 0 2px #a80005,0 12px 30px #7d000833}html[data-brand=dhruv] .sel{box-shadow:inset 0 0 0 100px #ffd54f99}html[data-brand=dhruv] .lm{box-shadow:inset 0 0 0 100px #ffe08a80}html[data-brand=dhruv] .hn::after{background:#0b1f4d44}html[data-brand=dhruv] .hc::after{border-color:#0b1f4d55}html[data-brand=dhruv] .co{color:#1d3d1c;opacity:.8}
-html[data-brand=jethro] #bd{border:5px solid #2d2b63;box-shadow:0 0 0 2px #b22234,0 12px 30px #2d2b6333}html[data-brand=jethro] .sel{box-shadow:inset 0 0 0 100px #ffcf3f99}html[data-brand=jethro] .lm{box-shadow:inset 0 0 0 100px #fff2a678}html[data-brand=jethro] .hn::after{background:#2d2b6350}html[data-brand=jethro] .hc::after{border-color:#2d2b6360}html[data-brand=jethro] .co{color:#2d2b63;opacity:.85}
+html[data-brand=dhruv]{--wf:#ffffff;--ws:#7a0710;--bf:#0e2455;--bs:#040a1c;--bh:#e4c37a}
+html[data-brand=jethro]{--wf:#ffffff;--ws:#2d2b63;--bf:#c8102e;--bs:#4a0612;--bh:#ffffff}
+html[data-brand=dhruv] #bd{border:5px solid #d9bd7b;box-shadow:0 0 0 2px #a80005,0 12px 30px #7d000833}html[data-brand=dhruv] .sel{box-shadow:inset 0 0 0 100px #ffd54f99}html[data-brand=dhruv] .lm{box-shadow:inset 0 0 0 100px #ffe08a80}html[data-brand=dhruv] .hn::after{background:#0b1f4d66}html[data-brand=dhruv] .hc::after{border-color:#0b1f4d77}html[data-brand=dhruv] .co{color:#0b1f4d;opacity:.85}
+html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0 0 0 4px #2d2b63,0 12px 30px #2d2b6333}html[data-brand=jethro] .sel{box-shadow:inset 0 0 0 100px #ffcf3f99}html[data-brand=jethro] .lm{box-shadow:inset 0 0 0 100px #fff2a678}html[data-brand=jethro] .hn::after{background:#2d2b6350}html[data-brand=jethro] .hc::after{border-color:#2d2b6360}html[data-brand=jethro] .co{color:#16205c;opacity:.9}
 .bro{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:0;background:none;border-radius:10px;font:inherit;font-weight:700;color:var(--txt);text-align:left;cursor:pointer}.bro.on{background:var(--chip)}.bro i{width:24px;height:24px;border-radius:50%;flex:none;box-shadow:0 0 0 1px #0002}
 </style></head><body>
 <!-- Chess pieces: Cburnett (Wikimedia Commons), CC BY-SA 3.0, via cm-chessboard (MIT) -->
@@ -471,7 +471,7 @@ const SVGST=Object.keys(SVGP);
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
 const DEF={zen:false,wide:true,fill:false,bl:'clown',br:'classic',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true,ca:true,ep:'ghost',pr:true,rs:'napoleon',bn:'citeh'},
-BT={gunner:['#f1f1db','#5d9a58'],stars:['#f8f5ee','#8d9fd6'],sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
+BT={gunner:['#fff6ee','#cc2a32'],stars:['#f7f4ee','#6f86c8'],sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
 const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',cburnett:'Cburnett',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 if(S.mf=='exec')S.mf='drama';
