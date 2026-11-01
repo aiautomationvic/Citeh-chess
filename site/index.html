@@ -211,6 +211,12 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
  body.gw.zen #game{grid-template-columns:1fr}body.gw.zen #side{grid-column:1;grid-row:4}
  body.gw.zen #bw{width:min(100%,max(300px,calc(100dvh - 210px)))}
 }
+/* brands */
+html[data-brand=dhruv]{--bg1:#fffafa;--bg2:#fde4e4;--card:#fff;--line:#f1cdd0;--txt:#2a0a10;--dim:#8a5c63;--chip:#fdeeee;--surf:#fff;--blue:#d90007;--blue2:#a80005;--g1:#e30613;--g2:#b3000d;--gs:transparent}
+html[data-brand=jethro]{--bg1:#fbfbff;--bg2:#e4e7f6;--card:#fff;--line:#cdd1ea;--txt:#171a3d;--dim:#5b6190;--chip:#eef0fa;--surf:#fff;--blue:#b22234;--blue2:#8d1a29;--g1:#c2263a;--g2:#9a1c2d;--gs:transparent}
+html[data-brand=dhruv] .logo{background:#c8000a;box-shadow:inset 0 0 0 2px #d9bd7b}html[data-brand=dhruv] .clk.run,html[data-brand=dhruv] #mlist .mv.cur{background:#7d0008;border-color:#7d0008}
+html[data-brand=jethro] .logo{background:#2d2b63;box-shadow:inset 0 0 0 2px #fff}html[data-brand=jethro] .clk.run,html[data-brand=jethro] #mlist .mv.cur{background:#2d2b63;border-color:#2d2b63}
+.bro{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:0;background:none;border-radius:10px;font:inherit;font-weight:700;color:var(--txt);text-align:left;cursor:pointer}.bro.on{background:var(--chip)}.bro i{width:24px;height:24px;border-radius:50%;flex:none;box-shadow:0 0 0 1px #0002}
 </style></head><body>
 <!-- Chess pieces: Cburnett (Wikimedia Commons), CC BY-SA 3.0, via cm-chessboard (MIT) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" viewBox="0 0 40 40">
@@ -385,7 +391,7 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
 </svg>
 
 
-<div class="top"><h1 onclick="goHome()" style="cursor:pointer"><span class="logo"><svg viewBox="4 4 32 32"><use href="#wn"/></svg></span>Citeh <span>Chess</span></h1><span style="display:flex;gap:8px"><button class="gear" onclick="goHome()" aria-label="Home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/></svg></button><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></span></div>
+<div class="top"><h1 onclick="goHome()" style="cursor:pointer"><span class="logo"><svg viewBox="4 4 32 32"><use href="#wn"/></svg></span><span id="bnm">Citeh</span> <span>Chess</span></h1><span style="display:flex;gap:8px"><button class="gear hide" id="bpb" onclick="bpick(true)" aria-label="Choose style"><i id="bdot" style="display:block;width:20px;height:20px;border-radius:50%"></i></button><button class="gear" onclick="goHome()" aria-label="Home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/></svg></button><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></span></div>
 
 <div id="login" class="hide">
  <div class="card" id="fc1"></div>
@@ -430,6 +436,7 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
  </div>
 </div>
 
+<div id="bpick" class="hide" onclick="if(event.target==this)bpick(false)" style="position:fixed;inset:0;z-index:50"><div id="bpl" style="position:absolute;top:64px;right:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px #0003;padding:6px;min-width:200px"></div></div>
 <div id="set" class="hide" onclick="if(event.target==this)toggleSet(false)"><div class="sheet"><div class="top" style="margin-top:0"><b style="font-size:22px">Settings</b><button class="gear" onclick="toggleSet(false)" aria-label="Close"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="sbody"></div></div></div>
 <button id="zb" class="gear" onclick="setS('zen',false)" aria-label="Leave zen mode"><svg class="ic" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
 <div id="toast"></div><div id="promo" class="hide"></div><div id="gh" class="hide"></div>
@@ -458,13 +465,13 @@ const SVGST=Object.keys(SVGP);
 (function(){let d='';for(const k of SVGST)for(const t of 'prnbqk')d+=`<symbol id="${k}-${t}" viewBox="0 0 100 100"><g style="fill:var(--pf);stroke:var(--ps);stroke-width:${SVGP[k].sw};stroke-linejoin:round;stroke-linecap:round">${SVGP[k][t]}</g></symbol>`;
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
-const DEF={zen:false,wide:true,fill:false,bl:'clown',br:'classic',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true,ca:true,ep:'ghost',pr:true,rs:'napoleon'},
-BT={sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
+const DEF={zen:false,wide:true,fill:false,bl:'clown',br:'classic',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true,ca:true,ep:'ghost',pr:true,rs:'napoleon',bn:'citeh'},
+BT={gunner:['#f7eee2','#c4353b'],stars:['#f2f4fb','#4b5aa0'],sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
 const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',cburnett:'Cburnett',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 if(S.mf=='exec')S.mf='drama';
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
-function show(v){for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
+function show(v){$('#bpb').classList.toggle('hide',v=='game');for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
 const H=()=>({Authorization:'Bearer '+tok});
 // ---------- chess rules (for hints, notation) ----------
 const inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8,isW=p=>p!='.'&&p==p.toUpperCase();
@@ -1243,7 +1250,10 @@ function resumeGame(){show('game');render()}
 function lobbyBack(){if(G&&G.net)netClose();pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();if(tok&&me)lobby();else show('login')}
 // ---------- settings ----------
 function applyView(){const gv=!$('#game').classList.contains('hide'),b=document.body.classList;b.toggle('zen',gv&&!!S.zen&&!!G&&!G.analysis);b.toggle('gw',gv&&!!S.wide);b.toggle('fill',gv&&!!S.fill);b.toggle('over',!!G&&!live());if(gv)sizeB()}
-function applyS(){applyView();document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=S.th;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+function applyS(){applyView();document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=bnd()?'sky':S.th;document.documentElement.dataset.brand=bn();const BR=BRANDS[bn()];$('#bnm').textContent=BR.n;document.title=BR.n+' Chess';$('#bdot').style.background=`conic-gradient(${BR.c[0]} 0 50%,${BR.c[1]} 0)`;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
+const BRANDS={citeh:{n:'Citeh',c:['#2c6bed','#e8eef7'],bt:'sky'},dhruv:{n:'Dhruv',c:['#e30613','#ffffff'],bt:'gunner'},jethro:{n:'Jethro',c:['#b22234','#3c3b6e'],bt:'stars'}},bn=()=>BRANDS[S.bn]?S.bn:'citeh',bnd=()=>bn()!='citeh';
+function bpick(on){$('#bpick').classList.toggle('hide',!on);if(on)$('#bpl').innerHTML=Object.entries(BRANDS).map(([k,b])=>`<button class="bro ${k==bn()?'on':''}" onclick="setBrand('${k}')"><i style="background:conic-gradient(${b.c[0]} 0 50%,${b.c[1]} 0)"></i>${b.n} Chess</button>`).join('')}
+function setBrand(k){const was=bn();if(was==k)return bpick(false);if(was=='citeh')S.btp=S.bt;S.bt=k=='citeh'?(S.btp||'sky'):BRANDS[k].bt;setS('bn',k);bpick(false)}
 function setS(k,v){S[k]=v;ls.s('bcSet',JSON.stringify(S));applyS();renderSet();if(G&&B)render()}
 function fs(){const d=document,e=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d);return}const r=e.requestFullscreen||e.webkitRequestFullscreen;if(r){const q=r.call(e);if(q&&q.catch)q.catch(()=>{setS('fill',!S.fill);toast(S.fill?'Edge-to-edge on':'Edge-to-edge off')})}else{setS('fill',!S.fill);toast(S.fill?'Edge-to-edge on. Add to Home Screen for full screen':'Edge-to-edge off')}}catch{setS('fill',!S.fill)}}
 function toggleSet(v){$('#set').classList.toggle('hide',!v);if(v)renderSet()}
