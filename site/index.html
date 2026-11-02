@@ -21,6 +21,14 @@ button.alt{background:var(--surf);border:1px solid var(--line);color:var(--blue2
 .row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
 .chips button{flex:1 0 28%;padding:10px 4px}
 #game.pz #opn,#game.pz .nav,#game.pz #mlist{display:none}
+.card[data-tab]{display:none}
+body[data-tab=play] .card[data-tab=play],body[data-tab=puz] .card[data-tab=puz],body[data-tab=ana] .card[data-tab=ana]{display:block}
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-around;gap:4px;padding:6px 10px calc(6px + env(safe-area-inset-bottom));background:var(--surf);border-top:1px solid var(--line)}
+#tabs button{flex:1;flex-direction:column;gap:2px;min-height:52px;padding:4px 0;background:transparent;border:0;box-shadow:none;color:var(--dim);font-size:12px;font-weight:700;border-radius:12px}
+#tabs button.on{color:var(--blue2);background:var(--chip)}
+#tabs .ic{width:24px;height:24px}
+body.hasnav{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+@media (min-width:760px){#tabs{top:0;right:auto;bottom:0;width:92px;flex-direction:column;justify-content:flex-start;gap:6px;padding:84px 8px 8px;border-top:0;border-right:1px solid var(--line)}#tabs button{flex:none}body.hasnav{padding-bottom:28px}}
 select{width:100%;min-height:46px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0}
 input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
 small,.dim{color:var(--dim)}summary{font-weight:700}
@@ -399,12 +407,14 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
 
 <div class="top"><h1 onclick="goHome()" style="cursor:pointer"><span class="logo"><svg viewBox="4 4 32 32"><use href="#wn"/></svg></span><span id="bnm">Citeh</span> <span>Chess</span></h1><span style="display:flex;gap:8px"><button class="gear hide" id="bpb" onclick="bpick(true)" aria-label="Choose style"><i id="bdot" style="display:block;width:20px;height:20px;border-radius:50%"></i></button><button class="gear" onclick="goHome()" aria-label="Home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/></svg></button><button class="gear" onclick="toggleSet(true)" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button></span></div>
 
+<nav id="tabs" class="hide"></nav>
+
 <div id="login" class="hide">
  <div class="card hide" id="lnote"><b>Reconnecting to Lichess…</b><p class="dim" style="margin:6px 0 12px;font-size:13px">You are still signed in. Trying again.</p><button style="width:100%" onclick="boot()">Try again now</button></div>
- <div class="card" id="fc1"></div>
- <div class="card" id="pz0"></div>
- <div class="card"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
- <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button></div></div>
+ <div class="card" id="fc1" data-tab="play"></div>
+ <div class="card" id="pz0" data-tab="puz"></div>
+ <div class="card" data-tab="play"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
+ <div class="card" data-tab="ana"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button></div></div>
  <div class="card" style="padding:22px 18px"><button style="width:100%" onclick="login()">Continue with Lichess</button></div>
  <details style="margin:14px 4px"><summary class="dim" style="font-weight:600;font-size:14px">Use an access token</summary>
  <div class="card" style="margin-top:10px"><p class="dim" style="margin:0 0 8px;font-size:13px">lichess.org/account/oauth/token · tick board play and challenges</p>
@@ -416,14 +426,14 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
  <div id="inc"></div>
  <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="min-height:38px;padding:6px 12px">Log out</button></div>
  <div class="rt" id="rt"></div></div>
- <div class="card"><b>Play a person</b><div class="seg g4" id="tcs" style="margin-bottom:10px"></div>
+ <div class="card" data-tab="play"><b>Play a person</b><div class="seg g4" id="tcs" style="margin-bottom:10px"></div>
  <div class="seg" style="margin-bottom:12px"><button id="rcas" onclick="rated=false;lobby()">Casual</button><button id="rrat" onclick="rated=true;lobby()">Rated</button></div><button id="sk" style="width:100%" onclick="seek()">Find game</button></div>
- <div class="card" id="fc2"></div>
- <div class="card"><b>Play a friend</b><div class="seg g3" id="tcf1" style="margin:10px 0 4px"></div><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
- <div class="card"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
- <div class="card" id="pzc"></div>
- <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">Recent games</button></div><div id="rg"></div></div>
- <div class="card"><b>Play the computer</b><div class="seg g3" id="tcf2" style="margin:10px 0"></div><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
+ <div class="card" id="fc2" data-tab="play"></div>
+ <div class="card" data-tab="play"><b>Play a friend</b><div class="seg g3" id="tcf1" style="margin:10px 0 4px"></div><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card" data-tab="play"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
+ <div class="card" id="pzc" data-tab="puz"></div>
+ <div class="card" data-tab="ana"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">Recent games</button></div><div id="rg"></div></div>
+ <div class="card" data-tab="play"><b>Play the computer</b><div class="seg g3" id="tcf2" style="margin:10px 0"></div><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
  <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
 </div>
 
@@ -484,7 +494,7 @@ let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 if(S.v!=2){if(S.br=='sigma'||S.br=='classic')S.br='awaken';S.v=2}
 if(S.mf=='exec')S.mf='drama';
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
-function show(v){$('#bpb').classList.toggle('hide',v=='game');for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);$('#puz').classList.toggle('hide',!(v=='game'&&G&&G.puz));$('#game').classList.toggle('pz',v=='game'&&!!G&&!!G.puz);if(v!='game')puzCard();if(v=='game')sizeB()}
+function show(v){$('#bpb').classList.toggle('hide',v=='game');for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);$('#puz').classList.toggle('hide',!(v=='game'&&G&&G.puz));$('#tabs').classList.toggle('hide',v=='game');document.body.classList.toggle('hasnav',v!='game');tabsUI();$('#game').classList.toggle('pz',v=='game'&&!!G&&!!G.puz);if(v!='game')puzCard();if(v=='game')sizeB()}
 const H=()=>({Authorization:'Bearer '+tok});
 // ---------- chess rules (for hints, notation) ----------
 const inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8,isW=p=>p!='.'&&p==p.toUpperCase();
@@ -567,6 +577,11 @@ async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobb
  try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated:rated?'true':'false',time:String(tc[0]),increment:String(tc[1]),variant:'standard',color:'random'})});
   if(!r.ok){let t='';try{t=await r.text()}catch{}alert('Search failed\nStatus: '+r.status+'\nVia: '+(API==AUTH?'lichess.org':API)+'\nSent: rated='+rated+' time='+tc[0]+' inc='+tc[1]+'\nReply: '+(t.slice(0,400)||'(empty)'))}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
  seekAbort=null;if(!G)lobby()}
+// ---------- tabs ----------
+const TABS=[['play','Play','<path d="M7 4l13 8-13 8z"/>'],['puz','Puzzles','<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.3 1 2.5h6c0-1.2.4-1.9 1-2.5A6 6 0 0 0 12 3z"/>'],['ana','Analysis','<path d="M5 20V10M12 20V4M19 20v-7"/>']];
+let TAB=(()=>{const t=ls.g('bcTab');return TABS.some(x=>x[0]==t)?t:'play'})();
+function setTab(t){TAB=t;ls.s('bcTab',t);tabsUI()}
+function tabsUI(){document.body.dataset.tab=TAB;$('#tabs').innerHTML=TABS.map(([k,n,i])=>`<button class="${k==TAB?'on':''}" onclick="setTab('${k}')" aria-label="${n}"><svg class="ic" viewBox="0 0 24 24">${i}</svg>${n}</button>`).join('')}
 // ---------- puzzles ----------
 const PTH=[['mix','Any theme'],['mateIn1','Mate in 1'],['mateIn2','Mate in 2'],['mateIn3','Mate in 3'],['mate','Checkmate'],['fork','Fork'],['pin','Pin'],['skewer','Skewer'],['discoveredAttack','Discovered attack'],['doubleCheck','Double check'],['sacrifice','Sacrifice'],['deflection','Deflection'],['attraction','Attraction'],['clearance','Clearance'],['interference','Interference'],['intermezzo','Intermezzo'],['quietMove','Quiet move'],['xRayAttack','X-ray attack'],['zugzwang','Zugzwang'],['trappedPiece','Trapped piece'],['hangingPiece','Hanging piece'],['capturingDefender','Capture the defender'],['defensiveMove','Defensive move'],['exposedKing','Exposed king'],['kingsideAttack','Kingside attack'],['queensideAttack','Queenside attack'],['backRankMate','Back rank mate'],['smotheredMate','Smothered mate'],['advancedPawn','Advanced pawn'],['promotion','Promotion'],['underPromotion','Underpromotion'],['enPassant','En passant'],['castling','Castling'],['crushing','Crushing'],['advantage','Get an advantage'],['equality','Equalise'],['opening','Opening'],['middlegame','Middlegame'],['endgame','Endgame'],['rookEndgame','Rook endgame'],['pawnEndgame','Pawn endgame'],['bishopEndgame','Bishop endgame'],['knightEndgame','Knight endgame'],['queenEndgame','Queen endgame'],['short','Short (2 moves)'],['long','Long (3 moves)'],['veryLong','Very long']],
  POP=['Sicilian_Defense','French_Defense','Caro-Kann_Defense','Scandinavian_Defense','Alekhine_Defense','Pirc_Defense','Modern_Defense','Philidor_Defense','Italian_Game','Ruy_Lopez','Scotch_Game','Four_Knights_Game','Petrovs_Defense','Vienna_Game','Kings_Gambit','Bird_Opening','English_Opening','London_System','Catalan_Opening','Queens_Gambit_Accepted','Queens_Gambit_Declined','Slav_Defense','Nimzo-Indian_Defense','Kings_Indian_Defense','Grunfeld_Defense','Benoni_Defense','Dutch_Defense'],

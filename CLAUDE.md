@@ -39,6 +39,9 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 - Themes Sky/Night/Sunset/Mint, board colours (`BT`), piece sets (Cburnett default, Staunton, Neo, recolours), piece animations, Zen / Wide / Edge-to-edge / fullscreen. No phone vibration anywhere.
 - Sounds are synthesised in the browser (no audio files). `fun(kind)` has helpers `ob({type,f,f2,d,v,lp,at,dt,t0})` and `nz({d,v,ft,f,f2,q,t0})`; keep `at < d`. Sound style: low, dry, realistic, **not cartoony** (owner asked for this).
 
+## Tabs (chess.com style)
+Three tabs, Play / Puzzles / Analysis: bottom bar on phones, left side rail at 760px+ (`#tabs`, `TABS`, `setTab`, `tabsUI`; saved in `bcTab`). Cards carry `data-tab="play|puz|ana"` and CSS shows only the current tab's cards (`body[data-tab=...] .card[data-tab=...]`). New lobby/login cards need a `data-tab`. Tabs hide inside a game. Never write a bare `[data-tab]` CSS rule: the attribute is also on `<body>` and it blanked the page once in testing.
+
 ## No-login features
 Login page (and lobby) offer everything that doesn't need Lichess: Puzzles and Puzzle Rush, Play with a link, Two players, Analysis board (no Recent games). `goHome()` returns anonymous users to login via `lobbyBack()`. Puzzle calls send no token on purpose.
 - Puzzle Rush is "quiet": while `Rsh` is active `moveFx` returns early and the checkmate cutscene is skipped (`G.puz&&Rsh`). Normal puzzles keep all effects.
