@@ -4,7 +4,7 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 
 ## Repo layout and backup
 - `site/` app, `worker/` Lichess relay, `rooms/` friend-game server, `tests/` Playwright checks with offline puzzle fixtures (run steps in `tests/README.md`), `CLAUDE.md` this memory, `README.md` public readme and credits.
-- Backup = git on GitHub (`main`) plus dated tags `backup-YYYY-MM-DD` before big changes (restore with `git checkout <tag> -- site/index.html`). Keep this file current after every feature: it is the only memory that survives between sessions.
+- Backup = git on GitHub (`main`) plus dated backup branches `backup/YYYY-MM-DD` before big changes (pushing git tags is blocked with a 403 in the sandbox, branches work; restore with `git checkout backup/<date> -- site/index.html`). Latest: `backup/2026-11-02`. Keep this file current after every feature: it is the only memory that survives between sessions.
 
 ## Where it lives
 - Repo: `aiautomationvic/Citeh-chess` (public). The app is `site/`. `worker/` and `rooms/` are Cloudflare Workers (not part of the site).
