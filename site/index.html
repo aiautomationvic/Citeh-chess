@@ -20,6 +20,8 @@ button.alt{background:var(--surf);border:1px solid var(--line);color:var(--blue2
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 6px 22px #3b8cf022}
 .row{display:flex;flex-wrap:wrap;gap:8px}.row>*{flex:1}
 .chips button{flex:1 0 28%;padding:10px 4px}
+#game.pz #opn,#game.pz .nav,#game.pz #mlist{display:none}
+select{width:100%;min-height:46px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0}
 input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
 small,.dim{color:var(--dim)}summary{font-weight:700}
 .rt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.rt b{display:block;font-size:21px;color:var(--blue2)}
@@ -400,6 +402,7 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
 <div id="login" class="hide">
  <div class="card hide" id="lnote"><b>Reconnecting to Lichess…</b><p class="dim" style="margin:6px 0 12px;font-size:13px">You are still signed in. Trying again.</p><button style="width:100%" onclick="boot()">Try again now</button></div>
  <div class="card" id="fc1"></div>
+ <div class="card" id="pz0"></div>
  <div class="card" style="padding:22px 18px"><button style="width:100%" onclick="login()">Continue with Lichess</button></div>
  <details style="margin:14px 4px"><summary class="dim" style="font-weight:600;font-size:14px">Use an access token</summary>
  <div class="card" style="margin-top:10px"><p class="dim" style="margin:0 0 8px;font-size:13px">lichess.org/account/oauth/token · tick board play and challenges</p>
@@ -411,13 +414,14 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
  <div id="inc"></div>
  <div class="card"><div class="pl" style="padding-top:0"><span id="un" style="font-size:20px"></span><button class="alt" onclick="logout()" style="min-height:38px;padding:6px 12px">Log out</button></div>
  <div class="rt" id="rt"></div></div>
- <div class="card"><b>Play a person</b><div class="seg g3" id="tcs" style="margin-bottom:10px"></div>
+ <div class="card"><b>Play a person</b><div class="seg g4" id="tcs" style="margin-bottom:10px"></div>
  <div class="seg" style="margin-bottom:12px"><button id="rcas" onclick="rated=false;lobby()">Casual</button><button id="rrat" onclick="rated=true;lobby()">Rated</button></div><button id="sk" style="width:100%" onclick="seek()">Find game</button></div>
  <div class="card" id="fc2"></div>
- <div class="card"><b>Play a friend</b><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
+ <div class="card"><b>Play a friend</b><div class="seg g3" id="tcf1" style="margin:10px 0 4px"></div><input id="fr" placeholder="Their Lichess username" autocomplete="off" autocapitalize="off"><button style="width:100%" onclick="challenge()">Challenge friend</button></div>
  <div class="card"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
+ <div class="card" id="pzc"></div>
  <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button><button class="alt" onclick="recent()">Recent games</button></div><div id="rg"></div></div>
- <div class="card"><b>Play the computer</b><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
+ <div class="card"><b>Play the computer</b><div class="seg g3" id="tcf2" style="margin:10px 0"></div><div class="seg g4" id="lvs" style="margin-bottom:12px"></div>
  <button style="width:100%" onclick="vsAI()">Start vs computer</button></div>
 </div>
 
@@ -426,6 +430,7 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
  <div id="bw"><div id="bd"></div><svg id="arr" viewBox="0 0 8 8"></svg></div>
  <div class="pl"><span id="mt"></span><span class="clk" id="mc">--</span></div>
  <div id="side">
+ <div id="puz" class="card hide" style="padding:12px;margin-top:10px"></div>
  <div id="opn"></div>
  <div id="mk"></div>
  <div id="inv" class="card hide" style="text-align:center"><div class="dim" style="font-size:13px">Game code</div><div id="invc" style="font-size:34px;font-weight:800;letter-spacing:.2em;margin:4px 0 12px"></div><div class="row"><button onclick="shareRoom()">Share link</button><button class="alt" onclick="copyRoom()">Copy link</button></div></div>
@@ -449,8 +454,8 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
 <script>
 const AUTH='https://lichess.org',API=(()=>{try{const q=new URLSearchParams(location.search).get('api');if(q!==null)q?localStorage.setItem('bcApi',q):localStorage.removeItem('bcApi');return localStorage.getItem('bcApi')||AUTH}catch{return AUTH}})(),CID='aiav-blue-chess',RU=location.origin+location.pathname,$=s=>document.querySelector(s);
 const mem={},ls={g:k=>{try{return localStorage.getItem(k)}catch{return mem[k]}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch{mem[k]=v}},d:k=>{try{localStorage.removeItem(k)}catch{delete mem[k]}}};
-let chal={},tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,hl=[],rated=false,tc=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false,flipped=false,ac;
-const TCS=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'};
+let chal={},tok=ls.g('bcTok'),me=null,G=null,B=null,sel=null,hl=[],rated=false,tc=[10,0],tc2=[5,0],lv=3,seekAbort=null,gAbort=null,evRun=false,flipped=false,ac;
+const TCS=[[8,0],[10,0],[10,5],[15,10]],FTC=[[3,0],[3,2],[5,0],[8,0],[10,0],[15,10]],RTC=[[1,0],[3,0],[3,2],[5,0],[10,0],[15,10]],GL={k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'},GW={k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'};
 
 const BASE='<path d="M22 78h56v9a5 5 0 0 1-5 5H27a5 5 0 0 1-5-5z"/>',PB='<rect x="24" y="76" width="52" height="15" rx="7.5"/>';
 const SVGP={
@@ -477,7 +482,7 @@ let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
 if(S.v!=2){if(S.br=='sigma'||S.br=='classic')S.br='awaken';S.v=2}
 if(S.mf=='exec')S.mf='drama';
 function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
-function show(v){$('#bpb').classList.toggle('hide',v=='game');for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);if(v=='game')sizeB()}
+function show(v){$('#bpb').classList.toggle('hide',v=='game');for(const i of['login','lobby','game'])$('#'+i).classList.toggle('hide',i!=v);applyView();$('#game').classList.toggle('an',v=='game'&&!!G&&!!G.analysis);$('#puz').classList.toggle('hide',!(v=='game'&&G&&G.puz));$('#game').classList.toggle('pz',v=='game'&&!!G&&!!G.puz);if(v!='game')puzCard();if(v=='game')sizeB()}
 const H=()=>({Authorization:'Bearer '+tok});
 // ---------- chess rules (for hints, notation) ----------
 const inB=(r,f)=>r>=0&&r<8&&f>=0&&f<8,isW=p=>p!='.'&&p==p.toUpperCase();
@@ -543,15 +548,16 @@ async function boot(){const q=new URLSearchParams(location.search),rc=(q.get('ro
 function lobby(){show('lobby');$('#res').innerHTML=G&&G.me&&!G.analysis&&live()?'<div class="card" style="border-color:var(--blue2)"><b>Game in progress</b><button style="width:100%" onclick="resumeGame()">Back to game</button></div>':'';incChal();$('#fr').value=$('#fr').value||ls.g('bcFr')||'';$('#un').textContent=me.username;
  $('#rt').innerHTML=['bullet','blitz','rapid','classical'].map(k=>`<div><b>${me.perfs?.[k]?.rating??'-'}</b><small>${k}</small></div>`).join('');
  $('#tcs').innerHTML=TCS.map(t=>`<button class="${t+''==tc+''?'on':''}" onclick="tc=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
+ $('#tcf1').innerHTML=$('#tcf2').innerHTML=FTC.map(t=>`<button class="${t+''==tc2+''?'on':''}" onclick="tc2=[${t}];lobby()">${t[0]}+${t[1]}</button>`).join('');
  $('#lvs').innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<button class="${n==lv?'on':''}" onclick="lv=${n};lobby()">${n}</button>`).join('');
  $('#rcas').className=rated?'':'on';$('#rrat').className=rated?'on':'';
  $('#sk').textContent=seekAbort?'Cancel search':'Find game';$('#sk').className=seekAbort?'alt':''}
 function incChal(){$('#inc').innerHTML=Object.values(chal).map(c=>`<div class="card" style="border-color:var(--blue2)"><b>${c.challenger.name}</b> challenges you<br><small>${c.timeControl?.show||''} · ${c.rated?'rated':'casual'}</small><div class="row" style="margin-top:8px"><button onclick="resp('${c.id}','accept')">Accept</button><button class="alt" onclick="resp('${c.id}','decline')">Decline</button></div></div>`).join('')}
 async function resp(id,a){delete chal[id];incChal();const r=await fetch(`${API}/api/challenge/${id}/${a}`,{method:'POST',headers:H()});if(!r.ok)toast('That challenge is gone')}
 async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)return toast("Type your friend's username");ls.s('bcFr',u);
- const r=await fetch(`${API}/api/challenge/${encodeURIComponent(u)}`,{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({rated,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+ const r=await fetch(`${API}/api/challenge/${encodeURIComponent(u)}`,{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({rated,'clock.limit':tc2[0]*60,'clock.increment':tc2[1],color:'random'})});
  if(r.ok)toast('Sent! The game starts when '+u+' accepts');else{let m='Could not send';try{m=(await r.json()).error||m}catch{}toast(m)}}
-async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
+async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc2[0]*60,'clock.increment':tc2[1],color:'random'})});
  if(!r.ok)toast('Computer game failed (check token scopes)')}
 async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
  if(tc[0]*60+tc[1]*40<480)return toast('Lichess only allows online search for 10+0 or slower. Pick 10+0 or 15+10');
@@ -559,8 +565,61 @@ async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobb
  try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated:rated?'true':'false',time:String(tc[0]),increment:String(tc[1]),variant:'standard',color:'random'})});
   if(!r.ok){let t='';try{t=await r.text()}catch{}alert('Search failed\nStatus: '+r.status+'\nVia: '+(API==AUTH?'lichess.org':API)+'\nSent: rated='+rated+' time='+tc[0]+' inc='+tc[1]+'\nReply: '+(t.slice(0,400)||'(empty)'))}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
  seekAbort=null;if(!G)lobby()}
+// ---------- puzzles ----------
+const PTH=[['mix','Any theme'],['mateIn1','Mate in 1'],['mateIn2','Mate in 2'],['mateIn3','Mate in 3'],['mate','Checkmate'],['fork','Fork'],['pin','Pin'],['skewer','Skewer'],['discoveredAttack','Discovered attack'],['doubleCheck','Double check'],['sacrifice','Sacrifice'],['deflection','Deflection'],['attraction','Attraction'],['clearance','Clearance'],['interference','Interference'],['intermezzo','Intermezzo'],['quietMove','Quiet move'],['xRayAttack','X-ray attack'],['zugzwang','Zugzwang'],['trappedPiece','Trapped piece'],['hangingPiece','Hanging piece'],['capturingDefender','Capture the defender'],['defensiveMove','Defensive move'],['exposedKing','Exposed king'],['kingsideAttack','Kingside attack'],['queensideAttack','Queenside attack'],['backRankMate','Back rank mate'],['smotheredMate','Smothered mate'],['advancedPawn','Advanced pawn'],['promotion','Promotion'],['underPromotion','Underpromotion'],['enPassant','En passant'],['castling','Castling'],['crushing','Crushing'],['advantage','Get an advantage'],['equality','Equalise'],['opening','Opening'],['middlegame','Middlegame'],['endgame','Endgame'],['rookEndgame','Rook endgame'],['pawnEndgame','Pawn endgame'],['bishopEndgame','Bishop endgame'],['knightEndgame','Knight endgame'],['queenEndgame','Queen endgame'],['short','Short (2 moves)'],['long','Long (3 moves)'],['veryLong','Very long']],
+ POP=['Sicilian_Defense','French_Defense','Caro-Kann_Defense','Scandinavian_Defense','Alekhine_Defense','Pirc_Defense','Modern_Defense','Philidor_Defense','Italian_Game','Ruy_Lopez','Scotch_Game','Four_Knights_Game','Petrovs_Defense','Vienna_Game','Kings_Gambit','Bird_Opening','English_Opening','London_System','Catalan_Opening','Queens_Gambit_Accepted','Queens_Gambit_Declined','Slav_Defense','Nimzo-Indian_Defense','Kings_Indian_Defense','Grunfeld_Defense','Benoni_Defense','Dutch_Defense'],
+ PNM={k:'king',q:'queen',r:'rook',b:'bishop',n:'knight',p:'pawn'},sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let PZ=(()=>{const d={th:'mix',df:'any',co:'any',rm:'3'};try{return{...d,...JSON.parse(ls.g('bcPz')||'{}')}}catch{return d}})(),pzTm=[],pzIv=0,Rsh=null;
+const rbest=m=>{try{return+(JSON.parse(ls.g('bcRush')||'{}')[m]||0)}catch{return 0}};
+function pzSet(k,v){PZ[k]=v;ls.s('bcPz',JSON.stringify(PZ));puzCard()}
+function puzCard(){const th=`<select onchange="pzSet('th',this.value)">`+PTH.map(([k,n])=>`<option value="${k}"${PZ.th==k?' selected':''}>${n}</option>`).join('')+`<optgroup label="Openings">`+POP.map(k=>`<option value="${k}"${PZ.th==k?' selected':''}>${k.replace(/_/g,' ')}</option>`).join('')+`</optgroup></select>`;
+ const sg=(k,a,c)=>`<div class="seg ${c||''}" style="margin:6px 0">`+a.map(([v,n])=>`<button class="${PZ[k]==v?'on':''}" onclick="pzSet('${k}','${v}')">${n}</button>`).join('')+`</div>`;
+ const h=`<b>Puzzles</b><div class="row" style="margin:10px 0 4px"><button onclick="pzStart('daily')">Daily puzzle</button><button onclick="pzStart('next')">New puzzle</button></div>`+th+
+ sg('df',[['any','Any'],['easiest','Easiest'],['easier','Easier'],['normal','Normal'],['harder','Harder'],['hardest','Hardest']],'g3')+sg('co',[['any','Any colour'],['white','White'],['black','Black']])+
+ `<div style="margin-top:14px"><b>Puzzle Rush</b></div>`+sg('rm',[['3','3 min'],['5','5 min'],['s','Survival']])+`<button style="width:100%" onclick="rushStart(PZ.rm)">Start Rush</button><div class="dim" style="font-size:13px;margin-top:6px;text-align:center">Best: ${rbest(PZ.rm)}</div>`;
+ for(const e of document.querySelectorAll('#pzc,#pz0'))e.innerHTML=h}
+const pzGet=async u=>{const r=await fetch(API+u,{signal:AbortSignal.timeout(10000)});if(!r.ok)throw r.status;return r.json()};
+function pzT(f,ms){const id=setTimeout(()=>{pzTm=pzTm.filter(x=>x!=id);f()},ms);pzTm.push(id)}
+function puzStop(){pzTm.forEach(clearTimeout);pzTm=[];clearInterval(pzIv);pzIv=0;Rsh=null}
+function pzSay(t){if(!G)return;G.review=t;$('#st').textContent=t}
+async function pzStart(kind){puzStop();const q=new URLSearchParams();if(kind=='next'){if(PZ.th!='mix')q.set('angle',PZ.th);if(PZ.df!='any')q.set('difficulty',PZ.df);if(PZ.co!='any')q.set('color',PZ.co)}
+ toast('Loading puzzle…');try{const d=await pzGet(kind=='daily'?'/api/puzzle/daily':'/api/puzzle/next?'+q);pzOpen(d,{kind})}catch(e){toast('Could not load a puzzle ('+(e&&e.name||e)+')')}}
+function pzMoves(d){let P=START;const ms=[];for(const t of(d.game.pgn||'').split(/\s+/)){if(!t||/^\d+\.+$/.test(t))continue;const u=sanToUci(P,ms.length%2==0,t);P=step(P,u);ms.push(u)}return{ms,P}}
+function pzOpen(d,o){let r;try{r=pzMoves(d)}catch{toast('That puzzle could not be loaded');return false}
+ const {ms,P}=r,sol=d.puzzle.solution,me=ms.length%2?'black':'white',u=sol[0];
+ if(!legal(P,8-u[1],u.charCodeAt(0)-97).some(m=>m[0]==8-u[3]&&m[1]==u.charCodeAt(2)-97)){toast('That puzzle could not be loaded');return false}
+ openAnalysis(ms,{w:'You',b:'Opponent',live:false,puz:1});G.me=me;G.w={name:me=='white'?'You':'Opponent'};G.b={name:me=='black'?'You':'Opponent'};G.live=false;flipped=false;
+ G.puz={d,sol,i:0,ok:true,fail:false,hint:0,over:false,o:o||{}};pzSay((me=='white'?'White':'Black')+' to play: find the best move');render();pzPaint();return true}
+function puzMove(u){const Z=G.puz;if(!Z||!Z.ok)return;const R=Rsh;playAn(u,1);const mate=/#$/.test(G.san[G.san.length-1]||'');
+ if(u==Z.sol[Z.i]||mate){Z.i++;if(Z.i>=Z.sol.length||mate)return pzDone();Z.ok=false;pzSay('Best move!');pzPaint();pzT(()=>{if(G.puz!==Z)return;playAn(Z.sol[Z.i],1);Z.i++;Z.ok=true;pzSay('Your move');pzPaint()},450)}
+ else{Z.ok=false;Z.fail=true;pzSay('Not that one');pzPaint();if(R)pzStrike();pzT(()=>{if(G.puz!==Z)return;G.moves.pop();G.pos.length=G.moves.length+1;G.san.length=G.moves.length;G.V=G.moves.length;sel=null;hl=[];render();if(R){if(!R.over)rushNext()}else{Z.ok=true;pzSay('Try again');pzPaint()}},800)}}
+function pzDone(){const Z=G.puz,R=Rsh;Z.ok=false;if(R){R.score++;pzPaint();return pzT(rushNext,450)}Z.over=true;pzSay(Z.fail?'Puzzle done (not counted as a clean solve)':'Puzzle solved!');if(!Z.fail)sfx('end');pzPaint()}
+function pzHint(){const Z=G.puz;if(!Z||!Z.ok)return;Z.fail=true;const u=Z.sol[Z.i],r=8-u[1],c=u.charCodeAt(0)-97;if(Z.hint++==0)toast('Move the '+PNM[cur().b[r][c].toLowerCase()]);else{sel=[r,c];hl=legal(cur(),r,c);render()}}
+function pzSol(){const Z=G.puz;if(!Z||!Z.ok)return;Z.fail=true;Z.ok=false;pzPaint();const go=()=>{if(G.puz!==Z)return;if(Z.i>=Z.sol.length){Z.over=true;pzSay('Solution shown');return pzPaint()}playAn(Z.sol[Z.i],1);Z.i++;pzT(go,700)};go()}
+function pzNext(){const k=G&&G.puz&&G.puz.o.kind;pzStart(k=='daily'||!k?'next':k)}
+function pzAnalyse(){const ms=G.moves.slice();openAnalysis(ms,{w:'White',b:'Black',txt:''})}
+function pzClock(){const R=Rsh;if(!R)return'';if(!R.total)return'';const l=Math.max(0,Math.ceil(R.total-(Date.now()-R.t0)/1000-R.pen));return Math.floor(l/60)+':'+String(l%60).padStart(2,'0')}
+function pzPaint(){const e=$('#puz'),Z=G&&G.puz;if(!Z){e.classList.add('hide');return}e.classList.remove('hide');$('#game').classList.add('pz');const R=Rsh,b=(t,f,c)=>`<button class="${c===undefined?'alt':c}" onclick="${f}">${t}</button>`;let h='';
+ if(R&&R.over)h=`<b>${R.m=='s'?'Out of strikes':"Time's up"}</b><div style="font-size:36px;font-weight:800;margin:6px 0">${R.score}</div><div class="dim" style="font-size:13px;margin-bottom:10px">${R.score>R.prev?'New best!':'Best: '+R.best}</div><div class="row">${b('Play again',`rushStart('${R.m}')`,'')}${b('Back','lobbyBack()')}</div>`;
+ else if(R)h=`<div class="pl" style="padding:0 0 6px"><span><b>${R.score}</b> solved</span><span id="pzt" style="font-size:22px;font-weight:800;font-variant-numeric:tabular-nums">${R.m=='s'?'Strikes '+R.strikes+'/3':pzClock()}</span></div><div class="row">${b('Skip','rushSkip()')}${b('Quit','lobbyBack()')}</div>`;
+ else if(Z.over){const p=Z.d.puzzle;h=`<b>Puzzle ${p.rating}</b><div class="dim" style="font-size:13px;margin:4px 0 10px">${(p.themes||[]).map(t=>(PTH.find(x=>x[0]==t)||[0,t.replace(/([A-Z])/g,' $1').toLowerCase()])[1]).join(' · ')}</div><div class="row">${b('Next puzzle','pzNext()','')}${b('Analyse','pzAnalyse()')}${b('Back','lobbyBack()')}</div>`}
+ else h=`<div class="row">${b('Hint','pzHint()')}${b('Solution','pzSol()')}${b('Skip','pzNext()')}</div>`;
+ e.innerHTML=h}
+// ---- puzzle rush ----
+async function rushStart(m){puzStop();const R=Rsh={m,t0:Date.now(),total:m=='5'?300:m=='3'?180:0,pen:0,score:0,strikes:0,q:[],seen:new Set(),over:false,best:rbest(m),prev:rbest(m)};toast('Loading puzzles…');
+ await rushNext();if(Rsh===R&&!R.started)puzStop()}
+async function rushFetch(){const R=Rsh;if(!R||R.fetching)return;R.fetching=1;R.err=0;try{const s=R.score,df=PZ.df!='any'?PZ.df:s<4?'easiest':s<9?'easier':s<16?'normal':s<26?'harder':'hardest',j=await pzGet(`/api/puzzle/batch/${encodeURIComponent(PZ.th)}?nb=8&difficulty=${df}`);if(Rsh===R)for(const x of j.puzzles||[])if(!R.seen.has(x.puzzle.id)){R.seen.add(x.puzzle.id);R.q.push(x)}}catch{R.err=1}R.fetching=0}
+async function rushNext(){const R=Rsh;if(!R||R.over)return;if(!R.q.length){await rushFetch();while(Rsh===R&&R.fetching)await sleep(100)}if(Rsh!==R||R.over)return;
+ const d=R.q.shift();if(!d){toast('Could not load puzzles');return R.started?rushEnd():0}
+ if(R.q.length<3)rushFetch();if(!pzOpen(d,{rush:1}))return rushNext();if(!R.started){R.started=1;R.t0=Date.now();if(R.total)pzIv=setInterval(rushTick,200)}}
+function rushTick(){const R=Rsh;if(!R||R.over)return;if(R.total-(Date.now()-R.t0)/1000-R.pen<=0)return rushEnd();const e=$('#pzt');if(e)e.textContent=pzClock()}
+function rushStrike(){const R=Rsh;if(!R||R.over)return;if(R.m=='s'){R.strikes++;if(R.strikes>=3)return rushEnd()}else{R.pen+=10;toast('-10 seconds');rushTick()}}
+function pzStrike(){rushStrike()}
+function rushSkip(){const Z=G.puz,R=Rsh;if(!Z||!R||!Z.ok||R.over)return;Z.ok=false;rushStrike();if(!R.over)pzT(rushNext,200)}
+function rushEnd(){const R=Rsh;if(!R||R.over)return;R.over=true;clearInterval(pzIv);pzIv=0;if(R.score>R.best){R.best=R.score;try{const o=JSON.parse(ls.g('bcRush')||'{}');o[R.m]=R.score;ls.s('bcRush',JSON.stringify(o))}catch{}}
+ if(G&&G.puz){G.puz.ok=false;pzSay(R.m=='s'?'Out of strikes':"Time's up")}puzCard();pzPaint();sfx('end')}
 // ---------- game ----------
-function openGame(id){if(G&&G.id==id)return;if(G&&G.net)netClose();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
+function openGame(id){if(G&&G.id==id)return;puzStop();if(G&&G.net)netClose();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
  pm=null;loadBook();G={id,moves:[],status:'created',pos:[START],san:[],V:0};sel=null;hl=[];flipped=false;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
  stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
 const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
@@ -571,7 +630,7 @@ function apply(s){const old=G.moves,n0=old.length,c0=cnt(G.pos[n0]||START),wasLi
  G.offer=(s.wdraw&&G.me=='black')||(s.bdraw&&G.me=='white');extend();if(wasLive)G.V=G.moves.length;
  cancelDrag();sel=null;hl=[];if(G.seen&&G.moves.length>n0)moveSfx(G.moves.length);if(wasL&&!live()&&!/#$/.test(G.san[G.san.length-1]||'')){if(G.status=='resign'&&G.winner&&rsv()!='off')setTimeout(()=>resignFx(G.winner=='white'?'black':'white'),600);else setTimeout(()=>sfx('end'),250)}if(!G.seen&&!G.moves.length&&live())sfx('start');G.seen=true;firePre();render()}
 const turn=()=>G.moves.length%2?'black':'white',live=()=>G&&(G.status=='started'||G.status=='created'),mine=p=>p!='.'&&((p==p.toUpperCase())==(G.analysis?G.V%2==0:G.me=='white')),
- canPre=()=>S.pm&&!G.analysis&&live()&&G.V==G.moves.length&&turn()!=G.me,canMove=()=>G.analysis||(live()&&turn()==G.me&&G.V==G.moves.length),bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
+ canPre=()=>S.pm&&!G.analysis&&live()&&G.V==G.moves.length&&turn()!=G.me,canMove=()=>G.puz?!!(G.puz.ok&&G.V==G.moves.length&&turn()==G.me):G.analysis||(live()&&turn()==G.me&&G.V==G.moves.length),bcol=()=>flipped?(G.me=='white'?'black':'white'):G.me;
 function sizeB(){const w=$('#bd').clientWidth;if(w)document.documentElement.style.setProperty('--cs',w/8+'px')}
 onresize=()=>{sizeB();if(G&&B)render()};
 function glyph(p){const w=p==p.toUpperCase(),t=p.toLowerCase(),pc=S.pc;if(pc=='cburnett')return`<svg class="pcsvg" viewBox="4 4 32 32"><use href="#${w?'w':'b'}${t}"/></svg>`;if(SVGP[pc])return`<svg class="pcsvg ${w?'w':'b'} ${pc}" viewBox="0 0 100 100"><use href="#${pc}-${t}"/></svg>`;const c=pc=='solid'?(w?'pw':'pb'):pc=='classic'?'pc':`p-${pc}-${w?'w':'b'}`;return`<span class="g ${c}">${(pc=='classic'&&w?GW:GL)[t]}\uFE0E</span>`}
@@ -619,7 +678,7 @@ function clsOne(i,eb,ea){if(i<=bookN())return'book';const w=i%2==1,sg=w?1:-1,bef
  return mvu==eb.best?'best':l<2?'exc':'good'}
 function classify(){const A=G.an;A.cls=[];for(let i=1;i<=G.moves.length;i++)A.cls[i]=clsOne(i,A.ev[i-1],A.ev[i])}
 function tag(i){const A=G.an,k=A&&A.done&&A.cls&&A.cls[i];return k&&!/^(best|exc|good|book)$/.test(k)?`<sup class="${k=='bril'?'s-bril':k=='great'?'s-great':'t'+({inacc:1,mist:2,blun:3})[k]}">${KN2[k][0]}</sup>`:''}
-function renderAna(){const el=$('#ana'),A=G.an;const over=!live()&&G.moves.length>0;el.classList.toggle('hide',!over);$('#arr').innerHTML='';if(!over)return;
+function renderAna(){const el=$('#ana'),A=G.an;if(G.puz){el.classList.add('hide');$('#arr').innerHTML='';return}const over=!live()&&G.moves.length>0;el.classList.toggle('hide',!over);$('#arr').innerHTML='';if(!over)return;
  if(!A||A.failed)return el.innerHTML=`<button style="width:100%" onclick="analyse()">${A?'Try analysis again':'Analyse game'}</button>`;
  if(A.run)return el.innerHTML=`<div id="anp" style="text-align:center;font-weight:700">Analysing… ${A.p}/${G.moves.length+1}</div><button class="alt" style="width:100%;margin-top:8px" onclick="stopAna()">Cancel</button>`;
  if(!A.done)return el.innerHTML=`<button style="width:100%" onclick="analyse()">Analyse game</button>`;
@@ -636,12 +695,12 @@ function drawArrow(u){const fl=bcol()=='black',pt=(a,b)=>{const f=a.charCodeAt(0
  $('#arr').innerHTML=`<defs><marker id="ah" markerWidth="3.2" markerHeight="3.2" refX="2" refY="1.6" orient="auto"><path d="M0,0L3.2,1.6L0,3.2z" fill="#1f6fd6"/></marker></defs><line x1="${x1}" y1="${y1}" x2="${x2-(x2-x1)*k}" y2="${y2-(y2-y1)*k}" stroke="#1f6fd6" stroke-opacity=".85" stroke-width=".2" stroke-linecap="round" marker-end="url(#ah)"/>`}
 // ---------- analysis board + game review ----------
 let evTok=0,evPend=null,RG=[],pm=null;
-function openAnalysis(ms,info){if(G&&G.net)netClose();pm=null;loadBook();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();stopAna();if(!Array.isArray(ms))ms=[];
+function openAnalysis(ms,info){if(!(info&&info.puz))puzStop();if(G&&G.net)netClose();pm=null;loadBook();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();stopAna();if(!Array.isArray(ms))ms=[];
  G={id:'an',analysis:true,live:info&&info.live===false?false:G&&G.analysis?G.live:true,me:'white',w:{name:info?.w||'White',rating:info?.wr},b:{name:info?.b||'Black',rating:info?.br},review:info?.txt||'',moves:ms,status:'analysis',pos:[START],san:[],V:0,seen:true,lastV:null};
  sel=null;hl=[];flipped=false;extend();G.V=ms.length;show('game');$('#nw').classList.add('hide');render()}
 function openTwo(){openAnalysis([],{w:'White',b:'Black',txt:'Two players: move both sides',live:false});G.two=true;render()}
 function resignTest(){if(!G||!G.two)return;if(rsv()=='off')return toast('Resignation cutscene is off in Settings');resignFx(G.moves.length%2?'black':'white')}
-function playAn(u){const c0=cnt(cur());G.moves=G.moves.slice(0,G.V);G.moves.push(u);G.pos.length=G.V+1;G.san.length=G.V;stopAna();G.an=null;extend();G.V=G.moves.length;sel=null;hl=[];moveSfx(G.moves.length);render()}
+function playAn(u,raw){if(G.puz&&!raw)return puzMove(u);const c0=cnt(cur());G.moves=G.moves.slice(0,G.V);G.moves.push(u);G.pos.length=G.V+1;G.san.length=G.V;stopAna();G.an=null;extend();G.V=G.moves.length;sel=null;hl=[];moveSfx(G.moves.length);render()}
 function toggleLive(){G.live=!G.live;G.evKey=null;G.lv=null;if(!G.live){evTok++;const w=sfs[engKey()];if(w)w.postMessage('stop');$('#arr').innerHTML=''}render()}
 async function liveEval(){if(!G||!G.analysis||!G.live||(G.an&&G.an.run))return;const key=G.moves.slice(0,G.V).join(' ');if(G.evKey===key)return;G.evKey=key;G.lv=null;G.evc=G.evc||{};const tk=++evTok,P=cur(),V=G.V,wtm=V%2==0;paintLive();
  let w;try{w=await getEngine()}catch{toast('Engine could not load');G.live=false;render();return}
@@ -690,7 +749,7 @@ function render(){if(!G||!G.me)return;applyView();sizeB();const pre=!!(G.pre&&G.
  const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;if(ml.scrollHeight>ml.clientHeight+4)ml.scrollTop=ce?ce.offsetTop-ml.clientHeight/2:0;
  const n=G.moves.length;$('#n0').disabled=$('#n1').disabled=G.V<=0;$('#n2').disabled=$('#n3').disabled=G.V>=n;
  if(G.analysis)$('#st').textContent=G.review||'Analysis board: move pieces for both sides';else if(live())$('#st').textContent=G.V<n?'Viewing an earlier move':turn()==G.me?'Your move':pm?'Premove set':"Opponent's move";
- else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis);$('#rsb').classList.toggle('hide',!G.two);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
+ else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis||!!G.puz);$('#rsb').classList.toggle('hide',!G.two);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  const on=openingAt(G.V);$('#opn').textContent=on?on.replace(' ',' · '):'';
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
  if(G.net)netUI();if(ck&&fresh&&lm)reactFx(ck,lm.slice(2,4));else if(st1&&!mm&&lm)moveFx(G.V);if(mm&&fresh){const ww=G.V%2==1,Vn=G.V,later=ck=='bril'&&S.br=='awaken'?9700:0;const go2=()=>{if(!G||G.V!==Vn)return;if(bxk('mf'))setTimeout(()=>(bx()=='dhruv'?dhMate:jtMate)(ww,Vn),700);else if((S.mf=='quick'||S.mf=='drama')&&execFx(kr,kf,ww,S.mf)){}else if(S.mf=='ufo')ufoFx(kr,kf,ww);else if(S.mf=='party')partyFx(kr,kf,ww);else if(S.mf=='siege')setTimeout(()=>siegeFx(ww,Vn),700);else if(S.mf=='caesar')setTimeout(()=>caesarFx(ww,Vn),700);else{mateFx(kr,kf,ww);sfx('mate')}};if(later)setTimeout(go2,later);else go2()}}
@@ -896,7 +955,7 @@ function siegeFx(ww,Vn){if(!G||G.V!==Vn)return;const wc=ww?'w':'b',col=ww?'b':'w
 // ---------- play a friend without Lichess: rooms server (Cloudflare Durable Objects) ----------
 const ROOMS=(()=>{try{const q=new URLSearchParams(location.search).get('rooms');if(q!==null)q?localStorage.setItem('bcRooms',q):localStorage.removeItem('bcRooms');return localStorage.getItem('bcRooms')||'wss://citeh-rooms.finndoolan.workers.dev'}catch{return'wss://citeh-rooms.finndoolan.workers.dev'}})(),RB=ROOMS.replace(/^ws/,'http');
 let fcol='random',ftc=[5,0];
-function friendUI(){const h=`<b>Play with a link</b><input class="fname" placeholder="Your name" maxlength="20" autocomplete="off" value="${(ls.g('bcName')||'').replace(/"/g,'')}"><div class="seg g3" style="margin-bottom:10px">${[['white','White'],['random','Random'],['black','Black']].map(([k,n])=>`<button class="${fcol==k?'on':''}" onclick="fcol='${k}';friendUI()">${n}</button>`).join('')}</div><div class="seg g3" style="margin-bottom:12px">${[...TCS,[0,0]].map(t=>`<button class="${t+''==ftc+''?'on':''}" onclick="ftc=[${t}];friendUI()">${t[0]?t[0]+'+'+t[1]:'No clock'}</button>`).join('')}</div><button style="width:100%" onclick="makeRoom()">Create game</button><div class="row" style="margin-top:12px"><input class="fcode" placeholder="Game code" maxlength="8" autocomplete="off" autocapitalize="characters" style="flex:1;margin:0"><button class="alt" onclick="joinCode()">Join</button></div>`;
+function friendUI(){const h=`<b>Play with a link</b><input class="fname" placeholder="Your name" maxlength="20" autocomplete="off" value="${(ls.g('bcName')||'').replace(/"/g,'')}"><div class="seg g3" style="margin-bottom:10px">${[['white','White'],['random','Random'],['black','Black']].map(([k,n])=>`<button class="${fcol==k?'on':''}" onclick="fcol='${k}';friendUI()">${n}</button>`).join('')}</div><div class="seg g3" style="margin-bottom:12px">${[...RTC,[0,0]].map(t=>`<button class="${t+''==ftc+''?'on':''}" onclick="ftc=[${t}];friendUI()">${t[0]?t[0]+'+'+t[1]:'No clock'}</button>`).join('')}</div><button style="width:100%" onclick="makeRoom()">Create game</button><div class="row" style="margin-top:12px"><input class="fcode" placeholder="Game code" maxlength="8" autocomplete="off" autocapitalize="characters" style="flex:1;margin:0"><button class="alt" onclick="joinCode()">Join</button></div>`;
  const keep=[...document.querySelectorAll('.fname')].map(e=>e.value).find(Boolean);$('#fc1').innerHTML=h;$('#fc2').innerHTML=h;if(keep)document.querySelectorAll('.fname').forEach(e=>e.value=keep)}
 const fbox=()=>$('#login').classList.contains('hide')?$('#fc2'):$('#fc1');
 function fname(){const n=(fbox().querySelector('.fname').value||'').trim()||(me&&me.username)||'Guest';ls.s('bcName',n);return n}
@@ -1413,7 +1472,7 @@ function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game
 function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
 function goHome(){toggleSet(false);if(G&&G.net&&!me){if(!live())lobbyBack();return}if(!me)return;if(G&&G.me&&!G.analysis&&live()){$('#promo').classList.add('hide');cancelDrag();lobby()}else if(G)lobbyBack();else lobby()}
 function resumeGame(){show('game');render()}
-function lobbyBack(){if(G&&G.net)netClose();pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();if(tok&&me)lobby();else show('login')}
+function lobbyBack(){puzStop();if(G&&G.net)netClose();pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();if(tok&&me)lobby();else show('login')}
 // ---------- settings ----------
 function applyView(){const gv=!$('#game').classList.contains('hide'),b=document.body.classList;b.toggle('zen',gv&&!!S.zen&&!!G&&!G.analysis);b.toggle('gw',gv&&!!S.wide);b.toggle('fill',gv&&!!S.fill);b.toggle('over',!!G&&!live());if(gv)sizeB()}
 function applyS(){applyView();document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=bnd()?'sky':S.th;document.documentElement.dataset.brand=bn();const BR=BRANDS[bn()];$('#bnm').textContent=BR.n;document.title=BR.n+' Chess';$('#bdot').style.background=`conic-gradient(${BR.c[0]} 0 50%,${BR.c[1]} 0)`;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
