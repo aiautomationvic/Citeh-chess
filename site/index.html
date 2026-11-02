@@ -556,7 +556,7 @@ async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST'
 async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
  seekAbort=new AbortController();lobby();
  try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated,time:tc[0],increment:tc[1]})});
-  if(!r.ok){let m='';try{const j=await r.json();m=j.error||j.message||JSON.stringify(j)}catch{}toast('Could not start a search ('+r.status+(m?': '+String(m).slice(0,120):'')+')')}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
+  if(!r.ok){let m='';try{const j=await r.json();m=typeof(j.error||j.message)=='string'?(j.error||j.message):JSON.stringify(j.error||j)}catch{}toast('Could not start a search ('+r.status+(m?': '+String(m).slice(0,120):'')+')')}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
  seekAbort=null;if(!G)lobby()}
 // ---------- game ----------
 function openGame(id){if(G&&G.id==id)return;if(G&&G.net)netClose();if(seekAbort){seekAbort.abort();seekAbort=null}if(gAbort)gAbort.abort();gAbort=new AbortController();
