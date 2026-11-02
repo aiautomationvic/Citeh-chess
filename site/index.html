@@ -990,22 +990,26 @@ function dhResign(loser){const I=rsInfo(loser),D=10600,C=cine(dhRes(I.col,I.pt,I
  fade(8900)}
 function dhMateScene(col,wc,tp,sb){const net=Array.from({length:17},(_,i)=>`M${52+i*9} 254V332`).join('')+Array.from({length:9},(_,i)=>`M44 ${258+i*9}H204`).join('');
  return`<svg viewBox="0 0 360 440" width="100%" style="display:block">${stdBg()}<g id="dnet" style="transform-box:fill-box;transform-origin:50% 0"><path d="${net}" stroke="#fff" stroke-opacity=".45" stroke-width=".8" fill="none"/></g><path d="M44 334V252H204V334" stroke="#fff" stroke-width="4.5" fill="none" stroke-linejoin="round"/>${pcs(col,'k',78,252,84,'dk')}${pcs(wc,tp,226,300,76,'ds','transform:translateX(170px)')}
-<g id="dball"><g transform="translate(262 372)"><circle r="9" fill="#fff" stroke="#222" stroke-width="1.1"/><path d="M0-4.5 4.3-1.4 2.7 3.6h-5.4L-4.3-1.4z" fill="#222"/></g></g>
+<g id="dball" style="transform-box:fill-box;transform-origin:50% 50%"><g transform="translate(226 375)"><circle r="9" fill="#fff" stroke="#222" stroke-width="1.1"/><path d="M0-4.5 4.3-1.4 2.7 3.6h-5.4L-4.3-1.4z" fill="#222"/></g></g>
 <g id="dcn" style="opacity:0"><g transform="translate(2 316) scale(.95)">${cannonSvg(60)}</g></g>
 <rect x="60" y="14" width="240" height="40" rx="8" fill="#050a18" stroke="#9c824a" stroke-width="1.6"/><text id="dsb" x="180" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="-apple-system,system-ui,sans-serif">${sb}</text><rect width="360" height="440" fill="url(#dvg)"/></svg>`}
-function dhMate(ww,Vn){if(!G||G.V!==Vn)return;const wc=ww?'w':'b',col=ww?'b':'w',u=G.moves[Vn-1]||'',P=(G.pos[Vn]||cur()).b,tp=((u.length>=4&&P[8-u[3]][u.charCodeAt(2)-97])||'q').toLowerCase(),pn=PN[tp]||'Queen',D=14200,sb=n=>`WHITE ${ww?n:0} - ${ww?0:n} BLACK`,C=cine(dhMateScene(col,wc,tp,sb(0)),D);if(!C)return;const{q,A,at,say,showD,hideD,cam,fade}=C;fun('dhmate');
- cam([[0,180,300,1],[3400,200,320,1.15],[5200,140,315,1.6],[7200,170,320,1.35],[8400,180,160,1.2],[10600,180,300,1.1],[D,180,300,1]]);
+function dhMate(ww,Vn){if(!G||G.V!==Vn)return;const wc=ww?'w':'b',col=ww?'b':'w',u=G.moves[Vn-1]||'',P=(G.pos[Vn]||cur()).b,tp=((u.length>=4&&P[8-u[3]][u.charCodeAt(2)-97])||'q').toLowerCase(),pn=PN[tp]||'Queen',D=14000,sb=n=>`WHITE ${ww?n:0} - ${ww?0:n} BLACK`,C=cine(dhMateScene(col,wc,tp,sb(0)),D);if(!C)return;const{q,A,at,say,showD,hideD,cam,fade}=C;fun('dhmate');
+ cam([[0,180,300,1],[2800,200,320,1.12],[4200,140,318,1.55],[5800,190,335,1.3],[7000,170,200,1.25],[8500,200,325,1.5],[10800,180,300,1.1],[D,180,300,1]]);
  A(q('#ds'),walkK(1),{duration:1800,delay:1000,easing:'linear'});
- at(()=>{showD();say(pn,`<use href="#${wc}${tp}"/>`,'Checkmate.','#ff8f8f',70)},3300);at(()=>say('King',`<use href="#${col}k"/>`,'...There is nothing I can do.','#e8e2d0',62),4700);at(hideD,6600);
- at(()=>A(q('#ds'),[{transform:'translateX(0)'},{transform:'translateX(30px)'},{transform:'translateX(-6px)'}],{duration:700,easing:'ease-in-out'}),6700);
- at(()=>{fun('d_cap');A(q('#dball'),[{transform:'translate(0,0) scale(1)'},{transform:'translate(-120px,-70px) scale(.75)',offset:.55},{transform:'translate(-205px,-100px) scale(.55)'}],{duration:520,easing:'cubic-bezier(.3,.1,.6,.9)'});
-  A(q('#dk'),[{transform:'none'},{transform:'translate(34px,-4px) rotate(52deg)'},{transform:'translate(40px,26px) rotate(88deg)'}],{duration:900,easing:'ease-out'});
-  A(q('#ds'),[{transform:'translateX(-6px)'},{transform:'translate(-14px,-4px) rotate(-8deg)'},{transform:'translateX(-10px)'}],{duration:500});
-  setTimeout(()=>{A(q('#dnet'),[{transform:'scale(1)'},{transform:'scale(1.06,.88) skewX(5deg)'},{transform:'scale(.98,1.04) skewX(-3deg)'},{transform:'scale(1)'}],{duration:900,easing:'ease-out'});q('#dsb').textContent=sb(1);fun('crowd')},520)},7300);
+ // the keeper knows what is coming
+ at(()=>{showD();say('King',`<use href="#${col}k"/>`,'...There is nothing I can do.','#e8e2d0',62)},3300);at(hideD,5400);
+ // run-up, then a low drive into the far corner while the keeper dives the wrong way
+ at(()=>A(q('#ds'),[{transform:'translateX(0)'},{transform:'translateX(16px)',offset:.6},{transform:'translateX(-4px)'}],{duration:700,easing:'ease-in-out'}),5600);
+ at(()=>{fun('d_cap');A(q('#dball'),[{transform:'translate(0,0) scale(1)'},{transform:'translate(-82px,-26px) scale(.86)',offset:.5},{transform:'translate(-164px,-52px) scale(.66)'}],{duration:480,easing:'cubic-bezier(.25,.1,.5,1)'});
+  A(q('#dk'),[{transform:'none'},{transform:'translate(4px,-6px) rotate(38deg)',offset:.4},{transform:'translate(8px,10px) rotate(72deg)'}],{duration:900,easing:'ease-out'});
+  A(q('#ds'),[{transform:'translateX(-4px)'},{transform:'translate(-12px,-3px) rotate(-7deg)',offset:.5},{transform:'translateX(-8px)'}],{duration:500});
+  setTimeout(()=>{A(q('#dnet'),[{transform:'scale(1)'},{transform:'scale(1.05,.9) skewX(5deg)'},{transform:'scale(.98,1.03) skewX(-3deg)'},{transform:'scale(1)'}],{duration:900,easing:'ease-out'});q('#dsb').textContent=sb(1);fun('crowd')},480)},6300);
+ // goal: cannon, confetti, celebration, and only then the call
  at(()=>{A(q('#dcn'),[{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none',offset:.2},{opacity:1,offset:.85},{opacity:0}],{duration:3600,easing:'ease-out'});at(()=>fun('cannon2'),500);lflash(C,50,322,500,52);lsmoke(C,54,320,6,540,'#dfe2ea');
   [[110,150],[250,120],[180,90]].forEach(([x,y],i)=>lconf(C,x,y,['#ef0107','#ffffff','#9c824a','#063672'],30,300+i*350));
-  A(q('#ds'),[{transform:'translateX(-10px)'},{transform:'translate(-10px,-18px)',offset:.2},{transform:'translateX(-10px)',offset:.4},{transform:'translate(-10px,-18px)',offset:.6},{transform:'translateX(-10px)'}],{duration:1800,delay:200,easing:'ease-out'})},8000);
- fade(12400)}
+  A(q('#ds'),[{transform:'translateX(-8px)'},{transform:'translate(-8px,-18px)',offset:.2},{transform:'translateX(-8px)',offset:.4},{transform:'translate(-8px,-18px)',offset:.6},{transform:'translateX(-8px)'}],{duration:1800,delay:200,easing:'ease-out'})},6900);
+ at(()=>{showD();say(pn,`<use href="#${wc}${tp}"/>`,'Checkmate.','#ff8f8f',80)},8400);at(hideD,10400);
+ fade(12000)}
 // ---------- Jethro: the field at dusk ----------
 const usFlag=w=>{const h=w*.62,sh=h/13;return`${Array.from({length:13},(_,i)=>`<rect y="${i*sh}" width="${w}" height="${sh+.3}" fill="${i%2?'#ffffff':'#b22234'}"/>`).join('')}<rect width="${w*.4}" height="${sh*7}" fill="#3c3b6e"/>${Array.from({length:4},(_,r)=>Array.from({length:5},(_,c)=>`<circle cx="${w*.4*(c+.6)/5.2}" cy="${sh*7*(r+.6)/4.2}" r="${w*.017}" fill="#fff"/>`).join('')).join('')}<rect width="${w}" height="${h}" fill="none" stroke="#0004" stroke-width=".6"/>`};
 const usBg=(dark)=>`<defs><linearGradient id="jsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dark?'#0a0d2a':'#141a45'}"/><stop offset=".5" stop-color="${dark?'#2a2350':'#6a4670'}"/><stop offset=".82" stop-color="${dark?'#7a4040':'#e1804a'}"/><stop offset="1" stop-color="${dark?'#a8693f':'#f6b36a'}"/></linearGradient><radialGradient id="jsn"><stop offset="0" stop-color="#ffe3a8" stop-opacity=".9"/><stop offset="1" stop-color="#ffb070" stop-opacity="0"/></radialGradient><linearGradient id="jgd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d2619"/><stop offset="1" stop-color="#110d07"/></linearGradient><radialGradient id="jvg" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".62"/></radialGradient><filter id="jbl"><feGaussianBlur stdDeviation="6"/></filter></defs>
