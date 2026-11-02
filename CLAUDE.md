@@ -42,6 +42,11 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 ## Tabs (chess.com style)
 Three tabs, Play / Puzzles / Analysis: bottom bar on phones, left side rail at 760px+ (`#tabs`, `TABS`, `setTab`, `tabsUI`; saved in `bcTab`). Cards carry `data-tab="play|puz|ana"` and CSS shows only the current tab's cards (`body[data-tab=...] .card[data-tab=...]`). New lobby/login cards need a `data-tab`. Tabs hide inside a game. Never write a bare `[data-tab]` CSS rule: the attribute is also on `<body>` and it blanked the page once in testing.
 
+## Game screen extras
+- Ratings: player rows show a rating chip (`rt()` in `render`, `?` if provisional). Names are wrapped in `.nmx` so zen modes can hide them.
+- Opponent disconnected: Lichess sends `{type:'opponentGone',gone,claimWinInSeconds}` on the game stream; `onGame` stores `G.gone`, `paintGone()` shows a red "Disconnected · claim win in Ns" under the opponent name, then a Claim win button (`POST /api/board/game/{id}/claim-victory`). Room games use presence (`G.on`) instead (no claim). Hidden once the game is over.
+- Extra zen (`S.zx` toggle in Settings makes the Zen buttons use it; `S.zen==='x'`, `body.zenx`): hides everything except the board, arrows (analysis engine arrows), clocks (live games), the disconnect warning and the eye button that returns to normal. Works on the analysis board too. CSS for it uses `html body.zenx` because older zen rules come later in the file and otherwise win.
+
 ## No-login features
 Login page (and lobby) offer everything that doesn't need Lichess: Puzzles and Puzzle Rush, Play with a link, Two players, Analysis board (no Recent games). `goHome()` returns anonymous users to login via `lobbyBack()`. Puzzle calls send no token on purpose.
 - Puzzle Rush is "quiet": while `Rsh` is active `moveFx` returns early and the checkmate cutscene is skipped (`G.puz&&Rsh`). Normal puzzles keep all effects.
