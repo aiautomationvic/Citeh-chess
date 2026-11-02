@@ -29,6 +29,18 @@ body[data-tab=play] .card[data-tab=play],body[data-tab=puz] .card[data-tab=puz],
 #tabs .ic{width:24px;height:24px}
 body.hasnav{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 @media (min-width:760px){#tabs{top:0;right:auto;bottom:0;width:92px;flex-direction:column;justify-content:flex-start;gap:6px;padding:84px 8px 8px;border-top:0;border-right:1px solid var(--line)}#tabs button{flex:none}body.hasnav{padding-bottom:28px}}
+#ot,#mt{display:flex;align-items:center;flex-wrap:wrap;gap:0 8px;min-width:0}#ot .gone{flex-basis:100%;margin:2px 0 0}
+#game .pl .rt{display:inline-block;margin-left:0;padding:1px 8px;border-radius:9px;background:var(--chip);color:var(--txt);font-size:13px;font-weight:700}
+.gone{margin-left:8px;color:#d64545;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.gone::before{content:'';width:8px;height:8px;border-radius:50%;background:#d64545;animation:gp 1.4s ease-in-out infinite}
+@keyframes gp{50%{opacity:.35}}
+.gone .clm{min-height:30px;padding:0 10px;border-radius:9px;font-size:12px}
+body.zenx #zb{display:flex}
+html body.zenx .top,html body.zenx #side>*,html body.zenx .nmx,html body.zenx #game .pl .rt,html body.zenx .av{display:none}
+html body.zenx #game:not(.an) .pl{padding:2px 4px}html body.zenx #game.an .pl{display:none}
+body.zenx.over #game:not(.an) #side>#st{display:block;margin-top:6px}
+html body.zenx{padding-top:calc(58px + env(safe-area-inset-top))}
+@media (max-width:759px){html body.zenx #game{min-height:calc(100dvh - 100px);display:flex;flex-direction:column;justify-content:center}}
 select{width:100%;min-height:46px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0}
 input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surf);color:var(--txt);font:inherit;font-size:16px;margin:6px 0;-webkit-user-select:text;user-select:text}
 small,.dim{color:var(--dim)}summary{font-weight:700}
@@ -220,6 +232,7 @@ body.fill .pl,body.fill #side>*{margin-left:12px;margin-right:12px}body.fill #si
  body.gw #mlist{flex-wrap:wrap;overflow-x:hidden;overflow-y:auto;max-height:280px;white-space:normal;align-content:flex-start}
  body.gw.zen #game{grid-template-columns:1fr}body.gw.zen #side{grid-column:1;grid-row:4}
  body.gw.zen #bw{width:min(100%,max(300px,calc(100dvh - 210px)))}
+ body.gw.zenx #game{grid-template-columns:1fr}body.gw.zenx #side{display:none}body.gw.zenx #bw{width:min(100%,max(300px,calc(100dvh - 190px)))}
 }
 /* brands */
 html[data-brand=dhruv]{--bg1:#fffafa;--bg2:#fde4e4;--card:#fff;--line:#f1cdd0;--txt:#0a2447;--dim:#6a6f8c;--chip:#fdeeee;--surf:#fff;--blue:#ef0107;--blue2:#b80005;--g1:#ef0107;--g2:#c00006;--gs:transparent}
@@ -451,8 +464,8 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
  <div id="lv" class="card hide" style="padding:12px"></div>
  <div id="ana" class="card hide" style="padding:12px"></div>
  <div class="dim" id="st" style="text-align:center;min-height:24px;font-weight:700;margin-top:8px"></div>
- <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="setS('zen',true)">Zen</button><button class="alt" id="rs" onclick="resign()">Resign</button><button class="alt" onclick="fs()" aria-label="Fullscreen" style="flex:0 0 46px;padding:0"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
- <div class="row hide" id="ctl2" style="margin-top:6px"><button class="alt" id="lvb" onclick="toggleLive()">Engine: On</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt hide" id="rsb" onclick="resignTest()">Resign</button><button class="alt" onclick="G.two?openTwo():openAnalysis()">Reset</button><button class="alt" onclick="lobbyBack()">Exit</button></div>
+ <div class="row" id="ctl" style="margin-top:6px"><button class="alt" id="dr" onclick="draw()">Draw</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt" onclick="setS('zen',S.zx?'x':true)">Zen</button><button class="alt" id="rs" onclick="resign()">Resign</button><button class="alt" onclick="fs()" aria-label="Fullscreen" style="flex:0 0 46px;padding:0"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
+ <div class="row hide" id="ctl2" style="margin-top:6px"><button class="alt" id="lvb" onclick="toggleLive()">Engine: On</button><button class="alt" onclick="flipped=!flipped;render()">Flip</button><button class="alt hide" id="rsb" onclick="resignTest()">Resign</button><button class="alt" onclick="setS('zen',S.zx?'x':true)">Zen</button><button class="alt" onclick="G.two?openTwo():openAnalysis()">Reset</button><button class="alt" onclick="lobbyBack()">Exit</button></div>
  <button id="rm" class="hide" style="width:100%;margin-top:8px" onclick="netSend({t:'rematch'})">Rematch</button>
  <button id="nw" class="hide" style="width:100%;margin-top:8px" onclick="lobbyBack()">Back to lobby</button>
  </div>
@@ -487,7 +500,7 @@ const SVGST=Object.keys(SVGP);
 (function(){let d='';for(const k of SVGST)for(const t of 'prnbqk')d+=`<symbol id="${k}-${t}" viewBox="0 0 100 100"><g style="fill:var(--pf);stroke:var(--ps);stroke-width:${SVGP[k].sw};stroke-linejoin:round;stroke-linecap:round">${SVGP[k][t]}</g></symbol>`;
  document.body.insertAdjacentHTML('afterbegin',`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`)})();
 
-const DEF={zen:false,wide:true,fill:false,bl:'clown',br:'awaken',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true,ca:true,ep:'ghost',pr:true,rs:'napoleon',bn:'citeh',bx:true},
+const DEF={zen:false,zx:false,wide:true,fill:false,bl:'clown',br:'awaken',mf:'topple',ms:'wood',pm:true,an:'slide',sp:'normal',eng:'sf10',dp:14,th:'sky',bt:'sky',pc:'cburnett',co:true,lm:true,ht:true,snd:true,vib:true,aq:false,cr:true,ca:true,ep:'ghost',pr:true,rs:'napoleon',bn:'citeh',bx:true},
 BT={gunner:['#ffffff','#ef0107'],stars:['#ffffff','#3c3b6e'],sky:['#e8eef7','#7c9cc8'],ocean:['#cfe3f7','#4f86c6'],ice:['#f4f8fc','#a3bdd8'],slate:['#dfe6ee','#6b82a1'],mint:['#e4f3ec','#79b39a'],wood:['#f0d9b5','#b58863'],sunset:['#fbe9d7','#e39a6b'],forest:['#e6efd8','#6f9a63'],grape:['#ebe3f7','#8b7cc2'],rose:['#f8e6ec','#d68aa6'],night:['#8b9bb8','#2a3b5e'],teal:['#dff3f1','#3e9aa0']};
 const TH={sky:['#4a9bff','#e8f4ff'],night:['#1c3a7a','#0b1b3a'],sunset:['#ff9a5b','#ffe4d2'],mint:['#4fd1a5','#dff7ee']},PS={staunton:'Staunton',cburnett:'Cburnett',neo:'Neo',solid:'Solid',classic:'Classic',ivory:'Ivory',neon:'Neon',ice:'Ice',gold:'Gold'};
 let S={...DEF};try{S={...DEF,...JSON.parse(ls.g('bcSet')||'{}')}}catch{}
@@ -640,7 +653,13 @@ function openGame(id){if(G&&G.id==id)return;puzStop();if(G&&G.net)netClose();if(
  pm=null;loadBook();G={id,moves:[],status:'created',pos:[START],san:[],V:0};sel=null;hl=[];flipped=false;show('game');$('#nw').classList.add('hide');$('#ctl').classList.remove('hide');
  stream('/api/board/game/stream/'+id,onGame,gAbort.signal).catch(()=>{})}
 const nm=p=>p?(p.name||(p.aiLevel?'Computer Lv '+p.aiLevel:'Guest')):'?';
-function onGame(d){if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
+let pgT=0;
+function paintGone(){clearTimeout(pgT);const e=$('#og');if(!e)return;const opp=G&&G.me=='white'?'black':'white',g=G&&live()&&!G.analysis&&(G.gone||(G.net&&G.on&&G.status!='created'&&!G.on[opp]));
+ if(!g){e.classList.add('hide');return}
+ let t='Disconnected',b='';if(G.gone&&G.gone.sec!=null){const l=Math.max(0,Math.ceil(G.gone.sec-(Date.now()-G.gone.at)/1000));if(l>0){t+=' · claim win in '+l+'s';pgT=setTimeout(paintGone,1000)}else b='<button class="clm" onclick="claimWin()">Claim win</button>'}
+ e.innerHTML=t+b;e.classList.remove('hide')}
+function claimWin(){fetch(`${API}/api/board/game/${G.id}/claim-victory`,{method:'POST',headers:H()}).then(r=>{if(!r.ok)toast('Could not claim yet')}).catch(()=>toast('No connection'))}
+function onGame(d){if(d.type=='opponentGone'){if(G)G.gone=d.gone?{at:Date.now(),sec:d.claimWinInSeconds}:null;return paintGone()}if(d.type=='gameFull'){G.w=d.white;G.b=d.black;G.me=d.white.id&&d.white.id==me.id?'white':'black';apply(d.state)}else if(d.type=='gameState')apply(d)}
 function apply(s){const old=G.moves,n0=old.length,c0=cnt(G.pos[n0]||START),wasLive=G.V>=n0;let nm=s.moves?s.moves.split(' '):[];
  if(G.pend&&n0>nm.length&&old.slice(0,nm.length).join()==nm.join())nm=old;else G.pend=null;
  let k=0;while(k<n0&&k<nm.length&&old[k]==nm[k])k++;G.pos.length=Math.min(G.pos.length,k+1);G.san.length=Math.min(G.san.length,k);G.moves=nm;if(G.V>nm.length)G.V=nm.length;G.wt=s.wtime;G.bt=s.btime;G.t0=Date.now();const wasL=live();G.status=s.status;G.winner=s.winner;
@@ -760,7 +779,7 @@ function render(){if(!G||!G.me)return;applyView();sizeB();const pre=!!(G.pre&&G.
   const am=an&&an.m.find(m=>m.r==r&&m.f==f),cg=an&&an.cap&&an.cap.r==r&&an.cap.f==f?`<b class="capg">${glyph(an.cap.p)}</b>`:'';
   h+=`<div class="${c}${bg?' bz':''}${am?' mvz':''}" data-r="${r}" data-f="${f}">${bg}${cg}${p=='.'?'':am?`<b class="mvp ${S.an}" style="--dx:${am.dx};--dy:${am.dy}">${glyph(p)}</b>`:gl(p,r,f)}${S.co&&dc==0?`<i class="co r">${8-r}</i>`:''}${S.co&&dr==7?`<i class="co f">${'abcdefgh'[f]}</i>`:''}</div>`}
  $('#bd').innerHTML=h;const opp=bcol()=='white'?G.b:G.w,mp=bcol()=='white'?G.w:G.b;
- const av=(n,c)=>`<span class="av ${c}">${(n||'?')[0].toUpperCase()}</span>`,mc=bcol(),oc=mc=='white'?'black':'white';$('#ot').innerHTML=av(nm(opp),oc)+nm(opp)+` <small>${opp?.rating||''}</small>`;$('#mt').innerHTML=av(nm(mp),mc)+nm(mp)+` <small>${mp?.rating||''}</small>`;
+ const av=(n,c)=>`<span class="av ${c}">${(n||'?')[0].toUpperCase()}</span>`,mc=bcol(),oc=mc=='white'?'black':'white';const rt=p=>p&&p.rating?`<small class="rt">${p.rating}${p.provisional?'?':''}</small>`:'';$('#ot').innerHTML=av(nm(opp),oc)+`<span class="nmx">${nm(opp)}</span>`+rt(opp)+'<span id="og" class="gone hide"></span>';$('#mt').innerHTML=av(nm(mp),mc)+`<span class="nmx">${nm(mp)}</span>`+rt(mp);paintGone();
  $('#rs').textContent=G.moves.length<2?'Abort':'Resign';$('#dr').textContent=G.offer?'Accept draw':'Draw';
  let m='';for(let i=0;i<G.san.length;i++){if(i%2==0)m+=`<span class="mn">${i/2+1}.</span>`;m+=`<span class="mv${G.V==i+1?' cur':''}" onclick="go(${i+1})">${G.san[i]}${tag(i+1)}</span>`}
  const ml=$('#mlist');ml.innerHTML=m;const ce=ml.querySelector('.cur');if(ce)ml.scrollLeft=ce.offsetLeft-ml.clientWidth/2;else if(!G.V)ml.scrollLeft=0;if(ml.scrollHeight>ml.clientHeight+4)ml.scrollTop=ce?ce.offsetTop-ml.clientHeight/2:0;
@@ -995,7 +1014,7 @@ const netAct=p=>{const o={resign:{t:'resign'},abort:{t:'resign'},'draw/yes':{t:'
 function netUI(){const g=G,wait=g.status=='created',opp=g.me=='white'?'black':'white';$('#inv').classList.toggle('hide',!wait);if(wait)$('#invc').textContent=g.code;
  if(live()){$('#ctl').classList.remove('hide');$('#nw').classList.add('hide')}
  $('#rm').classList.toggle('hide',live()||g.status=='aborted');$('#rm').textContent=g.rm&&g.rm[g.me]?'Waiting for rematch…':g.rm&&g.rm[opp]?'Accept rematch':'Rematch';
- if(g.off)$('#st').textContent='Reconnecting…';else if(wait)$('#st').textContent='Waiting for your friend…';else if(live()&&g.on&&!g.on[opp])$('#st').textContent+=' · friend offline'}
+ if(g.off)$('#st').textContent='Reconnecting…';else if(wait)$('#st').textContent='Waiting for your friend…';else if(live()&&g.on&&!g.on[opp])$('#st').textContent+=' · friend offline';paintGone()}
 const roomLink=()=>RU+'?room='+G.code+(ls.g('bcRooms')?'&rooms='+encodeURIComponent(ls.g('bcRooms')):'');
 function copyRoom(){const l=roomLink();try{navigator.clipboard.writeText(l).then(()=>toast('Link copied'),()=>prompt('Copy this link',l))}catch{prompt('Copy this link',l)}}
 function shareRoom(){const l=roomLink();if(navigator.share)navigator.share({title:'Chess game',text:'Play me at chess',url:l}).catch(()=>{});else copyRoom()}
@@ -1491,7 +1510,7 @@ function goHome(){toggleSet(false);if(!me){if(G&&!(G.net&&live()))lobbyBack();re
 function resumeGame(){show('game');render()}
 function lobbyBack(){puzStop();if(G&&G.net)netClose();pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();if(tok&&me)lobby();else show('login')}
 // ---------- settings ----------
-function applyView(){const gv=!$('#game').classList.contains('hide'),b=document.body.classList;b.toggle('zen',gv&&!!S.zen&&!!G&&!G.analysis);b.toggle('gw',gv&&!!S.wide);b.toggle('fill',gv&&!!S.fill);b.toggle('over',!!G&&!live());if(gv)sizeB()}
+function applyView(){const gv=!$('#game').classList.contains('hide'),b=document.body.classList;b.toggle('zen',gv&&!!S.zen&&!!G&&!G.analysis);b.toggle('zenx',gv&&S.zen=='x'&&!!G);b.toggle('gw',gv&&!!S.wide);b.toggle('fill',gv&&!!S.fill);b.toggle('over',!!G&&!live());if(gv)sizeB()}
 function applyS(){applyView();document.documentElement.style.setProperty('--ad',({fast:130,normal:230,slow:420})[S.sp]+'ms');document.documentElement.dataset.theme=bnd()?'sky':S.th;document.documentElement.dataset.brand=bn();const BR=BRANDS[bn()];$('#bnm').textContent=BR.n;document.title=BR.n+' Chess';$('#bdot').style.background=`conic-gradient(${BR.c[0]} 0 50%,${BR.c[1]} 0)`;const t=BT[S.bt]||BT.sky,r=document.documentElement.style;r.setProperty('--sqL',t[0]);r.setProperty('--sqD',t[1])}
 const BRANDS={citeh:{n:'Citeh',c:['#2c6bed','#e8eef7'],bt:'sky'},dhruv:{n:'Dhruv',c:['#ef0107','#ffffff'],bt:'gunner'},jethro:{n:'Jethro',c:['#b22234','#3c3b6e'],bt:'stars'}},bn=()=>BRANDS[S.bn]?S.bn:'citeh',bnd=()=>bn()!='citeh';
 function bpick(on){$('#bpick').classList.toggle('hide',!on);if(on)$('#bpl').innerHTML=Object.entries(BRANDS).map(([k,b])=>`<button class="bro ${k==bn()?'on':''}" onclick="setBrand('${k}')"><i style="background:conic-gradient(${b.c[0]} 0 50%,${b.c[1]} 0)"></i>${b.n} Chess</button>`).join('')}
@@ -1509,7 +1528,7 @@ function demoAn(){if(G&&G.moves.length&&G.me){G.noAnim=false;G.pvV=Math.max(0,G.
 const EN=()=>`<div class="seg">${[['sf10','Standard'],['sf19','Strong']].map(([k,n])=>`<button class="${engKey()==k?'on':''}" onclick="setS('eng','${k}')">${n}</button>`).join('')}</div><div class="seg g3" style="margin:8px 0 6px">${[[12,'Quick'],[14,'Normal'],[18,'Deep']].map(([d,n])=>`<button class="${S.dp==d?'on':''}" onclick="setS('dp',${d})">${n}</button>`).join('')}</div>`;
 function renderSet(){const sec=t=>`<div class="opt" style="border:0;padding-bottom:2px">${t}</div>`,sw=(o,key)=>`<div class="sws">${Object.entries(o).map(([k,t])=>`<button class="swb ${k==S[key]?'s2':''}" style="background:linear-gradient(135deg,${t[0]} 50%,${t[1]} 50%)" onclick="setS('${key}','${k}')"></button>`).join('')}</div>`;
  $('#sbody').innerHTML=sec('Theme')+sw(TH,'th')+sec('Board colour')+sw(BT,'bt')+sec('Piece style')+`<div class="pcs">${Object.entries(PS).map(([k,n])=>`<button class="pcb ${k==S.pc?'s2':''}" onclick="setS('pc','${k}')"><span class="pv">${pv(k)}</span>${n}</button>`).join('')}</div>`+`<div class="opt"><span>Fullscreen</span><button class="alt" style="min-height:38px" onclick="fs();toggleSet(false)">Enter</button></div>`+(bnd()?sec('Animation set')+`<div class="seg"><button class="${S.bx!==false?'on':''}" onclick="setS('bx',true)">Themed</button><button class="${S.bx===false?'on':''}" onclick="setS('bx',false)">Standard</button></div>`:'')+sec('Brilliant reaction')+`<div class="seg g5">${[['classic','Thud'],['aura','Aura'],['fire','Fire'],['awaken','Scene']].map(([k,n])=>`<button class="${S.br==k?'on':''}" onclick="setS('br','${k}')">${n}</button>`).join('')}</div>`+sec('Blunder reaction')+`<div class="seg g4">${[['off','Off'],['banana','Banana'],['clown','Clown'],['skull','Skull']].map(([k,n])=>`<button class="${S.bl==k?'on':''}" onclick="setS('bl','${k}')">${n}</button>`).join('')}</div>`+sec('Checkmate animation')+fxSeg('mf',S.mf,[['topple','Topple'],['quick','Quick'],['drama','Dramatic'],['ufo','UFO'],['party','Party'],['siege','Cutscene'],['caesar','Et tu, Brute?'],['off','Off']])+sec('En passant effect')+fxSeg('ep',epv(),[['ghost','Ghost'],['scene','Cutscene'],['off','Off']])+sec('Resignation cutscene')+fxSeg('rs',rsv(),[['napoleon','Napoleon'],['flag','White flag'],['off','Off']])+(thm()?sec('Castling effect')+fxSeg('ca',S.ca?'std':'off',[['std','Standard'],['off','Off']])+sec('Promotion effect')+fxSeg('pr',S.pr?'std':'off',[['std','Standard'],['off','Off']])+sec('Sounds')+`<div class="seg"><button class="${bxo('s')?'':'on'}" onclick="S.bxo=S.bxo||{};S.bxo.s=false;setS('bx',true)">Themed</button><button class="${bxo('s')?'on':''}" onclick="S.bxo=S.bxo||{};S.bxo.s=true;setS('bx',true)">Standard</button></div>`:'')+sec('Move sound')+`<div class="seg g3">${[['wood','Wood'],['soft','Soft'],['beep','Beep']].map(([k,n])=>`<button class="${S.ms==k?'on':''}" onclick="setS('ms','${k}');sfx('move')">${n}</button>`).join('')}</div>`+sec('Piece animation')+AN()+sec('Analysis engine')+EN()+
- [['zen','Zen mode'],['wide','Wide layout'],['fill','Edge-to-edge board'],['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['aq','Auto-queen promotions'],['cr','Confirm before resigning'],...(thm()?[]:[['ca','Castling effect'],['pr','Promotion effect']])].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')+'<div class="dim" style="text-align:center;font-size:11px;padding-top:16px">Cburnett pieces · CC BY-SA 3.0</div>'}
+ [['zen','Zen mode'],['zx','Extra zen (board only)'],['wide','Wide layout'],['fill','Edge-to-edge board'],['pm','Premoves'],['co','Show coordinates'],['lm','Highlight last move'],['ht','Show legal move dots'],['snd','Move sounds'],['aq','Auto-queen promotions'],['cr','Confirm before resigning'],...(thm()?[]:[['ca','Castling effect'],['pr','Promotion effect']])].map(([k,l])=>`<div class="opt"><span>${l}</span><button class="swt ${S[k]?'on':''}" onclick="setS('${k}',${!S[k]})" aria-label="${l}"><i></i></button></div>`).join('')+'<div class="dim" style="text-align:center;font-size:11px;padding-top:16px">Cburnett pieces · CC BY-SA 3.0</div>'}
 function beep(cap){if(!S.snd)return;try{const A=audio(),o=A.createOscillator(),g=A.createGain();o.type='triangle';o.frequency.value=cap?300:520;g.gain.setValueAtTime(.2,A.currentTime);g.gain.exponentialRampToValueAtTime(.001,A.currentTime+.12);o.connect(g);g.connect(A.destination);o.start();o.stop(A.currentTime+.13)}catch{}}
 let nbuf=null;
 function master(A){if(!A._m){const g=A.createGain(),c=A.createDynamicsCompressor();g.gain.value=1.1;g.connect(c);c.connect(A.destination);A._m=g}return A._m}
