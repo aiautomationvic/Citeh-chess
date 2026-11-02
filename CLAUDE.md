@@ -2,6 +2,10 @@
 
 A phone-first Lichess client (also plays friends with no Lichess account). One page, plain JavaScript, no build step. The owner is new to coding: explain in plain English, run commands for them, use Australian English. Keep replies and code token-efficient. Say plainly if an idea has a problem, then do what they decide.
 
+## Repo layout and backup
+- `site/` app, `worker/` Lichess relay, `rooms/` friend-game server, `tests/` Playwright checks with offline puzzle fixtures (run steps in `tests/README.md`), `CLAUDE.md` this memory, `README.md` public readme and credits.
+- Backup = git on GitHub (`main`) plus dated tags `backup-YYYY-MM-DD` before big changes (restore with `git checkout <tag> -- site/index.html`). Keep this file current after every feature: it is the only memory that survives between sessions.
+
 ## Where it lives
 - Repo: `aiautomationvic/Citeh-chess` (public). The app is `site/`. `worker/` and `rooms/` are Cloudflare Workers (not part of the site).
 - Live: https://aiautomationvic.github.io/Citeh-chess/ (capital C in the path).
@@ -35,6 +39,10 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 - Themes Sky/Night/Sunset/Mint, board colours (`BT`), piece sets (Cburnett default, Staunton, Neo, recolours), piece animations, Zen / Wide / Edge-to-edge / fullscreen. No phone vibration anywhere.
 - Sounds are synthesised in the browser (no audio files). `fun(kind)` has helpers `ob({type,f,f2,d,v,lp,at,dt,t0})` and `nz({d,v,ft,f,f2,q,t0})`; keep `at < d`. Sound style: low, dry, realistic, **not cartoony** (owner asked for this).
 
+## No-login features
+Login page (and lobby) offer everything that doesn't need Lichess: Puzzles and Puzzle Rush, Play with a link, Two players, Analysis board (no Recent games). `goHome()` returns anonymous users to login via `lobbyBack()`. Puzzle calls send no token on purpose.
+- Puzzle Rush is "quiet": while `Rsh` is active `moveFx` returns early and the checkmate cutscene is skipped (`G.puz&&Rsh`). Normal puzzles keep all effects.
+
 ## Lichess limits and puzzles
 - Board API seek (Find game) only allows rapid or slower (estimated length time+40*inc >= 480 s): lists `TCS` (seek) = 8+0, 10+0, 10+5, 15+10. Blitz/bullet get "Invalid time control" (lila `isBoardCompatible`). Friend/computer challenges use `FTC` and `tc2` (bullet 1+0 not playable via Board API); friend rooms (own server) use `RTC` (any clock). Blitz matchmaking is not possible via Lichess; would need our own queue in `rooms/`.
 - Search failures show a popup with status and Lichess's reply (diagnostic).
@@ -60,6 +68,14 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 - Chess rules written by hand: `pseudo`, `legal`, `step`, `san`, `attacked`, `qs`, `fenOf`, `sanToUci`.
 - `render()` rebuilds the board every time. `fresh` (viewed ply changed) triggers reactions; `st1` (stepped forward exactly one ply) triggers castling/en passant/promotion via `moveFx(i)`. `G.fxUntil` stops a background render cutting effects off.
 - Settings UI: `renderSet()`, `setS(key,value)`.
+
+## Lessons learned (do not repeat)
+- **Patch scripts**: `str.replace(old,lambda...)` raises TypeError (only `re.sub` takes a function). Opening the file with `'w'` BEFORE the replacement succeeds truncates it: one push emptied `index.html` on `main` for a couple of minutes. Always compute the new text first, write last, then check `wc -l site/index.html` (about 1,600 lines) and the `new Function` syntax check BEFORE `git commit`.
+- Never `git add -A` and push without looking at `git diff --stat` first.
+- When a Lichess call fails, show the status and body (the generic message hid the real cause for a long time). The real cause was Lichess's rapid-only rule, found by reading lila source on GitHub (the sandbox can reach github.com and lichess.org API for read-only checks, not github.io or workers.dev).
+- Existing CSS `#game.an .clk{display:none}` hides every clock in analysis-style boards (puzzles reuse that board), so give new timers their own element.
+- Existing global names to avoid: `PN`, `RU`, `H`, `tc`, `me`. Check with grep before adding a top-level `const`.
+- The owner tests on an iPhone and reports by screenshot; ask for the exact popup text instead of guessing.
 
 ## Working on it
 - Edit with small Python patch scripts that `assert` the old text exists (count == 1), then syntax-check every `<script>` block with `new Function(...)` in node. Scratch files go in the session scratchpad.

@@ -403,6 +403,8 @@ html[data-brand=jethro] #bd{border:5px solid #b22234;box-shadow:0 0 0 2px #fff,0
  <div class="card hide" id="lnote"><b>Reconnecting to Lichess…</b><p class="dim" style="margin:6px 0 12px;font-size:13px">You are still signed in. Trying again.</p><button style="width:100%" onclick="boot()">Try again now</button></div>
  <div class="card" id="fc1"></div>
  <div class="card" id="pz0"></div>
+ <div class="card"><b>Two players</b><div class="row"><button onclick="openTwo()">Play on this phone</button></div></div>
+ <div class="card"><b>Analysis board</b><div class="row"><button onclick="openAnalysis()">Open board</button></div></div>
  <div class="card" style="padding:22px 18px"><button style="width:100%" onclick="login()">Continue with Lichess</button></div>
  <details style="margin:14px 4px"><summary class="dim" style="font-weight:600;font-size:14px">Use an access token</summary>
  <div class="card" style="margin-top:10px"><p class="dim" style="margin:0 0 8px;font-size:13px">lichess.org/account/oauth/token · tick board play and challenges</p>
@@ -752,7 +754,7 @@ function render(){if(!G||!G.me)return;applyView();sizeB();const pre=!!(G.pre&&G.
  else{$('#st').textContent=result();$('#ctl').classList.add('hide');$('#nw').classList.remove('hide')}renderAna();clocks();$('#ctl2').classList.toggle('hide',!G.analysis||!!G.puz);$('#rsb').classList.toggle('hide',!G.two);if(G.analysis){$('#ctl').classList.add('hide');$('#nw').classList.add('hide');$('#lvb').textContent='Engine: '+(G.live?'On':'Off');paintLive();liveEval().catch(()=>{})}else $('#lv').classList.add('hide');
  const on=openingAt(G.V);$('#opn').textContent=on?on.replace(' ',' · '):'';
  $('#mk').innerHTML=ck?`<span class="mkb k-${ck}${fresh?' fresh':''}">${KN2[ck][0]}</span><span>${G.san[G.V-1]} is ${ART[ck]}</span>`:'';
- if(G.net)netUI();if(ck&&fresh&&lm)reactFx(ck,lm.slice(2,4));else if(st1&&!mm&&lm)moveFx(G.V);if(mm&&fresh){const ww=G.V%2==1,Vn=G.V,later=ck=='bril'&&S.br=='awaken'?9700:0;const go2=()=>{if(!G||G.V!==Vn)return;if(bxk('mf'))setTimeout(()=>(bx()=='dhruv'?dhMate:jtMate)(ww,Vn),700);else if((S.mf=='quick'||S.mf=='drama')&&execFx(kr,kf,ww,S.mf)){}else if(S.mf=='ufo')ufoFx(kr,kf,ww);else if(S.mf=='party')partyFx(kr,kf,ww);else if(S.mf=='siege')setTimeout(()=>siegeFx(ww,Vn),700);else if(S.mf=='caesar')setTimeout(()=>caesarFx(ww,Vn),700);else{mateFx(kr,kf,ww);sfx('mate')}};if(later)setTimeout(go2,later);else go2()}}
+ if(G.net)netUI();if(ck&&fresh&&lm)reactFx(ck,lm.slice(2,4));else if(st1&&!mm&&lm)moveFx(G.V);if(mm&&fresh&&!(G.puz&&Rsh)){const ww=G.V%2==1,Vn=G.V,later=ck=='bril'&&S.br=='awaken'?9700:0;const go2=()=>{if(!G||G.V!==Vn)return;if(bxk('mf'))setTimeout(()=>(bx()=='dhruv'?dhMate:jtMate)(ww,Vn),700);else if((S.mf=='quick'||S.mf=='drama')&&execFx(kr,kf,ww,S.mf)){}else if(S.mf=='ufo')ufoFx(kr,kf,ww);else if(S.mf=='party')partyFx(kr,kf,ww);else if(S.mf=='siege')setTimeout(()=>siegeFx(ww,Vn),700);else if(S.mf=='caesar')setTimeout(()=>caesarFx(ww,Vn),700);else{mateFx(kr,kf,ww);sfx('mate')}};if(later)setTimeout(go2,later);else go2()}}
 function audio(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();return ac}
 function chime(){if(!S.snd)return;try{const A=audio(),t0=A.currentTime+.02,out=A.createGain(),dl=A.createDelay(),fb=A.createGain();out.gain.value=.55;dl.delayTime.value=.16;fb.gain.value=.38;dl.connect(fb);fb.connect(dl);out.connect(A.destination);out.connect(dl);dl.connect(A.destination);
  const sw=A.createOscillator(),sg=A.createGain();sw.type='sawtooth';sw.frequency.setValueAtTime(220,t0);sw.frequency.exponentialRampToValueAtTime(1500,t0+.46);sg.gain.setValueAtTime(.0001,t0);sg.gain.linearRampToValueAtTime(.06,t0+.34);sg.gain.exponentialRampToValueAtTime(.0001,t0+.475);const lp=A.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(500,t0);lp.frequency.exponentialRampToValueAtTime(5500,t0+.46);sw.connect(lp);lp.connect(sg);sg.connect(out);sw.start(t0);sw.stop(t0+.52);
@@ -766,7 +768,7 @@ function fxk(ms){const bw=$('#bw');if(!bw||!bw.animate)return null;bw.querySelec
  return{c,box,xy:(r,f)=>[((fl?7-f:f)+.5)*c,((fl?7-r:r)+.5)*c],pc:(r,f)=>document.querySelector(`#bd [data-r="${r}"][data-f="${f}"] .pcsvg,#bd [data-r="${r}"][data-f="${f}"] .g`),ctr:w=>`width:${w}px;height:${w}px;margin:${-w/2}px 0 0 ${-w/2}px;`,
   add(x,y,css,kf,o){const e=document.createElement('i');e.style.cssText=`position:absolute;left:${x}px;top:${y}px;pointer-events:none;${css}`;box.appendChild(e);return e.animate(kf,{duration:o.d,delay:o.dl||0,easing:o.e||'cubic-bezier(.2,.7,.2,1)',fill:'both'})}}}
 const rsv=()=>S.rs===true?'napoleon':S.rs===false?'off':S.rs||'napoleon',epv=()=>S.ep===true?'ghost':S.ep===false?'off':S.ep||'ghost',mvD=()=>({fast:130,normal:230,slow:420})[S.sp]||230;
-function moveFx(i){try{const u=G.moves[i-1],P0=G.pos[i-1],P1=G.pos[i];if(!u||!P0||!P1)return;const fr=8-u[1],ff=u.charCodeAt(0)-97,tr=8-u[3],tf=u.charCodeAt(2)-97,p=P0.b[fr][ff];if(!p||p=='.')return;const t=p.toLowerCase();
+function moveFx(i){if(G.puz&&Rsh)return;try{const u=G.moves[i-1],P0=G.pos[i-1],P1=G.pos[i];if(!u||!P0||!P1)return;const fr=8-u[1],ff=u.charCodeAt(0)-97,tr=8-u[3],tf=u.charCodeAt(2)-97,p=P0.b[fr][ff];if(!p||p=='.')return;const t=p.toLowerCase();
  if(t=='k'&&Math.abs(tf-ff)==2){if(S.ca)(bxk('ca')?(bx()=='dhruv'?dhCastle:jtCastle):castleFx)(tr,tf,ff)}
  else if(t=='p'&&ff!=tf&&P0.b[tr][tf]=='.'){{const v=epv();if(bxk('ep')&&v!='off')return(bx()=='dhruv'?dhEp:jtEp)(fr,tr,tf,P0.b[fr][tf]);if(v=='ghost')epFx(fr,tr,tf,P0.b[fr][tf]);else if(v=='scene')epSceneFx(fr,tr,tf,P0.b[fr][tf],P1.b)}}
  else if(t=='p'&&u.length>4){if(S.pr)(bxk('pr')?(bx()=='dhruv'?dhCrown:jtCrown):crownFx)(tr,tf)}}catch{}}
@@ -1470,7 +1472,7 @@ async function send(u){if(G.net){if(!netSend({t:'move',uci:u})){toast('No connec
 const act=p=>G.net?netAct(p):fetch(`${API}/api/board/game/${G.id}/${p}`,{method:'POST',headers:H()});
 function resign(){if(G.moves.length>=2&&S.cr&&live()&&!confirm('Resign this game?'))return;act(G.moves.length<2?'abort':'resign')}
 function draw(){act('draw/yes');toast(G.offer?'Draw accepted':'Draw offered')}
-function goHome(){toggleSet(false);if(G&&G.net&&!me){if(!live())lobbyBack();return}if(!me)return;if(G&&G.me&&!G.analysis&&live()){$('#promo').classList.add('hide');cancelDrag();lobby()}else if(G)lobbyBack();else lobby()}
+function goHome(){toggleSet(false);if(!me){if(G&&!(G.net&&live()))lobbyBack();return}if(G&&G.me&&!G.analysis&&live()){$('#promo').classList.add('hide');cancelDrag();lobby()}else if(G)lobbyBack();else lobby()}
 function resumeGame(){show('game');render()}
 function lobbyBack(){puzStop();if(G&&G.net)netClose();pm=null;stopAna();G=null;B=null;cancelDrag();if(gAbort)gAbort.abort();if(tok&&me)lobby();else show('login')}
 // ---------- settings ----------
