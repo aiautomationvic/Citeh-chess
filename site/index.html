@@ -577,7 +577,7 @@ function pzSet(k,v){PZ[k]=v;ls.s('bcPz',JSON.stringify(PZ));puzCard()}
 function puzCard(){const th=`<select onchange="pzSet('th',this.value)">`+PTH.map(([k,n])=>`<option value="${k}"${PZ.th==k?' selected':''}>${n}</option>`).join('')+`<optgroup label="Openings">`+POP.map(k=>`<option value="${k}"${PZ.th==k?' selected':''}>${k.replace(/_/g,' ')}</option>`).join('')+`</optgroup></select>`;
  const sg=(k,a,c)=>`<div class="seg ${c||''}" style="margin:6px 0">`+a.map(([v,n])=>`<button class="${PZ[k]==v?'on':''}" onclick="pzSet('${k}','${v}')">${n}</button>`).join('')+`</div>`;
  const h=`<b>Puzzles</b><div class="row" style="margin:10px 0 4px"><button onclick="pzStart('daily')">Daily puzzle</button><button onclick="pzStart('next')">New puzzle</button></div>`+th+
- sg('df',[['any','Any'],['easiest','Easiest'],['easier','Easier'],['normal','Normal'],['harder','Harder'],['hardest','Hardest']],'g3')+sg('co',[['any','Any colour'],['white','White'],['black','Black']])+
+ sg('df',[['any','Any level'],['easiest','~900'],['easier','~1200'],['normal','~1500'],['harder','~1800'],['hardest','~2100']],'g3')+sg('co',[['any','Any colour'],['white','White'],['black','Black']])+
  `<div style="margin-top:14px"><b>Puzzle Rush</b></div>`+sg('rm',[['3','3 min'],['5','5 min'],['s','Survival']])+`<button style="width:100%" onclick="rushStart(PZ.rm)">Start Rush</button><div class="dim" style="font-size:13px;margin-top:6px;text-align:center">Best: ${rbest(PZ.rm)}</div>`;
  for(const e of document.querySelectorAll('#pzc,#pz0'))e.innerHTML=h}
 const pzGet=async u=>{const r=await fetch(API+u,{signal:AbortSignal.timeout(10000)});if(!r.ok)throw r.status;return r.json()};
