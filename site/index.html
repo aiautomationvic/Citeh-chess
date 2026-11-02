@@ -555,7 +555,7 @@ async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST'
  if(!r.ok)toast('Computer game failed (check token scopes)')}
 async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
  seekAbort=new AbortController();lobby();
- try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated,time:tc[0],increment:tc[1]})});
+ try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated:rated?'true':'false',time:String(tc[0]),increment:String(tc[1]),variant:'standard',color:'random'})});
   if(!r.ok){let t='';try{t=await r.text()}catch{}alert('Search failed\nStatus: '+r.status+'\nVia: '+(API==AUTH?'lichess.org':API)+'\nSent: rated='+rated+' time='+tc[0]+' inc='+tc[1]+'\nReply: '+(t.slice(0,400)||'(empty)'))}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
  seekAbort=null;if(!G)lobby()}
 // ---------- game ----------
