@@ -554,6 +554,7 @@ async function challenge(){const u=$('#fr').value.trim().replace(/^@/,'');if(!u)
 async function vsAI(){const r=await fetch(API+'/api/challenge/ai',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({level:lv,'clock.limit':tc[0]*60,'clock.increment':tc[1],color:'random'})});
  if(!r.ok)toast('Computer game failed (check token scopes)')}
 async function seek(){if(seekAbort){seekAbort.abort();seekAbort=null;return lobby()}
+ if(tc[0]*60+tc[1]*40<480)return toast('Lichess only allows online search for 10+0 or slower. Pick 10+0 or 15+10');
  seekAbort=new AbortController();lobby();
  try{const r=await fetch(API+'/api/board/seek',{method:'POST',headers:{...H(),'Content-Type':'application/x-www-form-urlencoded'},signal:seekAbort.signal,body:new URLSearchParams({rated:rated?'true':'false',time:String(tc[0]),increment:String(tc[1]),variant:'standard',color:'random'})});
   if(!r.ok){let t='';try{t=await r.text()}catch{}alert('Search failed\nStatus: '+r.status+'\nVia: '+(API==AUTH?'lichess.org':API)+'\nSent: rated='+rated+' time='+tc[0]+' inc='+tc[1]+'\nReply: '+(t.slice(0,400)||'(empty)'))}}catch(e){if(e&&e.name!='AbortError')toast('Could not reach Lichess for a search')}
