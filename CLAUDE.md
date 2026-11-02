@@ -33,7 +33,7 @@ A phone-first Lichess client. One page, plain JavaScript, no build step. The own
 - Modes: Zen (hides header, ratings, notation, analysis panels; only board, names, clocks, buttons), Wide layout (two columns at 760px+), Edge-to-edge board and a fullscreen button.
 
 ## Reaction animations (all optional in Settings)
-- Brilliant: Thud (default), Aura, Sigma, Fire, Scene. Scene is a full cutscene: the board shows the position before the move, the king gives the order, the piece answers "...ok.", eyes glow blue, it leaps from its own square, spins, crashes onto the target square (board then switches to the real position), glowing hairline cracks, title says only BRILLIANT.
+- Brilliant: Scene (default), Thud, Aura, Fire. (Sigma was removed; old saved Sigma/Thud settings are migrated to Scene once via `S.v`.) Scene is a full cutscene: the board shows the position before the move, the king gives the order, the piece answers "...ok.", eyes glow blue, it leaps from its own square, spins, crashes onto the target square (board then switches to the real position), glowing hairline cracks, title says only BRILLIANT.
 - Great: green W. Mistake: small "oops". Blunder: Banana, Clown (default), Skull, or Off.
 - Checkmate: Topple, Quick, Dramatic, UFO, Party, Off. Quick and Dramatic are the execution scenes: a piece drags the mated king to the winner's king and the winner chops it in two. Dramatic adds the king digging in, a whip, a long standoff with heartbeat and spotlight, and a hit-stop. Waddling is distance-driven (a piece only waddles while it moves). The checkmate banner is a dark glass card.
 
@@ -41,7 +41,7 @@ A phone-first Lichess client. One page, plain JavaScript, no build step. The own
 - State: `G` (game: `moves`, `pos[]` positions, `san[]`, `V` viewed ply, `analysis`, `live`, `an` full analysis, `evc` live evals, `lcls` live ratings, `pre` flag for the cutscene), `S` (settings; defaults in `DEF`), `B` (displayed board).
 - Chess rules written by hand: `pseudo`, `legal`, `step`, `san`, `attacked`, `qs` (capture-only search), `fenOf`, `sanToUci`.
 - `render()` rebuilds the board HTML every time. `fresh` (the viewed ply changed) triggers reactions, sounds and animations. Effects run on the DOM after render; `G.fxUntil` stops a background render cutting them off.
-- Effects live in functions: `brilFx`, `auraFx`, `sigmaFx`, `fireFx`, `awakenFx` (the Scene), `bananaFx`, `clownFx`, `skullFx`, `oopsFx`, `wFx`, `mateFx`, `execFx(…, mode)`, `ufoFx`, `partyFx`. Sounds: `sfx(kind)` and `fun(kind)`.
+- Effects live in functions: `brilFx`, `auraFx`, `fireFx`, `awakenFx` (the Scene), `bananaFx`, `clownFx`, `skullFx`, `oopsFx`, `wFx`, `mateFx`, `execFx(…, mode)`, `ufoFx`, `partyFx`. Sounds: `sfx(kind)` and `fun(kind)`.
 - Settings UI is built in `renderSet()`; toggles use `setS(key, value)`.
 
 ## Working on it
