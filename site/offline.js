@@ -113,7 +113,7 @@ async function offGuest(code){let o;try{o=await offUnpack(code)}catch{return toa
   offBox(`<b>Nearly there</b><div class="dim" style="font-size:13px;margin:10px 0 6px">Send this reply code back to your friend. The game starts when they paste it.</div><textarea id="offr" readonly rows="4" style="width:100%;box-sizing:border-box;font-size:12px">${rep}</textarea><div class="row" style="margin-top:6px"><button onclick="offShare('offr')">Share</button><button class="alt" onclick="offCopy('offr')">Copy</button><button class="alt" onclick="offCancel()">Cancel</button></div>`)}}
 
 // ---------- UI hooks ----------
-function offUI(){return`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)"><b>No server needed</b><div class="seg g4" style="margin:10px 0">${[1,2,3,4,5,6,7,8].map(n=>`<button class="${ocl==n?'on':''}" onclick="ocl=${n};friendUI()">${n}</button>`).join('')}</div><button style="width:100%;margin-bottom:8px" onclick="offCpu()">Play the computer (level ${ocl})</button><button class="alt" style="width:100%" onclick="offHost()">Play a friend directly</button></div>`}
+function offUI(){return`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)"><b>Play the computer</b><div class="seg g4" style="margin:10px 0">${[1,2,3,4,5,6,7,8].map(n=>`<button class="${ocl==n?'on':''}" onclick="ocl=${n};friendUI()">${n}</button>`).join('')}</div><button class="alt" style="width:100%" onclick="offCpu()">Play level ${ocl}</button></div>`}
 
 // ---------- 3. puzzles from puzzles.json when Lichess can't be reached ----------
 let offPzP=null;const offPzAll=()=>offPzP||(offPzP=fetch('puzzles.json').then(r=>r.json()).catch(e=>{offPzP=null;throw e}));
@@ -132,3 +132,8 @@ const offNc=netClose;netClose=function(){const g=G;offNc();if(g&&g.room)g.room.s
 // #p=<code> in the address opens the friend-join screen
 function offBoot(){const h=location.hash;if(h.startsWith('#p='))offGuest(h.slice(3))}
 addEventListener('load',()=>setTimeout(offBoot,300));addEventListener('hashchange',offBoot);
+
+function offJoin(){const v=(fbox().querySelector('.fjoin').value||'').trim(),i=v.indexOf('#p='),code=i>=0?v.slice(i+3):v;if(code.length<20)return toast('Paste the link your friend sent');offGuest(code)}
+document.querySelectorAll('#fc1,#fc2').forEach(e=>e.parentNode.prepend(e));
+
+try{friendUI()}catch{}
