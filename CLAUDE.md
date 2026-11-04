@@ -20,6 +20,8 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 
 ## Files
 - `site/index.html`: the whole app (HTML, CSS, JS, thousands of dense lines).
+- `site/offline.js`: classic script loaded after index.html's script (shares its globals). Offline play with no Lichess or Cloudflare, because the owner's network blocks both `lichess.org` and `workers.dev` (a custom domain was blocked as "personal blogs"; do not build filter workarounds). See "Offline play" below.
+- `site/puzzles.json`: built-in puzzle set (Lichess puzzles, CC0) used when Lichess can't be reached. Compact records `{i:id,r:rating,s:solution,t:themes,p:pgn}`. Rebuild with `node tools/harvest-puzzles.js` (slow on purpose: Lichess returns 429 for the batch endpoint if hit fast; the same params return the same puzzles, so it varies the theme).
 - `site/book.json`: opening book and names (lichess-org/chess-openings, CC0). Key = 53-bit hash (`h53`) of FEN placement + side to move; value = index into a names list.
 - `site/stockfish.js`, `stockfish.wasm.js`, `stockfish.wasm`: Stockfish 10 (default). `stockfish-19-lite-single.js/.wasm`: Stockfish 19 lite ("Strong"). `stockfish-COPYING.txt`: GPL.
 - Pieces: Cburnett set (CC BY-SA 3.0, via cm-chessboard) inlined as an SVG sprite at the top of `<body>`. Credit lives in Settings, README and an HTML comment. Keep it.
@@ -38,6 +40,14 @@ A phone-first Lichess client (also plays friends with no Lichess account). One p
 - Analysis board: both sides movable, live Stockfish, recent Lichess games for review. Game analysis with per-move ratings (book, brilliant, great, best, excellent, good, inaccuracy, mistake, blunder; win% loss thresholds 5/10/15; brilliant = sacrifice via capture-only search `qs`; great = only good move, MultiPV gap 15%; SF10 gets a 40 cp tempo fix; depth Quick 12 / Normal 14 / Deep 18). Engine help only after a game or on the analysis board, never in a live game.
 - Themes Sky/Night/Sunset/Mint, board colours (`BT`), piece sets (Cburnett default, Staunton, Neo, recolours), piece animations, Zen / Wide / Edge-to-edge / fullscreen. No phone vibration anywhere.
 - Sounds are synthesised in the browser (no audio files). `fun(kind)` has helpers `ob({type,f,f2,d,v,lp,at,dt,t0})` and `nz({d,v,ft,f,f2,q,t0})`; keep `at < d`. Sound style: low, dry, realistic, **not cartoony** (owner asked for this).
+
+## Offline play (site/offline.js)
+- `LRoom` = browser port of the rooms Durable Object (same messages: join/move/resign/draw/rematch, clocks, mate/stalemate/threefold/50-move/insufficient material using the app's own `legal/step/hasMove/attacked`). `offSock(room)` fakes a WebSocket so `netOpen/netMsg/apply` and all cutscenes work unchanged; `joinRoom(code,{local,p2p})` stores `G.local` (socket factory), `G.p2p`, `G.room`. `netClose` is wrapped to stop the room and close the WebRTC link.
+- Play the computer offline (`offCpu`, level `ocl` 1-8 -> Stockfish Skill Level `OFF_SK` + depth `OFF_DP`; the bot is a seat inside `LRoom`, `botTurn()` uses `getEngine/evalFen`). Uses the friend card's colour and clock picks (`fcol`, `ftc`). Bot ignores draw offers, auto-accepts rematch.
+- Direct friend game (`offHost`, `offGuest`): the host's browser IS the server; no server anywhere. Host makes a link `#p=<offer>` (SDP, deflate-raw + base64url via `offPack`), friend opens it, taps Join, sends back a reply code, host pastes it and taps Connect. Data channel carries the same JSON as the rooms server. Uses Google STUN (`OFF_ICE`); if that is blocked it only works on the same network. If the host closes the page the game ends. `offBox` is the full-screen overlay.
+- Both are offered at the bottom of the "Play with a link" card (`offUI()` is called from `friendUI`).
+- Puzzles: `pzGet` tries Lichess (6 s), and on any failure sets `pzOff` and answers from puzzles.json via `offPz(url)` (same shapes as the Lichess endpoints, filters angle/difficulty/colour). Toast says so once.
+- Local test without Python: `node .claude/serve.js` serves `site/` on 8000 (untracked helper). Two browser tabs can play each other over the P2P link.
 
 ## Tabs (chess.com style)
 Three tabs, Play / Puzzles / Analysis: bottom bar on phones, left side rail at 760px+ (`#tabs`, `TABS`, `setTab`, `tabsUI`; saved in `bcTab`). Cards carry `data-tab="play|puz|ana"` and CSS shows only the current tab's cards (`body[data-tab=...] .card[data-tab=...]`). New lobby/login cards need a `data-tab`. Tabs hide inside a game. Never write a bare `[data-tab]` CSS rule: the attribute is also on `<body>` and it blanked the page once in testing.
@@ -63,7 +73,7 @@ Login page (and lobby) offer everything that doesn't need Lichess: Puzzles and P
 - Napoleon art: `napK(col)` draws hat and coat on the Cburnett king, fitted to its measured outline (king centre x=20, cross y 4.4-12.5, lobes y 13-26, body 9.8-29.3). Always uses Cburnett.
 
 ## Brands (picker = round button top right of login/lobby, hidden in games)
-- Citeh (default, untouched), Dhruv (Arsenal), Jethro (US flag). `S.bn`, `BRANDS`, `setBrand()`, CSS `html[data-brand=...]` near the end of the style block. Official colours: Arsenal red #EF0107, navy #063672, gold #9C824A; US red #B22234, blue #3C3B6E, white. Dhruv = red/white board, gold frame, white pieces + navy-with-gold pieces. Jethro = white/navy board, red/white/navy frame, white pieces + red-with-white-outline pieces. The owner dislikes green boards.
+- Citeh (default, untouched), Dhruv (Arsenal), Jethro (US flag), Lucas (UAE Team Emirates red/black/white, Tadej Pogacar cycling pack in `site/lucas.js`: `lcCastle` peloton, `lcEp` attack/GAPPED, `lcCrown` yellow jersey, `lcRide` mate/resign cutscene with Pogacar dropping Evenepoel; sounds `l_*`/`lc_*`). `S.bn`, `BRANDS`, `setBrand()`, CSS `html[data-brand=...]` near the end of the style block. Official colours: Arsenal red #EF0107, navy #063672, gold #9C824A; US red #B22234, blue #3C3B6E, white. Dhruv = red/white board, gold frame, white pieces + navy-with-gold pieces. Jethro = white/navy board, red/white/navy frame, white pieces + red-with-white-outline pieces. The owner dislikes green boards.
 - Piece colours: the Cburnett sprite fills are CSS variables (`--wf/--ws` white fill/outline, `--bf/--bs/--bh` black fill/outline/highlight, defaults = originals so Citeh is pixel-identical). Switching brand forces the Cburnett set (previous in `S.pcp`), the Sky theme, and a brand board (`gunner`/`stars`, previous in `S.btp`).
 - Themed animation packs: Settings "Animation set" Themed (default) / Standard (`S.bx`); each effect row also has its own Themed button (`S.bxo[key]` override flags for s/ca/ep/pr/rs/mf; `bx()`, `bxk(key)`, `thm()`, `fxSeg`, `setFx`).
   - Dhruv: football sounds (`d_*`), cannon+confetti castling (`dhCastle`), VAR check en passant (`dhEp`), substitution board promotion (`dhCrown`), stadium resignation (`dhResign`), goal-scored checkmate (`dhMate`: keeper dives wrong way, "Checkmate." is said AFTER the goal).
@@ -103,6 +113,7 @@ Login page (and lobby) offer everything that doesn't need Lichess: Puzzles and P
 - Ask before anything public or hard to undo (publishing, permanent deletes). Pushing to `main` is fine when asked for changes.
 
 ## Open items and ideas
-- Deploy `rooms/` from a PC (see Cloudflare section), then test a real friend game on two phones and confirm the worker address.
+- Test the direct friend link and offline computer on two real phones (never tried on iPhone Safari; needs `CompressionStream`, iOS 16.4+).
+- Deploy `rooms/` from a PC (see Cloudflare section), then test a real friend game on two phones and confirm the worker address. Not useful on the owner's blocked network.
 - Possible next: public matchmaking queue for rooms, themed Brilliant/Great/Mistake/Blunder reactions for Dhruv and Jethro, a bigger Napoleon hand-in-coat, spectators, game history for friend games.
 - Known limits: soul-outline en passant and brand piece colours only apply to the Cburnett set; Napoleon and brand cutscenes always draw Cburnett pieces.
